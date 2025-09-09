@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <PackageReference Include="MudBlazor" Version="8.11.0" />
+    <PackageReference Include="MudBlazor.Translations" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MudBlazor" Version="8.11.0" />
+    <Folder Include="Service\" />
   </ItemGroup>
 
 </Project>
