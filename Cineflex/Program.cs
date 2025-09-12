@@ -9,6 +9,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddApplicationSevice();
+builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
+builder.Services.AddClients(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
