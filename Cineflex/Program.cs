@@ -1,5 +1,9 @@
 using Cineflex.Components;
 using Cineflex.Extensions;
+using Cineflex.Services;
+using Cineflex.Services.Auth;
+using Cineflex.Services.Email;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
+
+
 builder.Services.AddApplicationSevice();
+builder.Services.AddClients(builder.Configuration);
 builder.Services.AddMudServices();
+
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<CustomAuthStateProvider>();
+builder.Services.AddScoped<UserService>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

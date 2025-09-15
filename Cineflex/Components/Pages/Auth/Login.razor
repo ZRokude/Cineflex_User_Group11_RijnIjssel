@@ -1,0 +1,92 @@
+﻿@page "/login"
+@using Cineflex.Services.Auth
+@using Microsoft.AspNetCore.Identity.Data
+
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@* @inject CustomAuthStateProvider CustomAuth *@
+
+@rendermode InteractiveServer
+
+<PageTitle>Login</PageTitle>
+
+<div class="@($"color-transition {_backgroundClass}")"
+     style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center;">
+
+    <!-- Main login card -->
+    <MudCard Style="width: 450px; background-color:#2d1b1b; padding:15px; border-radius:15px" Elevation="25">
+
+        <!-- Logo container -->
+        <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+            <img src="Picture/logo_covadis_2016.png" style="height: 65px; width:225px;" alt="Covadis Logo" />
+        </div>
+
+        <!-- Login form -->
+        <MudForm @ref="_form">
+            <MudCardContent>
+
+                <!-- Email input field -->
+                <MudTextField Label="Email"
+                              Class="mt-3"
+                              @bind-Value="_loginFormModel.Email"
+                              For="@(() => _loginFormModel.Email)"
+                              InputType="InputType.Email"
+                              Placeholder="naam@gmail.com"
+                              Variant="Variant.Filled" />
+
+                <!-- Password input field with visibility toggle -->
+                <MudTextField T="string"
+                              Label="Wachtwoord"
+                              @bind-Value="_loginFormModel.Password"
+                              For="@(() => _loginFormModel.Password)"
+                              InputType="@PasswordInputType"
+                              Placeholder="***************"
+                              Variant="Variant.Filled"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@PasswordInputIcon"
+                              OnAdornmentClick="TogglePasswordVisibility"
+                              IconSize="Size.Medium" />
+
+                <!-- Action links for password reset and first login -->
+                <MudCardActions>
+                    <MudStack Spacing="1">
+                        <MudText>
+                            <MudLink Href="/forgotPassword">Wachtwoord vergeten?</MudLink>
+                        </MudText>
+                        <MudText>
+                            <MudLink Href="/register">Hier voor het eerst?</MudLink>
+                        </MudText>
+                    </MudStack>
+                </MudCardActions>
+
+                <!-- Login button -->
+                <MudButton ButtonType="ButtonType.Button"
+                           OnClick="HandleLoginAsync"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           FullWidth="true"
+                           Class="ml-auto"
+                           Disabled="@_isLoading">
+                    @if (_isLoading)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2">Inloggen...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Inloggen</MudText>
+                    }
+                </MudButton>
+
+            </MudCardContent>
+        </MudForm>
+    </MudCard>
+</div>
+
+<!-- CSS styles for background -->
+<style>
+    .start-color {
+        background-color: #8b0000;
+    }
+</style>
+
