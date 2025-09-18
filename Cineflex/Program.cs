@@ -2,6 +2,7 @@ using Cineflex.Components;
 using Cineflex.Extensions;
 using Cineflex.Services;
 using Cineflex.Services.Auth;
+using Cineflex.Services.Authentication;
 using Cineflex.Services.Email;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
@@ -19,8 +20,12 @@ builder.Services.AddApplicationSevice();
 builder.Services.AddClients(builder.Configuration);
 builder.Services.AddMudServices();
 
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
-builder.Services.AddScoped<CustomAuthStateProvider>();
+// Add the circuit services accessor
+builder.Services.AddCircuitServicesAccessor();
+builder.Services.AddScoped<AuthenticationStateService>();
+builder.Services.AddScoped<PersistingAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
+    provider.GetRequiredService<PersistingAuthenticationStateProvider>());
 builder.Services.AddScoped<UserService>();
 
 

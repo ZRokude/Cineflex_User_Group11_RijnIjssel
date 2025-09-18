@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace Cineflex.Services.Auth
+namespace Cineflex.Services.Authentication
 {
     public static class LoginResultExtentions
     {

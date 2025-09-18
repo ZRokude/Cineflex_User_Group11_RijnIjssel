@@ -1,4 +1,4 @@
-﻿namespace Cineflex.Services.Auth
+﻿namespace Cineflex.Services.Authentication
 {
     public enum LoginResult
     {
