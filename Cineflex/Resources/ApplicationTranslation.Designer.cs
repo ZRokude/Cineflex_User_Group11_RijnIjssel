@@ -59,5 +59,14 @@ namespace Cineflex.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello World7.
+        /// </summary>
+        public static string Home_Test {
+            get {
+                return ResourceManager.GetString("Home_Test", resourceCulture);
+            }
+        }
     }
 }

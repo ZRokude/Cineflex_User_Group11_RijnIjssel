@@ -13,9 +13,9 @@ public class Program
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
-        builder.Services.AddMudTranslations();
         //builder.Services.AddTransient<MudLocalizer, ApplicationTranslation>();
         builder.Services.AddApplicationSevice();
+        builder.Services.AddLocalizationServices();
         builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
         builder.Services.AddClients(builder.Configuration);
         var app = builder.Build();

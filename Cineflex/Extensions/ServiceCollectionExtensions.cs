@@ -4,6 +4,7 @@ using Cineflex.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Translations;
 using System.Text;
@@ -11,6 +12,16 @@ namespace Cineflex.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddLocalizationServices(this IServiceCollection services)
+        {
+            services
+                .AddMudTranslations()
+                .AddTransient<MudLocalizer, Localizer>()
+                .AddSingleton<IApplicationResourceManager, ApplicationResourceManager>()
+                .AddSingleton<IApplicationResource, ApplicationResource>()
+                .AddLocalization(options => options.ResourcesPath = "Resources");
+            return services;
+        }
         public static IServiceCollection AddAuthenticationAndAuthorizationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services
