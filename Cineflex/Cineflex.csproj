@@ -4,17 +4,14 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>75aa4d61-ef66-4c60-9b7e-5a7b2b4d3ee8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.13.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
     <PackageReference Include="MudBlazor" Version="8.11.0" />
+    <PackageReference Include="MudBlazor.Translations" Version="2.6.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 

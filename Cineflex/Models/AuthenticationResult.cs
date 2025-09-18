@@ -1,0 +1,8 @@
+﻿namespace Cineflex.Models
+{
+    public class AuthenticationResult(string? errorCode = null)
+    {
+        public bool IsAuthenticated => string.IsNullOrWhiteSpace(ErrorCode);
+        public string? ErrorCode { get; internal set; } = errorCode;
+    }
+}

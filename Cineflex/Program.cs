@@ -17,18 +17,8 @@ builder.Services.AddRazorComponents()
 
 
 builder.Services.AddApplicationSevice();
+builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
 builder.Services.AddClients(builder.Configuration);
-builder.Services.AddMudServices();
-
-// Add the circuit services accessor
-builder.Services.AddCircuitServicesAccessor();
-builder.Services.AddScoped<AuthenticationStateService>();
-builder.Services.AddScoped<PersistingAuthenticationStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
-    provider.GetRequiredService<PersistingAuthenticationStateProvider>());
-builder.Services.AddScoped<UserService>();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
