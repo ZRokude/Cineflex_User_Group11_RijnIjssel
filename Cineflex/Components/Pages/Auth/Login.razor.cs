@@ -7,6 +7,7 @@ namespace Cineflex.Components.Pages.Auth
 {
     public partial class Login
     {
+
         [Inject] IUserService UserService { get; set; } = null!;
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
@@ -37,7 +38,11 @@ namespace Cineflex.Components.Pages.Auth
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
             if (user.Identity?.IsAuthenticated == true)
+            {
                 NavigationManager.NavigateTo("/", true); // Redirect to home if already logged in
+                Snackbar.Add("U bent al ingelogd");
+            }
+               
         }
 
         private async Task HandleLoginAsync()

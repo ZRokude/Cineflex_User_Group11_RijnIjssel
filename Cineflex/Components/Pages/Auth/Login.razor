@@ -1,10 +1,9 @@
 ﻿@page "/login"
-@using Cineflex.Services.Auth
+@using Cineflex.Services.Authentication
 @using Microsoft.AspNetCore.Identity.Data
 
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
-@* @inject CustomAuthStateProvider CustomAuth *@
 
 @rendermode InteractiveServer
 
@@ -18,7 +17,7 @@
 
         <!-- Logo container -->
         <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
-            <img src="Picture/logo_covadis_2016.png" style="height: 65px; width:225px;" alt="Covadis Logo" />
+            <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
         </div>
 
         <!-- Login form -->
@@ -86,7 +85,7 @@
 <!-- CSS styles for background -->
 <style>
     .start-color {
-        background-color: #8b0000;
+        background-color: #910919;
     }
 </style>
 

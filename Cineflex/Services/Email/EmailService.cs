@@ -12,6 +12,7 @@ namespace Cinelexx.Services.Email
         private const int Port = 587;
         private const string Username = "lekkerbiertje0@gmail.com";
         private const string Password = "kvnd bqoz meop ixrv";
+        
 
         public async Task SendEmailAsync(string to, string subject, string htmlBody)
         {

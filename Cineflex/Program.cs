@@ -1,7 +1,6 @@
 using Cineflex.Components;
 using Cineflex.Extensions;
 using Cineflex.Services;
-using Cineflex.Services.Auth;
 using Cineflex.Services.Authentication;
 using Cineflex.Services.Email;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -13,8 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-
-
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddApplicationSevice();
 builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);

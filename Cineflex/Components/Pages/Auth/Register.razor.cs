@@ -1,11 +1,3 @@
-//using Cineflex.Services.Email;
-//using Cinelexx.Services.Email;
-//using Microsoft.AspNetCore.Components.Authorization;
-//using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.EntityFrameworkCore;
-//using System.Security.Claims;
-
 using MudBlazor;
 using System.ComponentModel.DataAnnotations;
 
@@ -40,6 +32,8 @@ namespace Cineflex.Components.Pages.Auth
             public string MiddleName { get; set; } = string.Empty;
             public string LastName { get; set; } = string.Empty;
             public string PostCode { get; set; } = string.Empty;
+
+
         }
 
         //JON: Password visibility toggle state

@@ -24,7 +24,12 @@ namespace Cineflex.Extensions
                             o =>
                             {
                                 var signingKey = configuration["Authentication:Bearer:SigningKey"];
-                                SecurityKey? key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey!));
+                                SecurityKey? key = null;
+                                if (!string.IsNullOrWhiteSpace(signingKey))
+                                {
+                                    key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey));
+                                }
+
                                 o.TokenValidationParameters.IssuerSigningKey = key;
                                 o.TokenValidationParameters.ValidateIssuerSigningKey = key is not null;
                                 o.TokenValidationParameters.ValidateLifetime = true;

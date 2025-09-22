@@ -1,12 +1,6 @@
 using Cineflex.Services.Email;
 using Cinelexx.Services.Email;
 
-//using Microsoft.AspNetCore.Components.Authorization;
-//using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.EntityFrameworkCore;
-//using System.Security.Claims;
-
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.ComponentModel.DataAnnotations;
@@ -25,10 +19,10 @@ namespace Cineflex.Components.Pages.Auth
         //<-------------------------->bools
         private bool _SendCode = false;
         private bool _fadeOut = false;
-        private bool _activeAccount = true;
         private bool _isLoading = false;
         private bool _isVerifying = false;
 
+        private string lampClass = "lamp-hidden";
 
         private string emailError = string.Empty;
         private string codeError = string.Empty;
@@ -40,6 +34,20 @@ namespace Cineflex.Components.Pages.Auth
             backgroundClass = "start-color"; //JON: set the background to the startcolor
             await base.OnInitializedAsync();
         }
+
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await Task.Delay(100);
+                lampClass = "lamp-visible";
+                StateHasChanged();
+            }
+
+            await base.OnAfterRenderAsync(firstRender);
+        }
+
 
         // Validation Methods
         private void ValidateEmail()
@@ -148,7 +156,6 @@ namespace Cineflex.Components.Pages.Auth
                  var emailService = new EmailService();
                  //await emailService.SendForgotPasswordEmailAsync(user.Email, code);
                 await emailService.SendForgotPasswordEmailAsync(_UserEmail, code);
-                await emailService.SendWelkomEmailAsync(_UserEmail);
 
 
                 Snackbar.Add("Code verstuurd naar uw e-mail!", Severity.Success);
@@ -199,15 +206,19 @@ namespace Cineflex.Components.Pages.Auth
             if (_SendCode)
             {
                 backgroundClass = "start-color";
-                StateHasChanged();
+                lampClass = "lamp-hidden";
                 await Task.Delay(500);
             }
+            lampClass = "lamp-hidden";
+            await Task.Delay(500);
+            StateHasChanged();
             NavigationManager.NavigateTo("/Login");
         }
 
         private async Task OnReturnToPasswordClick()//JON: if you have not made a password
         {
             backgroundClass = "start-color";
+            lampClass = "lamp-hidden";
             StateHasChanged();
             await Task.Delay(500);
             NavigationManager.NavigateTo("/firstlogin");

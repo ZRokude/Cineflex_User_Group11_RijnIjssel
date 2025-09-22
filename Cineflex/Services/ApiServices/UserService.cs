@@ -13,16 +13,12 @@ public class UserService(IHttpClientFactory httpClientFactory) : IUserService
 
     public async Task<string?> Login(string email, string password)
     {
-        var response = await _httpClient.GetAsync($"https://localhost:7153/api/Account/login?email={email}&password={password}");
+        var response = await _httpClient.GetAsync($"https://localhost:7153/api/Account/get?email={email}&password={password}");
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
             // Als je API direct een JWT token string teruggeeft:
             return content.Trim('"'); // Remove quotes if the API returns "token" instead of token
-
-            // Of als je API een object teruggeeft met een token property:
-            // var loginResponse = JsonSerializer.Deserialize<LoginResponse>(content);
-            // return loginResponse?.Token;
         }
         return null;
     }

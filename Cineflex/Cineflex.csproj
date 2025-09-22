@@ -8,11 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.13.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
-    <PackageReference Include="MudBlazor" Version="8.11.0" />
+    <PackageReference Include="MudBlazor" Version="8.12.0" />
     <PackageReference Include="MudBlazor.Translations" Version="2.6.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Picture\" />
   </ItemGroup>
 
 </Project>
