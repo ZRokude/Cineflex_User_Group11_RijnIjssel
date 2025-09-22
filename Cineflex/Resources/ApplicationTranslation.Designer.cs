@@ -68,5 +68,32 @@ namespace Cineflex.Resources {
                 return ResourceManager.GetString("Home_Test", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cineflex.
+        /// </summary>
+        public static string Home_Title {
+            get {
+                return ResourceManager.GetString("Home_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Film.
+        /// </summary>
+        public static string Navbar_Item1 {
+            get {
+                return ResourceManager.GetString("Navbar_Item1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cineflex.
+        /// </summary>
+        public static string Navbar_Title {
+            get {
+                return ResourceManager.GetString("Navbar_Title", resourceCulture);
+            }
+        }
     }
 }

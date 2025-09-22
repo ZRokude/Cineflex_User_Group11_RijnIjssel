@@ -1,10 +1,16 @@
-﻿<MudAppBar Color="Color.Secondary">
-    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Row="true"> 
-        <h2>Cineflex</h2>
-        <MudStack AlignItems="AlignItems.Start" Row="true">
-            <h3>Films</h3>
-        </MudStack>
+﻿<MudAppBar Color="Color.Secondary" Fixed="false" Elevation="0">
+    <h2>@Localizer["Navbar_Title"]</h2>
+    <MudSpacer />
+    <MudStack AlignItems="AlignItems.Center" Row="true" >
+        <MudNavLink Ripple="true" Style="margin-left:unset!important;" Href="">@Localizer["Navbar_Item1"]</MudNavLink>
+        <MudNavLink Ripple="true" Style="margin-left:unset!important;" Href="">@Localizer["Navbar_Item1"]</MudNavLink>
+        <MudNavLink Ripple="true" Style="margin-left:unset!important;" Href="">@Localizer["Navbar_Item1"]</MudNavLink>
     </MudStack>
 </MudAppBar>
 
+<style>
+    .mud-nav-link-text{
+        margin-left: unset !important;
+    }
+</style>
 
