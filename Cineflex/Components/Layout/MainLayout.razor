@@ -4,7 +4,13 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-@Body
+<MudLayout>
+    <Navbar/>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.

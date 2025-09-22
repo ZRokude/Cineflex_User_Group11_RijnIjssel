@@ -1,39 +1,44 @@
 using Cineflex.Components;
 using Cineflex.Extensions;
-using Cineflex.Services;
-using Cineflex.Services.Authentication;
-using Cineflex.Services.Email;
-using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using MudBlazor.Services;
+using MudBlazor.Translations;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddApplicationSevice();
-builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
-builder.Services.AddClients(builder.Configuration);
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+        builder.Services.AddRazorComponents()
+            .AddInteractiveServerComponents();
+        //builder.Services.AddTransient<MudLocalizer, ApplicationTranslation>();
+        builder.Services.AddApplicationSevice();
+        builder.Services.AddLocalizationServices();
+        builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
+        builder.Services.AddClients(builder.Configuration);
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseExceptionHandler("/Error", createScopeForErrors: true);
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+
+
+        app.UseAntiforgery();
+
+        app.MapStaticAssets();
+        app.MapRazorComponents<App>()
+            .AddInteractiveServerRenderMode();
+
+        app.Run();
+    }
+
 }
 
-app.UseHttpsRedirection();
-
-
-app.UseAntiforgery();
-
-app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
-
-app.Run();
