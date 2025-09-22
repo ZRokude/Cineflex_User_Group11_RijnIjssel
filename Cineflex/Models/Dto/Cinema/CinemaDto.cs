@@ -15,7 +15,7 @@ namespace Cineflex.Models.Dto.Cinema
         public bool IsActive { get; set; } = true;
 
         //Relationship
-        public ICollection<CinemaRoom> CinemaRooms { get; set; }
+        public ICollection<CinemaRoomDto> CinemaRooms { get; set; }
 
     }
 }
