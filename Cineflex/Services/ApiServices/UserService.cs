@@ -34,10 +34,3 @@ public class UserService(IHttpClientFactory httpClientFactory) : IUserService
         return response.IsSuccessStatusCode;
     }
 }
-
-// Als je API een object teruggeeft met token property:
-public class LoginResponse
-{
-    public string Token { get; set; }
-    // Andere properties...
-}

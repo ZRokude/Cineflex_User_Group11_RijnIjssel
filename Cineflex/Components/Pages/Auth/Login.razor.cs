@@ -1,4 +1,6 @@
+using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
+using Cineflex_API.Model.Commands.User;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -8,7 +10,7 @@ namespace Cineflex.Components.Pages.Auth
 {
     public partial class Login
     {
-
+        [Inject] ILoginService Loginservice { get; set; } = null!;
         [Inject] IUserService UserService { get; set; } = null!;
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
@@ -70,17 +72,27 @@ namespace Cineflex.Components.Pages.Auth
             try
             {
                 // Step 1: Call your UserService to authenticate and get JWT token
-                var jwtToken = await UserService.Login(_loginFormModel.Email, _loginFormModel.Password);
+                LoginCommand command = new LoginCommand
+                {
+                    Email = _loginFormModel.Email,
+                    Password = _loginFormModel.Password
+                };
+                var result = await Loginservice.Login(command);
+                if(result.IsSuccesfull)
+                {
+                    var response = result.Model;
+                    if (!string.IsNullOrEmpty(response!.Token))
+                    {
+                        // Step 2: Use DoLogin with the bearer token
+                        await DoLogin(response!.Token);
+                    }
+                    else
+                    {
+                        Snackbar.Add("Login mislukt. Controleer je inloggegevens.", Severity.Error);
+                    }
+                }
 
-                if (!string.IsNullOrEmpty(jwtToken))
-                {
-                    // Step 2: Use DoLogin with the bearer token
-                    await DoLogin(jwtToken);
-                }
-                else
-                {
-                    Snackbar.Add("Login mislukt. Controleer je inloggegevens.", Severity.Error);
-                }
+               
             }
             catch (Exception ex)
             {
