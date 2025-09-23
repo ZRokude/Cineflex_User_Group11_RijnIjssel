@@ -5,6 +5,7 @@ using System.Text.Json;
 public interface IUserService
 {
     public Task<string?> Login(string username, string password); // JWT token returnen
+    public Task<bool> CreateAccount(Account account);
 }
 
 public class UserService(IHttpClientFactory httpClientFactory) : IUserService
@@ -21,6 +22,16 @@ public class UserService(IHttpClientFactory httpClientFactory) : IUserService
             return content.Trim('"'); // Remove quotes if the API returns "token" instead of token
         }
         return null;
+    }
+
+    public async Task<bool> CreateAccount(Account account)
+    {
+        var json = JsonSerializer.Serialize(account);
+        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsJsonAsync("https://localhost:7153/api/Account/create", account);
+
+        return response.IsSuccessStatusCode;
     }
 }
 

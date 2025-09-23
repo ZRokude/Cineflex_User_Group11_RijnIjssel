@@ -1,5 +1,11 @@
+using Cineflex_DataAccess.Entities.User;
+using Cinelexx.Services.Email;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using MudBlazor;
 using System.ComponentModel.DataAnnotations;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Cineflex.Components.Pages.Auth
 {
@@ -8,6 +14,9 @@ namespace Cineflex.Components.Pages.Auth
         // Form reference for validation
         private RegisterModel model = new();
         private EmailAddressAttribute emailValidator = new();
+
+
+        [Inject] IUserService UserService { get; set; } = default!;
 
         private string _backgroundClass = "start-color";
         private string emailError = string.Empty;
@@ -33,6 +42,8 @@ namespace Cineflex.Components.Pages.Auth
             public string LastName { get; set; } = string.Empty;
             public string PostCode { get; set; } = string.Empty;
 
+            public string Address { get; set; } = string.Empty;
+            public DateTime UserDb { get; set; } = DateTime.Now;
 
         }
 
@@ -231,28 +242,48 @@ namespace Cineflex.Components.Pages.Auth
         }
 
 
-        // private async Task MakeAccount()
-        // {
-        //     await ValidateEmail();JON: checks if the email is valid and don't repeat in the db
-
-        //     if (!_isEmailUniqe)
-        //         return;
-
-        //     var newUser = new User
-        //     {
-        //         Email = model.Email,
-        //         FirstName = model.FirstName,
-        //         MiddleName = model.MiddleName,
-        //         LastName = model.LastName,
-        //         PostCode = model.PostCode,
-        //         PasswordHash = HashPassword(model.NewPassword) voorbeeld, sla nooit plain text op
-        //     };
-
-        //     await UserService.AddUserAsync(newUser); 
-        // }
 
         private async Task MakeAccount()
         {
+            var hasher = new PasswordHasher<Account>(); //JON: the hasher of blazor
+
+            await ValidateEmail();
+
+            if (!_isEmailUniqe)
+                return;
+
+            Account newAccount = new Account()
+            {
+                Email = model.Email,
+                Credential = new Credential
+                {
+                    FirstName = model.FirstName,
+                    MidName = model.MiddleName, // bij jou heet het MidName
+                    LastName = model.LastName,
+                    Address = model.Address,
+                    PostCode = model.PostCode,
+                    DateBirth = model.UserDb,
+                }
+            };
+
+
+            newAccount.Password = hasher.HashPassword(newAccount, model.NewPassword);
+
+            // Use the UserService to create the account
+            var success = await UserService.CreateAccount(newAccount);
+
+            if (success)
+            {
+                Snackbar.Add("Account is Aangemaakt!");
+                var emailService = new EmailService();
+                await emailService.SendWelkomEmailAsync(newAccount.Email);
+
+                NavigationManager.NavigateTo("/login");
+            }
+            else
+            {
+                // Handle failure (account already exists, etc.)
+            }
 
         }
     }

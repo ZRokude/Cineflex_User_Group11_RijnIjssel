@@ -9,20 +9,35 @@
 
 <PageTitle>Login</PageTitle>
 
+
+
+
 <div class="@($"color-transition {_backgroundClass}")"
      style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center;">
 
+    <div class="row @(chairsVisible ? "row-visible" : "row-hidden")">
+        @for (int i = 0; i < 20; i++)
+        {
+            <div class="chair">
+                <div class="backrest"></div>
+                <div class="seat"></div>
+                <div class="arm left"></div>
+                <div class="arm right"></div>
+                <div class="leg left"></div>
+                <div class="leg right"></div>
+            </div>
+        }
+    </div>
+
     <!-- Main login card -->
-    <MudCard Style="width: 450px; background-color:#2d1b1b; padding:15px; border-radius:15px" Elevation="25">
-
-        <!-- Logo container -->
-        <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
-            <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
-        </div>
-
+    <MudCard Style="position: fixed; top: 20vh; left: 35vw; width: 450px; background-color:#272727; padding:15px; border-radius:15px" Elevation="25">
         <!-- Login form -->
         <MudForm @ref="_form">
             <MudCardContent>
+
+                <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+                    <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
+                </div>
 
                 <!-- Email input field -->
                 <MudTextField Label="Email"
@@ -50,12 +65,13 @@
                 <MudCardActions>
                     <MudStack Spacing="1">
                         <MudText>
-                            <MudLink Href="/forgotPassword">Wachtwoord vergeten?</MudLink>
+                            <MudLink OnClick="NavigateToForgetPassword">Wachtwoord vergeten?</MudLink>
                         </MudText>
                         <MudText>
-                            <MudLink Href="/register">Hier voor het eerst?</MudLink>
+                            <MudLink OnClick="NavigateToRegister">Registreer</MudLink> 
                         </MudText>
                     </MudStack>
+                    
                 </MudCardActions>
 
                 <!-- Login button -->
@@ -85,7 +101,112 @@
 <!-- CSS styles for background -->
 <style>
     .start-color {
-        background-color: #910919;
+        background-color: #232323;
+    }
+
+
+    .glow-text {
+        font-size: 23px; /* Make text bigger */
+        color: #fff; /* Base color */
+        text-align: center;
+        transition: all 0.3s ease; /* Smooth transition on hover */
+    }
+
+        .glow-text:hover {
+            font-size: 25px; /* Bigger on hover */
+            }
+
+
+
+
+    .row {
+        display: flex;
+        gap: 25px; /* spacing between chairs */
+        perspective: 800px;
+        position: relative; /* needed for top */
+        top: 335px; /* moves row down 60px from its normal position */
+    }
+
+
+    .chair {
+        position: relative;
+        width: 60px;
+        height: 90px;
+        transform-style: preserve-3d;
+        transition: transform 0.3s;
+    }
+
+        .chair:hover {
+            transform: translateY(-5px); /* slight lift on hover */
+        }
+
+    /* Backrest */
+    .backrest {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(to bottom, #ff4d4d, #b30000);
+        border-radius: 10px 10px 0 0;
+        position: absolute;
+        top: 0;
+        box-shadow: inset 0 -5px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Seat */
+    .seat {
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to bottom, #b30000, #800000);
+        border-radius: 0 0 5px 5px;
+        position: absolute;
+        bottom: 0;
+        box-shadow: inset 0 5px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Armrests */
+    .arm {
+        width: 10px;
+        height: 40px;
+        background: #800000;
+        position: absolute;
+        top: 10px;
+        border-radius: 5px;
+        box-shadow: inset 0 2px 2px rgba(0,0,0,0.5);
+    }
+
+        .arm.left {
+            left: -10px;
+        }
+
+        .arm.right {
+            right: -10px;
+        }
+
+    /* Legs */
+    .leg {
+        width: 8px;
+        height: 20px;
+        background: #333;
+        position: absolute;
+        bottom: -20px;
+        border-radius: 2px;
+    }
+
+        .leg.left {
+            left: 5px;
+        }
+
+        .leg.right {
+            right: 5px;
+        }
+
+    .row-hidden {
+        transition: transform 0.7s ease-in-out;
+        transform: translateY(100%);
+    }
+
+    .row-visible {
+        transition: transform 0.7s ease-in-out;
+        transform: translateY(0);
     }
 </style>
 

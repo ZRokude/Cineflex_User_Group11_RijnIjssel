@@ -1,10 +1,3 @@
-//using Cineflex.Services.Email;
-//using Cinelexx.Services.Email;
-//using Microsoft.AspNetCore.Components.Authorization;
-//using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.EntityFrameworkCore;
-//using System.Security.Claims;
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;

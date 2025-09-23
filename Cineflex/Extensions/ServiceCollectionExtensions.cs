@@ -60,6 +60,7 @@ namespace Cineflex.Extensions
             services.AddMudServices()
                 .AddMudTranslations()
                 .AddScoped<NotifyService>();
+            services.AddTransient<IUserService, UserService>();
             return services;
         }
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)

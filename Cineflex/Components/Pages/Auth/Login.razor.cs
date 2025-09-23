@@ -2,6 +2,7 @@ using Cineflex.Services.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using System.Threading.Tasks;
 
 namespace Cineflex.Components.Pages.Auth
 {
@@ -11,10 +12,15 @@ namespace Cineflex.Components.Pages.Auth
         [Inject] IUserService UserService { get; set; } = null!;
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
+
+
         private MudForm _form = new();
         private string _backgroundClass = "start-color";
         private int _loginAttempts = 0;
         private bool _isLoading = false;
+        private bool chairsVisible;
+
+
         private LoginFormModel _loginFormModel = new()
         {
             Email = string.Empty,
@@ -44,6 +50,19 @@ namespace Cineflex.Components.Pages.Auth
             }
                
         }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                // Wait a tiny bit for page load effect
+                await Task.Delay(100);
+                chairsVisible = true;
+                StateHasChanged();
+            }
+        }
+
+
 
         private async Task HandleLoginAsync()
         {
@@ -88,6 +107,20 @@ namespace Cineflex.Components.Pages.Auth
 
                 Snackbar.Add($"Authenticatie mislukt: {result.ErrorCode}", Severity.Error);
             }
+        }
+
+        private async Task NavigateToRegister()
+        {
+            chairsVisible = false;
+            await Task.Delay(500);
+            NavigationManager.NavigateTo("/register");
+        }
+
+        private async Task NavigateToForgetPassword()
+        {
+            chairsVisible = false;
+            await Task.Delay(500);
+            NavigationManager.NavigateTo("/forgotPassword");
         }
 
         // Form model class for binding

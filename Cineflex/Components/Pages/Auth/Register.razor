@@ -14,7 +14,7 @@
 <div class="@($"color-transition {_backgroundClass}")"
      style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center;">
     <!-- Main register card -->
-    <MudCard Style="width: 600px; background-color:#2d1b1b; padding:15px; border-radius:15px" Elevation="25">
+    <MudCard Style="width: 600px; background-color:#272727; padding:15px; border-radius:15px" Elevation="25">
 
         <!-- Logo container -->
         <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
@@ -52,6 +52,10 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudTextField Label="Postcode" Variant="Variant.Filled" @bind-Value="model.PostCode" />
+                    </MudItem>
+
+                    <MudItem xs="6"> 
+                        <MudTextField Label="Adres" Variant="Variant.Filled" @bind-Value="model.Address" Placeholder="Straatnaam & Huisnummer" />
                     </MudItem>
 
                     <!-- Row 4 -->
@@ -156,7 +160,7 @@
 <!-- CSS styles for background -->
 <style>
     .start-color {
-        background-color: #8b0000;
+        background-color: #232323;
     }
 </style>
 
