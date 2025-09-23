@@ -4,18 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex.Models.Dto.Cinema
+namespace Cineflex_API.Model.Responses.Cinema
 {
-    public class CinemaDto
+    public class CinemaResponse
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string PostCode { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
-
-        //Relationship
-        public ICollection<CinemaRoomDto> CinemaRooms { get; set; }
-
     }
 }

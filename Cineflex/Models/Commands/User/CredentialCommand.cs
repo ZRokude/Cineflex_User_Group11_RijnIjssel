@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex.Models.Dto.User
+namespace Cineflex_API.Model.Commands.User
 {
-    public class CredentialDto
+    public class CredentialResponse
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string FirstName { get; set; } = string.Empty;
@@ -16,7 +16,5 @@ namespace Cineflex.Models.Dto.User
         public string PostCode { get; set; } = string.Empty;
         public DateTime DateBirth { get; set; }
         public Guid AccountId { get; set; } = Guid.Empty;
-        //Relationship
-        public AccountDto Account { get; set; }
     }
 }

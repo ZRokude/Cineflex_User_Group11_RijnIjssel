@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex.Models.Dto.Movie
+namespace Cineflex_API.Model.Commands.Movie
 {
-    public class GenreDto
+    public class GenreResponse
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
-        //Relationship
-        public ICollection<MovieGenreDto> MovieGenres { get; set; }
     }
 }
