@@ -126,6 +126,12 @@
   <data name="Navbar_Item1" xml:space="preserve">
     <value>Film</value>
   </data>
+  <data name="Navbar_Item2" xml:space="preserve">
+    <value>Informatie</value>
+  </data>
+  <data name="Navbar_Item3" xml:space="preserve">
+    <value>Over Ons</value>
+  </data>
   <data name="Navbar_Title" xml:space="preserve">
     <value>Cineflex</value>
   </data>

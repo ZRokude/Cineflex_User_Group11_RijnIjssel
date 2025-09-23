@@ -5,10 +5,15 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <Navbar/>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
+    <NavBar/>
+    <MudStack Row="true">
+        <div class="block-color"/>
+        <MudMainContent>
+            @Body
+        </MudMainContent>
+        <div class="block-color"/>
+    </MudStack>
+    
 </MudLayout>
 
 

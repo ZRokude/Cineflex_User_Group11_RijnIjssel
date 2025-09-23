@@ -1,4 +1,38 @@
-﻿@page "/"
+﻿@using Cineflex.Models.Dto.Movie
+@page "/"
 
 <PageTitle>["Home_Title"]</PageTitle>
+<MudStack Justify="Justify.Center" >
+    <MudCarousel @ref="_carousel" ItemsSource="Movies" Style="height:60vh;" EnableSwipeGesture="true" 
+                 ShowArrows="true" ShowBullets="true" AutoCycle="true" AutoCycleTime="TimeSpan.FromSeconds(10)">
+        <ItemTemplate>
+            <div style="position: relative; height: 100%; width: 100%;">
+                <MudImage Elevation="5" Src="@GetImage(context.Name)"
+                          Style="height:100%; width:100%;pointer-events:none;touch-action:none;" />
+                <MudText Align="@Align.Start" Style="" Class="carousel-text">
+                    @context.Name
+                    <br />
+                    @context.Description
+                </MudText>
+            </div>
+        </ItemTemplate>
+    </MudCarousel>
+   
+</MudStack>
+
+
+
+@*Isolation CSS doesnt work*@
+<style>
+    .carousel-text {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        color: white;
+        background-color: rgba(0,0,0,0.5);
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+</style>
 

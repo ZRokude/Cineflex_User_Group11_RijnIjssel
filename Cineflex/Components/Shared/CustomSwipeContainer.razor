@@ -1,0 +1,18 @@
+﻿
+@typeparam T
+
+
+<MudCarousel TData="T" EnableSwipeGesture="true"
+             ShowArrows="true">
+    @foreach (var item in Items)
+    {
+        <MudCarouselItem>
+            <div style="position: relative; height:; width:;">
+                <MudImage Elevation="5" 
+                          Style="height:100%; width:100%;pointer-events:none;touch-action:none;" />
+            </div>
+        </MudCarouselItem>
+    }
+</MudCarousel>
+
+

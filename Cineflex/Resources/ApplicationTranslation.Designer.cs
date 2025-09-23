@@ -88,6 +88,24 @@ namespace Cineflex.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Informatie.
+        /// </summary>
+        public static string Navbar_Item2 {
+            get {
+                return ResourceManager.GetString("Navbar_Item2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Over Ons.
+        /// </summary>
+        public static string Navbar_Item3 {
+            get {
+                return ResourceManager.GetString("Navbar_Item3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cineflex.
         /// </summary>
         public static string Navbar_Title {

@@ -59,7 +59,8 @@ namespace Cineflex.Extensions
         {
             services.AddMudServices()
                 .AddMudTranslations()
-                .AddScoped<NotifyService>();
+                .AddScoped<NotifyService>()
+                .AddMvc() ;
             return services;
         }
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
