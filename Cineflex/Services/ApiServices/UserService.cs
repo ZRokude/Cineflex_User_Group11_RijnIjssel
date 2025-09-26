@@ -1,36 +1,51 @@
-﻿using Cineflex_DataAccess.Entities.User;
-using System.Security.Principal;
-using System.Text.Json;
+﻿using Cineflex.Models;
+using Cineflex.Services;
+using Cineflex.Utilities;
+using Cineflex_API.Model.Commands.User;
+using Cineflex_API.Model.Responses.User;
+using Cineflex_API.Model.User;
 
 public interface IUserService
 {
-    public Task<string?> Login(string username, string password); // JWT token returnen
-    public Task<bool> CreateAccount(Account account);
+    public Task<ModelServiceResponse<AccountResponse>> CreateAccount(AccountCommand account);
+    public Task<ModelServiceResponse<CredentialResponse>> CreateCredentialsAccount(CredentialCommand account); // Ook deze consistent maken
+    public Task<ModelServiceResponse<AccountResponse>> GetAccountByEmail(string email);
+    public Task<ModelServiceResponse<AccountResponse>> ResetPassword(Guid userId, string newPassword);
 }
 
-public class UserService(IHttpClientFactory httpClientFactory) : IUserService
+public class UserService(HttpRequestHandler<Program> requestHandler, NotifyService notifyService) :
+    BaseApiService(requestHandler, notifyService),
+    IUserService
 {
-    private readonly HttpClient _httpClient = httpClientFactory.CreateClient("AccountApi");
-
-    public async Task<string?> Login(string email, string password)
+    public async Task<ModelServiceResponse<AccountResponse>> CreateAccount(AccountCommand command)
     {
-        var response = await _httpClient.GetAsync($"https://localhost:7153/api/Account/get?email={email}&password={password}");
-        if (response.IsSuccessStatusCode)
+        var result = await requestHandler.PostAsync<AccountResponse, AccountCommand>("api/Account/create", command, CancellationToken.None);
+        return result; 
+    }
+
+    public async Task<ModelServiceResponse<CredentialResponse>> CreateCredentialsAccount(CredentialCommand command)
+    {
+        var result = await requestHandler.PostAsync<CredentialResponse, CredentialCommand>("api/Credential/create", command, CancellationToken.None);
+        return result; 
+    }
+
+    public async Task<ModelServiceResponse<AccountResponse>> GetAccountByEmail(string email)
+    {
+        var result = await requestHandler.GetAsync<AccountResponse>($"api/Account/getbyemail?email={email}", CancellationToken.None);
+        return result;
+    }
+    public async Task<ModelServiceResponse<AccountResponse>> ResetPassword(Guid userId, string newPassword)
+    {
+        var updateCommand = new AccountCommand
         {
-            var content = await response.Content.ReadAsStringAsync();
-            // Als je API direct een JWT token string teruggeeft:
-            return content.Trim('"'); // Remove quotes if the API returns "token" instead of token
-        }
-        return null;
+            Id = userId,
+            Password = newPassword
+            
+        };
+
+        var result = await requestHandler.PostAsync<AccountResponse, AccountCommand>(
+            "api/Account/resetpassword", updateCommand, CancellationToken.None);
+        return result;
     }
 
-    public async Task<bool> CreateAccount(Account account)
-    {
-        var json = JsonSerializer.Serialize(account);
-        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsJsonAsync("https://localhost:7153/api/Account/create", account);
-
-        return response.IsSuccessStatusCode;
-    }
 }

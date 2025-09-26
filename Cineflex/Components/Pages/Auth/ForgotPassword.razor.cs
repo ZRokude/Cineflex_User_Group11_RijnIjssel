@@ -1,4 +1,7 @@
+using Cineflex.Models.Responses.User;
+using Cineflex.Services.ApiServices;
 using Cineflex.Services.Email;
+using Cineflex_API.Model.Commands.User;
 using Cinelexx.Services.Email;
 
 using Microsoft.AspNetCore.Components;
@@ -13,6 +16,9 @@ namespace Cineflex.Components.Pages.Auth
         private ForgotPasswordModel model = new();
         private MudForm form = new();
         private EmailAddressAttribute emailValidator = new();
+
+        [Inject] IUserService UserService { get; set; } = default!;
+        [Inject] ITokenService TokenService { get; set; } = default!;
 
         private string backgroundClass = "start-color";
 
@@ -133,29 +139,43 @@ namespace Cineflex.Components.Pages.Auth
 
             try
             {
-                // var user = await DbContext.Users.FirstOrDefaultAsync(e => e.Email == model.Email); JON: find the user in the db with the emial
-
-                // if (user is null) JON:if the e-mail is not found
-                // {
-                //     Snackbar.Add("E-mailadres niet gevonden!", Severity.Error);
-                //     return;
-                // }
 
                 backgroundClass = "end-color";
                 _fadeOut = true;
                 StateHasChanged();
 
+                var userResponse = await UserService.GetAccountByEmail(model.Email);
+                // Gebruik de bestaande property IsSuccesfull in plaats van Success
+                if (!userResponse.IsSuccesfull || userResponse.Model == null)
+                {
+                    Snackbar.Add("E-mailadres niet gevonden!", Severity.Error);
+                    _SendCode = false;
+                    return;
+                   
+                }
+
+                // En hier gebruik je Model in plaats van Data
+                var user = userResponse.Model;
+
                 var code = new Random().Next(100000, 999999).ToString(); //JON: generate a code
-                // user.Token = code;
-                // user.TokenCreated = DateTime.UtcNow.AddHours(1); JON: make the time olny 1 hour from nowe
-                // await DbContext.SaveChangesAsync(); JON: update the User in the db
+                var tokenResponse = await TokenService.CreateToken(new TokenResponse
+                {
+                    UserId = user.Id,
+                    Value = code,
+                    Expiration = DateTime.UtcNow.AddHours(1),
+                    IsActive = true
+                });
 
 
-                var _UserEmail = "jonathanhoefnagel@gmail.com"; //test
 
-                 var emailService = new EmailService();
-                 //await emailService.SendForgotPasswordEmailAsync(user.Email, code);
-                await emailService.SendForgotPasswordEmailAsync(_UserEmail, code);
+                if (!tokenResponse.IsSuccesfull)
+                {
+                    Snackbar.Add("Er is een fout opgetreden bij het aanmaken van de token.", Severity.Error);
+                    return;
+                }
+
+                var emailService = new EmailService();
+                await emailService.SendForgotPasswordEmailAsync(model.Email, code);
 
 
                 Snackbar.Add("Code verstuurd naar uw e-mail!", Severity.Success);
@@ -181,15 +201,18 @@ namespace Cineflex.Components.Pages.Auth
 
             try
             {
-                // var user = await DbContext.Users.FirstOrDefaultAsync(s => s.Email == model.Email && s.Token == model.ResetCode); JON: find the user int he db with the email and token
+                // Gebruik Email en Token parameters die je al hebt
+                var tokenResponse = await TokenService.ValidateToken(model.Email, model.ResetCode);
 
-                // if (user is null || user.TokenCreated < DateTime.UtcNow) JON: check if the token is valid and the user is not null
-                // {
-                //     Snackbar.Add("Ongeldige of verlopen code!", Severity.Error);
-                //     return;
-                // }
+                if (!tokenResponse.IsSuccesfull || tokenResponse.Model == null) //JON: checks if the token is still good
+                {
+                    Snackbar.Add("Ongeldige herstelcode.", Severity.Error);
+                    return;
+                }
 
                 backgroundClass = "start-color"; //JON: set the background to normal for a smooth transition
+                lampClass = "lamp-hidden";
+                _fadeOut = false;
                 StateHasChanged();
                 await Task.Delay(500); //JON: small delay so the animation can play
                 NavigationManager.NavigateTo($"/passwordreset/{model.Email}/{model.ResetCode}");//JON: navigate to the passwordreset page
@@ -206,6 +229,7 @@ namespace Cineflex.Components.Pages.Auth
             if (_SendCode)
             {
                 backgroundClass = "start-color";
+                _fadeOut = false;
                 lampClass = "lamp-hidden";
                 await Task.Delay(500);
             }
@@ -218,6 +242,7 @@ namespace Cineflex.Components.Pages.Auth
         private async Task OnReturnToPasswordClick()//JON: if you have not made a password
         {
             backgroundClass = "start-color";
+            _fadeOut = false;
             lampClass = "lamp-hidden";
             StateHasChanged();
             await Task.Delay(500);

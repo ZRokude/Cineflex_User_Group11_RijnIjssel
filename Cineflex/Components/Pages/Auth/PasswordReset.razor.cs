@@ -1,4 +1,9 @@
-
+﻿
+using Cineflex.Services.ApiServices;
+using Cineflex_API.Model.Commands.User;
+using Cineflex_API.Model.User;
+using Cinelexx.Services.Email;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -6,16 +11,24 @@ namespace Cineflex.Components.Pages.Auth
 {
     public partial class PasswordReset
     {
+        [Inject] private ITokenService TokenService { get; set; } = null!;
+        [Inject] private IUserService UserService { get; set; } = null!;
+
+
         //<---------------->Model
         private ResetModel model = new();
         [Parameter] public required string Email { get; set; }
         [Parameter] public required string Token { get; set; }
-        // private User? _user;
+
+
+
+
+        private AccountResponse? _user;
 
         private string backgroundClass = "start-color";
 
         //<---------------------->Bools
-        private bool isValidToken = false;
+        private bool isValidToken = true;
         private bool isNewPasswordVisible = false;
         private bool isConfirmPasswordVisible = false;
 
@@ -41,23 +54,36 @@ namespace Cineflex.Components.Pages.Auth
 
         protected override async Task OnInitializedAsync()
         {
-            backgroundClass = "start-color"; //JON: set the background collour
+            backgroundClass = "start-color";
             try
             {
-                // _user = await DbContext.Users
-                //     .FirstOrDefaultAsync(u => u.Email == Email && u.Token == Token); JON: finds the user with the email and token
+                // Gebruik Email en Token parameters die je al hebt
+                var tokenResponse = await TokenService.ValidateToken(Email, Token);
 
-                // if (_user == null) JON: if the epmolyee is NOT found
-                // {
-                //     isValidToken = false;
-                //     Snackbar.Add("Ongeldige of verlopen resetlink.", Severity.Error);
-                //     await Task.Delay(1000);
-                //     NavigationManager.NavigateTo("/Login");
-                // }
-                // else
-                // {
-                //     isValidToken = true; JON: if the employee is found, the isValidToken is set to true
-                // }
+                if (!tokenResponse.IsSuccesfull || tokenResponse.Model == null)
+                {
+                    isValidToken = false;
+                    Snackbar.Add("Ongeldige of verlopen resetlink.", Severity.Error);
+                    await Task.Delay(1000);
+                    NavigationManager.NavigateTo("/forgotPassword");
+                    return;
+                }
+
+                var validToken = tokenResponse.Model; 
+
+                // Haal gebruiker op
+                var userResponse = await UserService.GetAccountByEmail(Email);
+                if (!userResponse.IsSuccesfull || userResponse.Model == null)  
+                {
+                    isValidToken = false;
+                    Snackbar.Add("Gebruiker niet gevonden.", Severity.Error);
+                    await Task.Delay(1000);
+                    NavigationManager.NavigateTo("/forgotPassword");
+                    return;
+                }
+
+                _user = userResponse.Model;
+                isValidToken = true;
             }
             catch (Exception ex)
             {
@@ -66,7 +92,6 @@ namespace Cineflex.Components.Pages.Auth
                 Snackbar.Add("Er is een fout opgetreden bij het valideren van de resetlink.", Severity.Error);
             }
         }
-
 
         // Validation Methods
         private void ValidateNewPassword()
@@ -186,27 +211,30 @@ namespace Cineflex.Components.Pages.Auth
                 return;
             }
 
-            // if (_user is null) JON: if it can't find the employee
-            // {
-            //     Snackbar.Add("Onverwachte fout: gebruiker niet gevonden.", Severity.Error);
-            //     return;
-            // }
+            if (_user is null)// JON: if it can't find the User
+             {
+                Snackbar.Add("Onverwachte fout: gebruiker niet gevonden.", Severity.Error);
+                return;
+            }
 
             try
             {
-                // var hasher = new PasswordHasher<User>();JON: use the hasher from blazor it self
-                // _user.PasswordHash = hasher.HashPassword(_user, model.NewPassword);
-                // _user.Token = null; JON: set the epmoyee token to null
-                // _user.TokenCreated = null;JON: set the epmoyee TokenCreated to null
 
-                // DbContext.Users.Update(_user); JON: update the employee in the db
-                // await DbContext.SaveChangesAsync();
+
+                // Reset wachtwoord via API
+                var resetResponse = await UserService.ResetPassword(_user.Id, model.NewPassword);
+
+                if (!resetResponse.IsSuccesfull)
+                {
+                    Snackbar.Add("Er is een fout opgetreden bij het wijzigen van het wachtwoord.", Severity.Error);
+                    return;
+                }
 
                 Snackbar.Add("Wachtwoord succesvol gewijzigd!", Severity.Success);
                 await Task.Delay(2000);
 
-                // var emailService = new EmailService();
-                // await emailService.SendPasswordChangedEmailAsync(_user.Email, _timeNow); JON: send the mail
+                var emailService = new EmailService();
+                await emailService.SendPasswordChangedEmailAsync(_user.Email, _timeNow); //JON: send the mail
 
                 NavigationManager.NavigateTo("/login");
             }

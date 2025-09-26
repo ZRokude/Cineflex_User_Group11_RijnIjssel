@@ -113,7 +113,10 @@ namespace Cineflex.Components.Pages.Auth
 
                 if (result.IsAuthenticated)
                 {
+                    chairsVisible = false;
+                    await Task.Delay(500);
                     NavigationManager.NavigateTo("/", forceLoad: true);
+
                     return;
                 }
 

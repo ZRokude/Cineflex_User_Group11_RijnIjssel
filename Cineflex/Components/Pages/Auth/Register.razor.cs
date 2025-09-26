@@ -1,4 +1,5 @@
-using Cineflex_DataAccess.Entities.User;
+using Cineflex_API.Model.Commands.User;
+
 using Cinelexx.Services.Email;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Components;
@@ -220,12 +221,6 @@ namespace Cineflex.Components.Pages.Auth
                 return;
             }
 
-            // _isEmailUniqe = await UserService.IsEmailUniqueAsync(model.Email);
-
-            if (!_isEmailUniqe)
-            {
-                Snackbar.Add("Dit email adress is word al gebruikt");
-            }
         }
 
 
@@ -245,45 +240,72 @@ namespace Cineflex.Components.Pages.Auth
 
         private async Task MakeAccount()
         {
-            var hasher = new PasswordHasher<Account>(); //JON: the hasher of blazor
+            _isLoading = true;
+
+            var hasher = new PasswordHasher<AccountCommand>(); //JON: the hasher of blazor
 
             await ValidateEmail();
 
             if (!_isEmailUniqe)
                 return;
 
-            Account newAccount = new Account()
+            AccountCommand newAccountCommands = new AccountCommand()
             {
                 Email = model.Email,
-                Credential = new Credential
-                {
-                    FirstName = model.FirstName,
-                    MidName = model.MiddleName, // bij jou heet het MidName
-                    LastName = model.LastName,
-                    Address = model.Address,
-                    PostCode = model.PostCode,
-                    DateBirth = model.UserDb,
-                }
+                Password = model.NewPassword
             };
 
-
-            newAccount.Password = hasher.HashPassword(newAccount, model.NewPassword);
-
-            // Use the UserService to create the account
-            var success = await UserService.CreateAccount(newAccount);
-
-            if (success)
+            try
             {
-                Snackbar.Add("Account is Aangemaakt!");
-                var emailService = new EmailService();
-                await emailService.SendWelkomEmailAsync(newAccount.Email);
+                // Use the UserService to create the account
+                var result = await UserService.CreateAccount(newAccountCommands);
 
-                NavigationManager.NavigateTo("/login");
+                if (result.Model != null)
+                {
+                    CredentialCommand credentialCommand = new CredentialCommand
+                    {
+                        FirstName = model.FirstName,
+                        MidName = model.MiddleName,
+                        LastName = model.LastName,
+                        Address = model.Address,
+                        PostCode = model.PostCode,
+                        DateBirth = model.UserDb,
+                        AccountId = result.Model.Id
+                    };
+
+                    var credentialResult = await UserService.CreateCredentialsAccount(credentialCommand);
+                    if (credentialResult != null)
+                    {
+                        var emailService = new EmailService();
+                        await emailService.SendWelkomEmailAsync(model.Email);
+                        _isLoading = false;
+                        Snackbar.Add("Account succesfol toegevoegd");
+                        NavigationManager.NavigateTo("/login");
+                    }
+                    else
+                    {
+                        Snackbar.Add("Fout opgetreden bij het aanmaken van uw account, probeer opnieuw");
+                        return;
+                    }
+
+                }
+                else
+                {
+                    if (result.StatusCode == 409)//JON: if the emial is already exised in the db
+                    {
+                        _isLoading = false;
+                        Snackbar.Add("Dit Email adres word al gebruikt");
+                        return;
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // Handle failure (account already exists, etc.)
+                Snackbar?.Add(ex.Message);
+                return;
             }
+
+            
 
         }
     }

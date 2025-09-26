@@ -35,27 +35,27 @@
                                       ErrorText="@emailError" />
                     </MudItem>
                     <MudItem xs="6">
-                        <MudTextField Label="Voornaam" Variant="Variant.Filled" @bind-Value="model.FirstName" />
+                        <MudTextField Label="Voornaam" Variant="Variant.Filled" @bind-Value="model.FirstName" Required RequiredError="Uw Voornaam is verplicht om intevoeren" />
                     </MudItem>
 
                     <!-- Row 2 -->
                     <MudItem xs="6">
-                        <MudTextField Label="Middenvoegsel" Variant="Variant.Filled" @bind-Value="model.MiddleName" />
+                        <MudTextField Label="Middenvoegsel*" Variant="Variant.Filled" @bind-Value="model.MiddleName" />
                     </MudItem>
                     <MudItem xs="6">
-                        <MudTextField Label="Achternaam" Variant="Variant.Filled" @bind-Value="model.LastName" />
+                        <MudTextField Label="Achternaam" Variant="Variant.Filled" @bind-Value="model.LastName" Required RequiredError="Uw achternaam is verplicht om intevoeren" />
                     </MudItem>
 
                     <!-- Row 3 -->
                     <MudItem xs="6">
-                        <MudDatePicker Label="Geboorte datum" Variant="Variant.Filled" @bind-Date="_UserBD" ShowToolbar="false" />
+                        <MudDatePicker Label="Geboorte datum" Variant="Variant.Filled" @bind-Date="_UserBD" MaxDate="@DateTime.Today" ShowToolbar="false" />
                     </MudItem>
                     <MudItem xs="6">
-                        <MudTextField Label="Postcode" Variant="Variant.Filled" @bind-Value="model.PostCode" />
+                        <MudTextField Label="Postcode" Variant="Variant.Filled" @bind-Value="model.PostCode" Required  RequiredError="postcode is verplicht om intevoeren"/>
                     </MudItem>
 
                     <MudItem xs="6"> 
-                        <MudTextField Label="Adres" Variant="Variant.Filled" @bind-Value="model.Address" Placeholder="Straatnaam & Huisnummer" />
+                        <MudTextField Label="Adres" Variant="Variant.Filled" @bind-Value="model.Address" Placeholder="Straatnaam & Huisnummer" Required RequiredError="Uw adres is verplicht om intevoeren" />
                     </MudItem>
 
                     <!-- Row 4 -->
