@@ -1,14 +1,10 @@
 ﻿@page "/login"
 @using Cineflex.Services.Authentication
 @using Microsoft.AspNetCore.Identity.Data
-
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
-
 @rendermode InteractiveServer
-
 <PageTitle>Login</PageTitle>
-
 
 
 
@@ -29,54 +25,110 @@
         }
     </div>
 
-    <!-- Main login card -->
-    <MudCard Style="position: fixed; top: 20vh; left: 35vw; width: 450px; background-color:#272727; padding:15px; border-radius:15px" Elevation="25">
-        <!-- Login form -->
-        <MudForm @ref="_form">
+    @if (!_isLoggedIn)
+    {
+        <!-- Main login card -->
+        <MudCard Style="position: fixed; top: 20vh; left: 35vw; width: 450px; background-color:#272727; padding:15px; border-radius:15px" Elevation="25">
+            <!-- Login form -->
+            <MudForm @ref="_form">
+                <MudCardContent>
+
+                    <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+                        <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
+                    </div>
+
+
+                    <!-- Email input field -->
+                    <MudTextField Label="Email"
+                                  Class="mt-3"
+                                  @bind-Value="_loginFormModel.Email"
+                                  For="@(() => _loginFormModel.Email)"
+                                  InputType="InputType.Email"
+                                  Placeholder="naam@gmail.com"
+                                  Variant="Variant.Filled" />
+
+                    <!-- Password input field with visibility toggle -->
+                    <MudTextField T="string"
+                                  Label="Wachtwoord"
+                                  @bind-Value="_loginFormModel.Password"
+                                  For="@(() => _loginFormModel.Password)"
+                                  InputType="@PasswordInputType"
+                                  Placeholder="***************"
+                                  Variant="Variant.Filled"
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@PasswordInputIcon"
+                                  OnAdornmentClick="TogglePasswordVisibility"
+                                  IconSize="Size.Medium" />
+
+                    <!-- Action links for password reset and first login -->
+                    <MudCardActions>
+                        <MudStack Spacing="1">
+                            <MudText>
+                                <MudLink OnClick="NavigateToForgetPassword">Wachtwoord vergeten?</MudLink>
+                            </MudText>
+                            <MudText>
+                                <MudLink OnClick="NavigateToRegister">Heeft u nog geen account ? Registreer</MudLink>
+                            </MudText>
+                        </MudStack>
+
+                    </MudCardActions>
+
+                    <!-- Login button -->
+                    <MudButton ButtonType="ButtonType.Button"
+                               OnClick="HandleLoginAsync"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               FullWidth="true"
+                               Class="ml-auto"
+                               Disabled="@_isLoading">
+                        @if (_isLoading)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Inloggen...</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Inloggen</MudText>
+                        }
+                    </MudButton>
+
+                </MudCardContent>
+            </MudForm>
+        </MudCard>
+
+    }
+    
+
+    @if (_isLoggedIn)
+    {
+        <MudCard Style="position: fixed; top: 20vh; left: 35vw; width: 450px; background-color:#272727; padding:15px; border-radius:15px" Elevation="25">
             <MudCardContent>
+
+
 
                 <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
                     <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
                 </div>
 
-                <!-- Email input field -->
-                <MudTextField Label="Email"
-                              Class="mt-3"
-                              @bind-Value="_loginFormModel.Email"
-                              For="@(() => _loginFormModel.Email)"
-                              InputType="InputType.Email"
-                              Placeholder="naam@gmail.com"
-                              Variant="Variant.Filled" />
+                <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+                    <MudText Typo="Typo.h5" Style="color:white;"> U bent al ingelogd.</MudText>
+                </div>
 
-                <!-- Password input field with visibility toggle -->
-                <MudTextField T="string"
-                              Label="Wachtwoord"
-                              @bind-Value="_loginFormModel.Password"
-                              For="@(() => _loginFormModel.Password)"
-                              InputType="@PasswordInputType"
-                              Placeholder="***************"
-                              Variant="Variant.Filled"
-                              Adornment="Adornment.End"
-                              AdornmentIcon="@PasswordInputIcon"
-                              OnAdornmentClick="TogglePasswordVisibility"
-                              IconSize="Size.Medium" />
-
+                                <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
                 <!-- Action links for password reset and first login -->
                 <MudCardActions>
                     <MudStack Spacing="1">
                         <MudText>
-                            <MudLink OnClick="NavigateToForgetPassword">Wachtwoord vergeten?</MudLink>
-                        </MudText>
-                        <MudText>
-                            <MudLink OnClick="NavigateToRegister">Heeft u nog geen account ? Registreer</MudLink> 
+                            <MudLink OnClick="LogOutAsync">Uitloggen</MudLink>
                         </MudText>
                     </MudStack>
-                    
                 </MudCardActions>
+
+                </div>
 
                 <!-- Login button -->
                 <MudButton ButtonType="ButtonType.Button"
-                           OnClick="HandleLoginAsync"
+                           OnClick="NavigateToHome"
                            Variant="Variant.Filled"
                            Color="Color.Primary"
                            FullWidth="true"
@@ -85,17 +137,17 @@
                     @if (_isLoading)
                     {
                         <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                        <MudText Class="ms-2">Inloggen...</MudText>
+                        <MudText Class="ms-2">sturen naar home...</MudText>
                     }
                     else
                     {
-                        <MudText>Inloggen</MudText>
+                        <MudText>Terug naar startpagina </MudText>
                     }
                 </MudButton>
-
             </MudCardContent>
-        </MudForm>
-    </MudCard>
+        </MudCard>
+    }
+
 </div>
 
 <!-- CSS styles for background -->
@@ -103,20 +155,6 @@
     .start-color {
         background-color: #232323;
     }
-
-
-    .glow-text {
-        font-size: 23px; /* Make text bigger */
-        color: #fff; /* Base color */
-        text-align: center;
-        transition: all 0.3s ease; /* Smooth transition on hover */
-    }
-
-        .glow-text:hover {
-            font-size: 25px; /* Bigger on hover */
-            }
-
-
 
 
     .row {

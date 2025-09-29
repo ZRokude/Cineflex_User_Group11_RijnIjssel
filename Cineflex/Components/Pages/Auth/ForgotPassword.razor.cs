@@ -131,7 +131,7 @@ namespace Cineflex.Components.Pages.Auth
             if (!IsEmailValid())
             {
                 Snackbar.Add("Controleer uw e-mailadres en probeer opnieuw.", Severity.Error);
-                return;
+                return; // Return hier zonder _SendCode aan te passen!
             }
 
             _isLoading = true; //JON: set isLoading to true so you can't use this multiple times
@@ -139,25 +139,26 @@ namespace Cineflex.Components.Pages.Auth
 
             try
             {
-
                 backgroundClass = "end-color";
                 _fadeOut = true;
                 StateHasChanged();
 
                 var userResponse = await UserService.GetAccountByEmail(model.Email);
-                // Gebruik de bestaande property IsSuccesfull in plaats van Success
+
                 if (!userResponse.IsSuccesfull || userResponse.Model == null)
                 {
                     Snackbar.Add("E-mailadres niet gevonden!", Severity.Error);
-                    _SendCode = false;
+                    // VERWIJDER: _SendCode = false; (dit zorgt ervoor dat de knop blijft)
+                    // Reset de UI state
+                    backgroundClass = "start-color";
+                    _fadeOut = false;
+                    StateHasChanged();
                     return;
-                   
                 }
 
-                // En hier gebruik je Model in plaats van Data
                 var user = userResponse.Model;
 
-                var code = new Random().Next(100000, 999999).ToString(); //JON: generate a code
+                var code = new Random().Next(100000, 999999).ToString();
                 var tokenResponse = await TokenService.CreateToken(new TokenResponse
                 {
                     UserId = user.Id,
@@ -166,20 +167,30 @@ namespace Cineflex.Components.Pages.Auth
                     IsActive = true
                 });
 
-
-
                 if (!tokenResponse.IsSuccesfull)
                 {
                     Snackbar.Add("Er is een fout opgetreden bij het aanmaken van de token.", Severity.Error);
+                    // Reset de UI state
+                    backgroundClass = "start-color";
+                    _fadeOut = false;
+                    StateHasChanged();
                     return;
                 }
 
                 var emailService = new EmailService();
                 await emailService.SendForgotPasswordEmailAsync(model.Email, code);
 
-
+                // ALLEEN HIER _SendCode = true zetten bij succes!
                 Snackbar.Add("Code verstuurd naar uw e-mail!", Severity.Success);
                 _SendCode = true;
+            }
+            catch (Exception ex)
+            {
+                // Bij een exception ook de UI resetten
+                Snackbar.Add("Er is een fout opgetreden. Probeer het opnieuw.", Severity.Error);
+                backgroundClass = "start-color";
+                _fadeOut = false;
+                // NIET: _SendCode = false;
             }
             finally
             {

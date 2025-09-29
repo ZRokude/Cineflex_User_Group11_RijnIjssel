@@ -3,6 +3,7 @@ using Cineflex.Services.Authentication;
 using Cineflex_API.Model.Commands.User;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using MudBlazor;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Cineflex.Components.Pages.Auth
     {
         [Inject] ILoginService Loginservice { get; set; } = null!;
         [Inject] IUserService UserService { get; set; } = null!;
+
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
 
@@ -21,6 +23,8 @@ namespace Cineflex.Components.Pages.Auth
         private int _loginAttempts = 0;
         private bool _isLoading = false;
         private bool chairsVisible;
+
+        private bool _isLoggedIn = false;
 
 
         private LoginFormModel _loginFormModel = new()
@@ -47,10 +51,9 @@ namespace Cineflex.Components.Pages.Auth
             var user = authState.User;
             if (user.Identity?.IsAuthenticated == true)
             {
-                NavigationManager.NavigateTo("/", true); // Redirect to home if already logged in
-                Snackbar.Add("U bent al ingelogd");
-            }
-               
+                _isLoggedIn = true;
+                return;
+            }                  
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -64,35 +67,38 @@ namespace Cineflex.Components.Pages.Auth
             }
         }
 
-
-
         private async Task HandleLoginAsync()
         {
             _isLoading = true;
             try
             {
-                // Step 1: Call your UserService to authenticate and get JWT token
+                
                 LoginCommand command = new LoginCommand
                 {
                     Email = _loginFormModel.Email,
                     Password = _loginFormModel.Password
                 };
+
                 var result = await Loginservice.Login(command);
                 if(result.IsSuccesfull)
                 {
                     var response = result.Model;
                     if (!string.IsNullOrEmpty(response!.Token))
                     {
-                        // Step 2: Use DoLogin with the bearer token
                         await DoLogin(response!.Token);
                     }
                     else
                     {
-                        Snackbar.Add("Login mislukt. Controleer je inloggegevens.", Severity.Error);
+                        Snackbar.Add("Login mislukt. Controleer uw inloggegevens.", Severity.Error);
                     }
                 }
+                if (result.StatusCode == 500 && !result.IsSuccesfull)//If the user is not found
+                {
+                    Snackbar.Add("Gebruiker niet gevonden, Controleer uw inloggegevens.");
+                    return;
+                }
 
-               
+
             }
             catch (Exception ex)
             {
@@ -117,10 +123,12 @@ namespace Cineflex.Components.Pages.Auth
                     await Task.Delay(500);
                     NavigationManager.NavigateTo("/", forceLoad: true);
 
+                    await Task.Delay(250);
+                    _isLoggedIn = true;
                     return;
                 }
 
-                Snackbar.Add($"Authenticatie mislukt: {result.ErrorCode}", Severity.Error);
+                    Snackbar.Add($"Authenticatie mislukt: {result.ErrorCode}", Severity.Error);
             }
         }
 
@@ -131,11 +139,30 @@ namespace Cineflex.Components.Pages.Auth
             NavigationManager.NavigateTo("/register");
         }
 
+
+        private async Task NavigateToHome()
+        {
+            chairsVisible = false;
+            await Task.Delay(500);
+            NavigationManager.NavigateTo("/");
+        }
+
         private async Task NavigateToForgetPassword()
         {
             chairsVisible = false;
             await Task.Delay(500);
             NavigationManager.NavigateTo("/forgotPassword");
+        }
+
+
+        private async Task LogOutAsync()
+        {
+            await ((PersistingAuthenticationStateProvider)AuthStateProvider).SignOut();
+
+            Snackbar.Add("U bent uitgelogd");
+            _isLoggedIn = false;
+            StateHasChanged();
+            return;
         }
 
         // Form model class for binding

@@ -30,6 +30,7 @@ namespace Cineflex.Extensions
                 .AddCascadingAuthenticationState()
                 .AddScoped<AuthenticationStateProvider, PersistingAuthenticationStateProvider>()
                 .AddScoped<AuthenticationStateService>()
+
                 .AddAuthorization()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(
@@ -64,7 +65,6 @@ namespace Cineflex.Extensions
                 .AddTransient<IUserService, UserService>()
                 .AddTransient<ITokenService, TokenService>()
                 .AddTransient<ILoginService, LoginService>();
-
             return services;
         }
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
