@@ -1,4 +1,5 @@
 ﻿using Cineflex.Services;
+using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
 using Cineflex.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,6 +30,7 @@ namespace Cineflex.Extensions
                 .AddCascadingAuthenticationState()
                 .AddScoped<AuthenticationStateProvider, PersistingAuthenticationStateProvider>()
                 .AddScoped<AuthenticationStateService>()
+
                 .AddAuthorization()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(
@@ -59,7 +61,10 @@ namespace Cineflex.Extensions
         {
             services.AddMudServices()
                 .AddMudTranslations()
-                .AddScoped<NotifyService>();
+                .AddScoped<NotifyService>()
+                .AddTransient<IUserService, UserService>()
+                .AddTransient<ITokenService, TokenService>()
+                .AddTransient<ILoginService, LoginService>();
             return services;
         }
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
@@ -69,7 +74,7 @@ namespace Cineflex.Extensions
                 .AddTransient<HttpRequestHandler<Program>>()
                 .AddHttpClient(typeof(Program).AssemblyQualifiedName!, client =>
                 {
-                    client.BaseAddress = new Uri(configuration["ApiBaseUrl"] ?? throw new InvalidOperationException("ApiBaseUrl is not configured."));
+                    client.BaseAddress = new Uri(configuration["Api:BaseUrl"!] ?? throw new InvalidOperationException("ApiBaseUrl is not configured."));
                     client.Timeout = TimeSpan.FromSeconds(30);
                 })
                 .AddHttpMessageHandler<BearerStateHandler>();
