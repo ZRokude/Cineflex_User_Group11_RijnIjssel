@@ -1,18 +1,28 @@
-﻿
-@typeparam T
+﻿@typeparam TData
+<section class="mud-carousel" style="@($"height:{Height};")">
+    <MudSwipeArea Style="width:100%;">
+        <MudStack Row="true" Justify="Justify.SpaceEvenly">
+            <CascadingValue Value="this" IsFixed="true">
+                @if (Items == null)
+                {
+                    @ChildContent
+                }
+                else
+                {
+                    foreach (var item in Items)
+                    {
+                        @if (ItemTemplate != null)
+                        {
+                            @ItemTemplate(item)
+                            ;
+                        }
+                    }
+                }
+            </CascadingValue>
+        </MudStack>
+    </MudSwipeArea>
+</section>
 
 
-<MudCarousel TData="T" EnableSwipeGesture="true"
-             ShowArrows="true">
-    @foreach (var item in Items)
-    {
-        <MudCarouselItem>
-            <div style="position: relative; height:; width:;">
-                <MudImage Elevation="5" 
-                          Style="height:100%; width:100%;pointer-events:none;touch-action:none;" />
-            </div>
-        </MudCarouselItem>
-    }
-</MudCarousel>
 
 

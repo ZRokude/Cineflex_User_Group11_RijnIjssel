@@ -9,12 +9,19 @@ namespace Cineflex.Components.Pages
         [Inject] internal MudLocalizer Localizer { get; set; } = default!;
 
         private MudCarousel<MovieDto> _carousel = null!;
-        private List<MovieDto> Movies { get; set; } = new();
+        private MudCarousel<object> _carouselMovieList = null!;
+        private List<MovieDto> MoviesHighlight { get; set; } = new();
+        private List<MovieDto> MovieList { get; set; } = new();
         private string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
         protected override Task OnInitializedAsync()
         {
-            Movies.Add(new MovieDto { Name = "Inception", Description = "A mind-bending thriller by Christopher Nolan."});
-            Movies.Add(new MovieDto { Name = "MovieTest", Description = "A mind-bending thriller by Christopher Nolan." });
+            MoviesHighlight.Add(new MovieDto { Name = "Inception", Description = "A mind-bending thriller by Christopher Nolan."});
+            MoviesHighlight.Add(new MovieDto { Name = "MovieTest", Description = "A mind-bending thriller by Christopher Nolan." });
+            MovieList.Add(new MovieDto { Name = "Inception", Description = "A mind-bending thriller by Christopher Nolan." });
+            MovieList.Add(new MovieDto { Name = "MovieTest", Description = "A mind-bending thriller by Christopher Nolan." });
+            MovieList.Add(new MovieDto { Name = "Inception", Description = "A mind-bending thriller by Christopher Nolan." });
+            MovieList.Add(new MovieDto { Name = "MovieTest", Description = "A mind-bending thriller by Christopher Nolan." }); 
+            MovieList.Add(new MovieDto { Name = "MovieTest", Description = "A mind-bending thriller by Christopher Nolan." }); MovieList.Add(new MovieDto { Name = "MovieTest", Description = "A mind-bending thriller by Christopher Nolan." });
             return base.OnInitializedAsync();
         }
         private string GetImage(string title)

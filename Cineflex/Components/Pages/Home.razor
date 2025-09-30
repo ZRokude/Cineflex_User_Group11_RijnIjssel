@@ -1,15 +1,17 @@
 ﻿@using Cineflex.Models.Dto.Movie
+
 @page "/"
 
 <PageTitle>["Home_Title"]</PageTitle>
 <MudStack Justify="Justify.Center" >
-    <MudCarousel @ref="_carousel" ItemsSource="Movies" Style="height:60vh;" EnableSwipeGesture="true" 
+    <MudCarousel @ref="_carousel" ItemsSource="MoviesHighlight" Style="height:60vh;" EnableSwipeGesture="true"
                  ShowArrows="true" ShowBullets="true" AutoCycle="true" AutoCycleTime="TimeSpan.FromSeconds(10)">
         <ItemTemplate>
-            <div style="position: relative; height: 100%; width: 100%;">
+            <div style="display:flex; justify-content:center; align-items:center; height:100%; position:relative;">
                 <MudImage Elevation="5" Src="@GetImage(context.Name)"
-                          Style="height:100%; width:100%;pointer-events:none;touch-action:none;" />
-                <MudText Align="@Align.Start" Style="" Class="carousel-text">
+                          Style="max-height:100%; max-width:100%; object-fit:contain;" />
+                <MudText Align="@Align.Start" Class="carousel-text-carousel-highlight"
+                         Style="position:absolute; bottom:10%; left:5%;">
                     @context.Name
                     <br />
                     @context.Description
@@ -17,14 +19,14 @@
             </div>
         </ItemTemplate>
     </MudCarousel>
-   
 </MudStack>
 
 
 
 @*Isolation CSS doesnt work*@
 <style>
-    .carousel-text {
+    .carousel-text-carousel-highlight {
+        display:inline-block;
         position: absolute;
         top: 10px;
         left: 20px;
@@ -32,7 +34,19 @@
         background-color: rgba(0,0,0,0.5);
         padding: 5px 10px;
         border-radius: 5px;
+        max-width:20%;
     }
 
+    .carousel-text-carousel{
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%); 
+        color: white;
+        background-color: rgba(0,0,0,0.5);
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
 </style>
 
