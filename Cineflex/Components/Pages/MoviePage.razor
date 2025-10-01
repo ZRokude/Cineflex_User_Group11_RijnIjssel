@@ -1,0 +1,110 @@
+﻿@page "/Moviepage/{movieId:guid}"
+@using Cineflex_API.Model.Commands.Movie;
+@using Cineflex_API.Model.Responses.Movie
+
+<PageTitle>Movie pagina</PageTitle>
+
+<div class="@($"color-transition {backgroundClass}")"
+     style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; display: flex; flex-direction: column; align-items: center;">
+
+
+    <MudCard Style="width:100vw; height:500px; border: 5px solid white; position: relative; z-index:1;">
+    </MudCard>
+
+    <MudCard Style="width:250px; height:350px; border: 5px solid gray; position: absolute; top: 150px; left: 300px; z-index: 2;">
+    </MudCard>
+
+
+</div>
+
+    <div style="position: fixed; bottom: 230px; left: 10%; transform: translateX(-10%); text-align: left;">
+        @if (Movie is not null)
+            {
+                <MudText Class="movie-title">@Movie.Name</MudText>
+                <div class="movie-subtext">
+                    <MudAvatar Color="Color.Warning" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                </div>
+
+                <div class="movie-subtext">
+                    <MudIcon Icon="@Icons.Material.Filled.Star" /> Rating: @Movie.Rating / 10
+                </div>
+
+                <div class="movie-subtext">
+                    <MudIcon Icon="@Icons.Material.Filled.MovieCreation" /> Released: @formattedDate
+                </div>
+            }
+            else
+            {
+                <MudText>Loading...</MudText>
+            }
+    </div>
+
+
+
+@code {
+    [Inject] private IMovieService MovieService { get; set; } = null!;
+
+    [Parameter] public required Guid movieId { get; set; }
+
+
+
+    private int _MovieAge = 0;
+    private string formattedDate;
+    private string backgroundClass = "start-color";
+
+    private MovieResponse? Movie { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var response = await MovieService.ReadMovieById(movieId);
+            Movie = response.Model;
+
+            formattedDate = Movie?.ReleaseDate.ToString("yyyy/MM");
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+
+}
+
+
+<style>
+
+
+    .start-color {
+        background: radial-gradient(circle at center, #111 0%, #232323 40%, #000 100%);
+    }
+
+    .movie-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #ffffff; /* plain white text */
+        letter-spacing: 2px;
+        transition: color 0.3s ease, transform 0.3s ease;
+        cursor: pointer;
+    }
+
+        .movie-title:hover {
+            transform: scale(1.01); /* subtle zoom effect */
+        }
+
+    .movie-subtext {
+        font-size: 1.2rem;
+        color: #cccccc;
+        transition: color 0.3s ease;
+    }
+
+        .movie-subtext:hover {
+            transform: scale(1.01);
+            color: #ffffff; /* brighten text on hover */
+        }
+
+
+
+</style>

@@ -64,7 +64,9 @@ namespace Cineflex.Extensions
                 .AddScoped<NotifyService>()
                 .AddTransient<IUserService, UserService>()
                 .AddTransient<ITokenService, TokenService>()
+                .AddTransient<IMovieService, MovieService>()
                 .AddTransient<ILoginService, LoginService>();
+
             return services;
         }
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
