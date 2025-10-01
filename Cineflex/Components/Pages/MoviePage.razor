@@ -32,6 +32,21 @@
                 <div class="movie-subtext">
                     <MudIcon Icon="@Icons.Material.Filled.MovieCreation" /> Released: @formattedDate
                 </div>
+
+                <div class="movie-subtext">
+                    <MudText>
+                        @if (showMore)
+                        {
+                            @Movie.Description
+                            
+                        }
+                        else
+                        {
+                            @ShortDescription <MudText>...</MudText>
+                            <MudButton OnClick="ToggleShowMore">Show less</MudButton>
+                        }
+                    </MudText>
+                </div>
             }
             else
             {
@@ -46,7 +61,7 @@
 
     [Parameter] public required Guid movieId { get; set; }
 
-
+    private bool showMore = false;
 
     private int _MovieAge = 0;
     private string formattedDate;
@@ -68,6 +83,27 @@
         catch (Exception ex)
         {
             Console.WriteLine(ex);
+        }
+    }
+
+    private void ToggleShowMore()
+    {
+        showMore = !showMore;
+    }
+
+    private string ShortDescription
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(Movie?.Description))
+                return string.Empty;
+
+            // Split into words and take first 15
+            var words = Movie.Description.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (words.Length <= 15)
+                return Movie.Description;
+
+            return string.Join(" ", words.Take(15));
         }
     }
 
