@@ -12,7 +12,7 @@ namespace Cineflex.Components.Shared
         /// </summary>
         [Parameter] public string TitleColor { get; set; }
 
-        private string _imageStyle { get; set; } = "min-height:80%; max-height:80%;background-size:cover; background-position:center;";
+        private string _imageStyle { get; set; } = "min-height:80%; max-height:80%;";
         private string _titleStyle { get; set; } = "border-radius:25px;";
 
         public ValueTask DisposeAsync()
@@ -27,10 +27,6 @@ namespace Cineflex.Components.Shared
             if(!string.IsNullOrEmpty(Title))
             {
                 _titleStyle += $"color:{TitleColor};";
-            }
-            if (!string.IsNullOrEmpty(_imageStyle))
-            {
-                _imageStyle += $"background-image:url('{Image}');";
             }
             return base.OnInitializedAsync();
         }

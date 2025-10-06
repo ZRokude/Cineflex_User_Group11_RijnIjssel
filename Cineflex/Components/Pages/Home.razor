@@ -1,8 +1,7 @@
-﻿@using Cineflex.Models.Dto.Movie
-
+﻿@using Cineflex.Models.Responses.Movie
 @page "/"
 
-<PageTitle>["Home_Title"]</PageTitle>
+<PageTitle>@Localizer["Home_Title"]</PageTitle>
 <MudStack Justify="Justify.Center" >
     <MudCarousel @ref="_carousel" ItemsSource="MoviesHighlight" Style="height:60vh;" EnableSwipeGesture="true"
                  ShowArrows="true" ShowBullets="true" AutoCycle="true" AutoCycleTime="TimeSpan.FromSeconds(10)">
@@ -10,7 +9,7 @@
             <div style="display:flex; justify-content:center; align-items:center; height:100%; position:relative;">
                 <MudImage Elevation="5" Src="@GetImage(context.Name)"
                           Style="max-height:100%; max-width:100%; object-fit:contain;" />
-                <MudText Align="@Align.Start" Class="carousel-text-carousel-highlight"
+                <MudText Align="@Align.Start" Class="carousel-text-carousel-highlight overflow-scroll"
                          Style="position:absolute; bottom:10%; left:5%;">
                     @context.Name
                     <br />
@@ -19,6 +18,14 @@
             </div>
         </ItemTemplate>
     </MudCarousel>
+    <CustomSwipeContainer TData="MovieResponse" Height="40vh">
+        @foreach(var item in MovieList)
+        {
+            <CustomSwipeItem Image="@GetImage(item.Name)" Title="@item.Name">
+
+            </CustomSwipeItem>
+        }
+    </CustomSwipeContainer>
 </MudStack>
 
 

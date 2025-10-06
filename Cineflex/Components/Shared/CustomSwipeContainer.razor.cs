@@ -18,11 +18,15 @@ namespace Cineflex.Components.Shared
         [Parameter] public int ShowItems { get; set; } = 3;
         [Parameter] public string Height { get; set; } = "20vh";
         [Parameter] public RenderFragment? ChildContent { get; set; }
+        [Parameter] public string Style { get; set; }
 
         private bool _disposing;
         protected override Task OnInitializedAsync()
         {
-
+            if (!string.IsNullOrEmpty(Style))
+            {
+                Style = $"{Style}height:{Height}";
+            }
             return base.OnInitializedAsync();
         }
         public async ValueTask DisposeAsync()

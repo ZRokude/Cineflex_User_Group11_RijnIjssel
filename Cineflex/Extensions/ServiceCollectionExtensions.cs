@@ -1,4 +1,5 @@
 ﻿using Cineflex.Services;
+using Cineflex.Services.ApiService;
 using Cineflex.Services.Authentication;
 using Cineflex.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -60,7 +61,9 @@ namespace Cineflex.Extensions
             services.AddMudServices()
                 .AddMudTranslations()
                 .AddScoped<NotifyService>()
-                .AddMvc() ;
+                .AddTransient<IMovieService, MovieService>()
+                .AddMvc() 
+                ;
             return services;
         }
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
