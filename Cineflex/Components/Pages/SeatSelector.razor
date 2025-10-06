@@ -1,9 +1,29 @@
-﻿@page "/seat/{FilmId:guid}"
+﻿@page "/seat/{CinemaRoomId:guid}"
+
 
 <PageTitle>@Localizer["SeatSelecter_Title"]</PageTitle>
 
 <div>
-    <MudStack>
+    @if (CinemaRoomSeatResponses == null && CinemaRoomSeatResponses.Count > 0)
+    {
+       
+    }
+    else
+    {
         
-    </MudStack>
+        <MudStack>
+            @foreach (var item in CinemaRoomSeatResponses.OrderBy(c=>c.RowNumber))
+            {
+                <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    @for (int i = 0; i < item.TotalRowSeatNumber; i++)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.EventSeat"> 
+
+                        </MudIcon>
+                    }
+                </MudStack>    
+            }
+        </MudStack>
+    }
 </div>
+
