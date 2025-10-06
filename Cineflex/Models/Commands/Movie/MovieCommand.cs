@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex.Models.Dto.Movie
+namespace Cineflex_API.Model.Commands.Movie
 {
-    public class MovieDto
+    public class MovieResponse
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
@@ -15,7 +15,5 @@ namespace Cineflex.Models.Dto.Movie
         public string Description { get; set; } = string.Empty;
         public DateTime ReleaseDate { get; set; }
 
-        //Relationship
-        public ICollection<MovieGenreDto> MovieGenres { get; set; }
     }
 }
