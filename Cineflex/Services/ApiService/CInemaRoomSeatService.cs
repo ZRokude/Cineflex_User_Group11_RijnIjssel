@@ -7,15 +7,15 @@ namespace Cineflex.Services.ApiService
 {
     public interface ICinemaRoomSeatService
     {
-        public Task<ModelServiceResponse<IEnumerable<CinemaRoomSeatResponse>>> Get(Guid Id);
+        public Task<ModelServiceResponse<IEnumerable<CinemaRoomSeatResponse>>> GetByCinemaRoomId(Guid Id);
     }
     public class CinemaRoomSeatService(HttpRequestHandler<Program> requestHandler, NotifyService notifyService)
         :BaseApiService(requestHandler, notifyService)
         ,ICinemaRoomSeatService
     { 
-        public async Task<ModelServiceResponse<IEnumerable<CinemaRoomSeatResponse>>> Get(Guid Id)
+        public async Task<ModelServiceResponse<IEnumerable<CinemaRoomSeatResponse>>> GetByCinemaRoomId(Guid Id)
         {
-            return await requestHandler.GetAsync<IEnumerable<CinemaRoomSeatResponse>>($"/CinemaRoomSeat?id={Id}", CancellationToken.None);
+            return await requestHandler.GetAsync<IEnumerable<CinemaRoomSeatResponse>>($"api/CinemaRoomSeat/readbycinemaroomid?id={Id}", CancellationToken.None);
         }
     }
 }

@@ -17,15 +17,15 @@ namespace Cineflex.Services.ApiService
     {
         public async Task<ModelServiceResponse<IEnumerable<CinemaRoomMovieResponse>>> GetAll()
         {
-            return await requestHandler.GetAsync<IEnumerable<CinemaRoomMovieResponse>>($"/CinemaRoomMovie/readall", CancellationToken.None);
+            return await requestHandler.GetAsync<IEnumerable<CinemaRoomMovieResponse>>($"api/CinemaRoomMovie/readall", CancellationToken.None);
         }
         public async Task<ModelServiceResponse<IEnumerable<CinemaRoomMovieResponse>>> GetByCinemaRoomId(Guid Id)
         {
-            return await requestHandler.GetAsync<IEnumerable<CinemaRoomMovieResponse>>($"/CinemaRoomMovie/readbyroom?cinemaRoomId={Id}", CancellationToken.None);
+            return await requestHandler.GetAsync<IEnumerable<CinemaRoomMovieResponse>>($"api/CinemaRoomMovie/readbyroom?cinemaRoomId={Id}", CancellationToken.None);
         }
         public async Task<ModelServiceResponse<IEnumerable<CinemaRoomMovieResponse>>> GetByMovieId(Guid Id)
         {
-            return await requestHandler.GetAsync<IEnumerable<CinemaRoomMovieResponse>>($"/CinemaRoomMovie/readbymovie?movieId={Id}", CancellationToken.None);
+            return await requestHandler.GetAsync<IEnumerable<CinemaRoomMovieResponse>>($"api/CinemaRoomMovie/readbymovie?movieId={Id}", CancellationToken.None);
         }
     }
 }

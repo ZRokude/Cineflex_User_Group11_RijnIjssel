@@ -17,9 +17,15 @@
                 <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
                     @for (int i = 0; i < item.TotalRowSeatNumber; i++)
                     {
-                        <MudIcon Icon="@Icons.Material.Filled.EventSeat"> 
-
-                        </MudIcon>
+                        if(IsSeatTaken())
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@Color.Transparent"/>
+                        }
+                        else
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@Color.Dark"/>
+                        }
+                        
                     }
                 </MudStack>    
             }

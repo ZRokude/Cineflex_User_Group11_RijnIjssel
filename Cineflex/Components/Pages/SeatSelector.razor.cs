@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MudBlazor;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Cineflex.Components.Pages
 {
@@ -18,12 +19,38 @@ namespace Cineflex.Components.Pages
         private List<CinemaRoomSeatResponse> CinemaRoomSeatResponses { get; set; } = new();
         private List<TicketResponse> TicketResponses { get; set; } = new();
         private CinemaRoomMovieResponse CinemaRoomMovieResponse { get; set; } = new();
+        private int currentSeat = 0;
         protected override async Task OnInitializedAsync()
         {
-            CinemaRoomSeatResponses = await CinemaRoomSeatService.Get(CinemaRoomId);
-            CinemaRoomMovieResponse = await CinemaRoomMovieService.GetByCinemaRoomId(CinemaRoomId);
-            await TicketService.GetTicketByCinemaRoomId(CinemaRoomId);
+            await DoApiService();
             await base.OnInitializedAsync();
+        }
+        private async Task DoApiService()
+        {
+            var cinemaRoomSeatResult = await CinemaRoomSeatService.GetByCinemaRoomId(CinemaRoomId);
+            if (cinemaRoomSeatResult.IsSuccesfull)
+            {
+                CinemaRoomSeatResponses = cinemaRoomSeatResult.Model!.ToList();
+            }
+            var cinemaRoomMovieResult = await CinemaRoomMovieService.GetByCinemaRoomId(CinemaRoomId);
+            if (cinemaRoomMovieResult.IsSuccesfull)
+            {
+                CinemaRoomMovieResponse = cinemaRoomMovieResult.Model!.First();
+            }
+            var ticketResult = await TicketService.GetTicketByCinemaRoomId(CinemaRoomMovieResponse.Id);
+            if (ticketResult.IsSuccesfull)
+            {
+                if(ticketResult != null && ticketResult.Model?.Count() > 0) TicketResponses = ticketResult.Model.ToList();
+            }
+        }
+        private bool IsSeatTaken()
+        {
+            currentSeat++;
+            if(TicketResponses.Any(c=>c.SeatNumber == currentSeat))
+            {
+                return true;
+            }
+            return false;
         }
 
     }
