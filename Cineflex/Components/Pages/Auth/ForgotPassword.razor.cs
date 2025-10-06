@@ -147,9 +147,8 @@ namespace Cineflex.Components.Pages.Auth
 
                 if (!userResponse.IsSuccesfull || userResponse.Model == null)
                 {
-                    Snackbar.Add("E-mailadres niet gevonden!", Severity.Error);
-                    // VERWIJDER: _SendCode = false; (dit zorgt ervoor dat de knop blijft)
-                    // Reset de UI state
+                    Snackbar.Add("E-mailadres niet gevondeEn!", Severity.Error);
+                   
                     backgroundClass = "start-color";
                     _fadeOut = false;
                     StateHasChanged();

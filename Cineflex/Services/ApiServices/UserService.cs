@@ -31,7 +31,7 @@ public class UserService(HttpRequestHandler<Program> requestHandler, NotifyServi
 
     public async Task<ModelServiceResponse<AccountResponse>> GetAccountByEmail(string email)
     {
-        var result = await requestHandler.GetAsync<AccountResponse>($"api/Account/getbyemail?email={email}", CancellationToken.None);
+        var result = await requestHandler.GetAsync<AccountResponse>($"api/Account/readbyemail?email={email}", CancellationToken.None);
         return result;
     }
     public async Task<ModelServiceResponse<AccountResponse>> ResetPassword(Guid userId, string newPassword)
