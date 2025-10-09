@@ -1,0 +1,168 @@
+﻿@page "/register"
+@using Microsoft.AspNetCore.Identity.Data
+@using Cineflex.Services
+@using Cineflex.Services.Email
+@using System.ComponentModel.DataAnnotations
+
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<PageTitle>Register</PageTitle>
+
+<!-- Full-screen background container with color transition -->
+<div class="@($"color-transition {_backgroundClass}")"
+     style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center;">
+    <!-- Main register card -->
+    <MudCard Style="width: 600px; background-color:#272727; padding:15px; border-radius:15px" Elevation="25">
+
+        <!-- Logo container -->
+        <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+            <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
+        </div>
+
+        <!-- Register form -->
+        <form>
+            <MudCardContent>
+
+                <MudGrid GutterSize="2">
+                    <!-- Row 1 -->
+                    <MudItem xs="6">
+                        <MudTextField Label="Email"
+                                      Variant="Variant.Filled"
+                                      InputType="InputType.Email"
+                                      @bind-Value="model.Email"
+                                      ErrorText="@emailError" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="Voornaam" Variant="Variant.Filled" @bind-Value="model.FirstName" Required RequiredError="Uw Voornaam is verplicht om intevoeren" />
+                    </MudItem>
+
+                    <!-- Row 2 -->
+                    <MudItem xs="6">
+                        <MudTextField Label="Middenvoegsel*" Variant="Variant.Filled" @bind-Value="model.MiddleName" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="Achternaam" Variant="Variant.Filled" @bind-Value="model.LastName" Required RequiredError="Uw achternaam is verplicht om intevoeren" />
+                    </MudItem>
+
+                    <!-- Row 3 -->
+                    <MudItem xs="6">
+                        <MudDatePicker Label="Geboorte datum" Variant="Variant.Filled" @bind-Date="_UserBD" MaxDate="@DateTime.Today" ShowToolbar="false" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="Postcode" Variant="Variant.Filled" @bind-Value="model.PostCode" Required  RequiredError="postcode is verplicht om intevoeren"/>
+                    </MudItem>
+
+                    <MudItem xs="6"> 
+                        <MudTextField Label="Adres" Variant="Variant.Filled" @bind-Value="model.Address" Placeholder="Straatnaam & Huisnummer" Required RequiredError="Uw adres is verplicht om intevoeren" />
+                    </MudItem>
+
+                    <!-- Row 4 -->
+                    <MudItem xs="6">
+                        <MudTextField Label="Nieuw wachtwoord"
+                                      Variant="Variant.Filled"
+                                      @bind-Value="model.NewPassword"
+                                      InputType="@NewPasswordInputType"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@NewPasswordVisibilityIcon"
+                                      OnAdornmentClick="ToggleNewPasswordVisibility"
+                                      Pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{15,}"
+                                      Error="@(!string.IsNullOrEmpty(newPasswordError))"
+                                      ErrorText="@newPasswordError"
+                                      @onblur="ValidateNewPassword" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="Herhaal wachtwoord"
+                                      Variant="Variant.Filled"
+                                      @bind-Value="model.ConfirmPassword"
+                                      InputType="@ConfirmPasswordInputType"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@ConfirmPasswordVisibilityIcon"
+                                      OnAdornmentClick="ToggleConfirmPasswordVisibility"
+                                      Error="@(!string.IsNullOrEmpty(confirmPasswordError))"
+                                      ErrorText="@confirmPasswordError"
+                                      @onblur="ValidateConfirmPassword" />
+                    </MudItem>
+                </MudGrid>
+
+
+                <!-- Password Strength + Requirements -->
+                @if (!string.IsNullOrEmpty(model.NewPassword))
+                {
+                    <div class="password-strength mt-2">
+                        <MudText Typo="Typo.caption" Color="@GetPasswordStrengthColor()">
+                            Wachtwoord sterkte: @GetPasswordStrengthText()
+                        </MudText>
+                        <MudProgressLinear Value="@GetPasswordStrengthPercentage()"
+                                           Color="@GetPasswordStrengthColor()"
+                                           Size="Size.Small"
+                                           Class="mt-1" />
+                    </div>
+                }
+
+                <MudCollapse Expanded="@(!string.IsNullOrEmpty(model.NewPassword))">
+                    <div class="password-requirements mt-2">
+                        <MudText Typo="Typo.caption" Color="Color.Primary">Wachtwoord vereisten:</MudText>
+                        <div class="requirements-list">
+                            <MudText Typo="Typo.caption" Color="@(HasMinLength() ? Color.Success : Color.Default)">
+                                <MudIcon Icon="@(HasMinLength() ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)" Size="Size.Small" />
+                                Minimaal 15 karakters
+                            </MudText>
+                            <MudText Typo="Typo.caption" Color="@(HasUpperCase() ? Color.Success : Color.Default)">
+                                <MudIcon Icon="@(HasUpperCase() ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)" Size="Size.Small" />
+                                Minimaal één hoofdletter
+                            </MudText>
+                            <MudText Typo="Typo.caption" Color="@(HasLowerCase() ? Color.Success : Color.Default)">
+                                <MudIcon Icon="@(HasLowerCase() ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)" Size="Size.Small" />
+                                Minimaal één kleine letter
+                            </MudText>
+                            <MudText Typo="Typo.caption" Color="@(HasDigit() ? Color.Success : Color.Default)">
+                                <MudIcon Icon="@(HasDigit() ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)" Size="Size.Small" />
+                                Minimaal één cijfer
+                            </MudText>
+                        </div>
+                    </div>
+                </MudCollapse>
+
+                <MudCardActions Class="mt-3" Style="  display: flex; justify-content: center; align-items: center;">
+                    <MudStack Spacing="1">
+                        <MudText>
+                            <MudLink Href="/login">Heeft u al een account?</MudLink>
+                        </MudText>
+                    </MudStack>
+                </MudCardActions>
+
+                <MudButton ButtonType="ButtonType.Button"
+                           OnClick="MakeAccount"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           FullWidth="true"
+                           Class="mt-2"
+                           Disabled="@_isLoading">
+                    @if (_isLoading)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2">Account aanmaken...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Registreer</MudText>
+                    }
+                </MudButton>
+
+            </MudCardContent>
+        </form>
+    </MudCard>
+</div>
+
+
+<!-- CSS styles for background -->
+<style>
+    .start-color {
+        background-color: #232323;
+    }
+</style>
+
+
+
