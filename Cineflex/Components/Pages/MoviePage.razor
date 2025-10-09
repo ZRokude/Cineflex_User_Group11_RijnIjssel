@@ -102,7 +102,7 @@
                @if (!_isLoggedIn)
                 {
                         <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
-                            <MudText Style="color:white;" Typo="Typo.body2">*U moet ingelogd zijn om een filmticket te kopen*</MudText>
+                            <MudText Style="color:white;" Typo="Typo.body1">*U moet ingelogd zijn om een filmticket te kopen*</MudText>
                         </div>
 
                 }
@@ -112,8 +112,8 @@
                                ValueChanged="OnCinemaChanged"
                                Placeholder="Kies een bioscoop"
                                FitContent=true
+                               Variant="Variant.Outlined"
                                Style="width: 200px; color:white">
-
                         @if (GetCinema != null)
                         {
                                 @foreach (var cinema in GetCinema)
@@ -123,6 +123,8 @@
                         }
                     </MudSelect>
                 </div>
+
+
 
           <div style="display: flex;justify-content: center; align-items: center; overflow-x: auto; gap: 15px; padding: 0 20px; scrollbar-width: thin; scrollbar-color: #666 #222;">
                 
@@ -171,7 +173,7 @@
                                     @foreach (var room in GetRoomsForSelectedDate())
                                     {
                                                 <MudButton OnClick="@(() => SelectTicket(room))"
-                                                           Style="height:100px; width:150px; border-radius:15px; margin:10px;"
+                                                           Style="height:100px; width:150px; border-radius:15px; margin:10px; border-color:white;"
                                                            class="@($"color-transition {backgroundClass}")">
                                                     <MudText Style="color: white;">@room.AirTime.ToString("HH:mm")</MudText>
                                                 </MudButton>

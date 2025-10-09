@@ -32,36 +32,39 @@
                                       Variant="Variant.Filled"
                                       InputType="InputType.Email"
                                       @bind-Value="model.Email"
+                                      Class="textCollor white-placeholder"
+                                      Required
                                       ErrorText="@emailError" />
                     </MudItem>
                     <MudItem xs="6">
-                        <MudTextField Label="Voornaam" Variant="Variant.Filled" @bind-Value="model.FirstName" Required RequiredError="Uw Voornaam is verplicht om intevoeren" />
+                        <MudTextField Label="Voornaam" Class="textCollor white-placeholder" Variant="Variant.Filled" @bind-Value="model.FirstName" Required RequiredError="Uw Voornaam is verplicht om intevoeren" />
                     </MudItem>
 
                     <!-- Row 2 -->
                     <MudItem xs="6">
-                        <MudTextField Label="Middenvoegsel*" Variant="Variant.Filled" @bind-Value="model.MiddleName" />
+                        <MudTextField Label="Middenvoegsel*" Class="textCollor white-placeholder" Variant="Variant.Filled" @bind-Value="model.MiddleName" />
                     </MudItem>
                     <MudItem xs="6">
-                        <MudTextField Label="Achternaam" Variant="Variant.Filled" @bind-Value="model.LastName" Required RequiredError="Uw achternaam is verplicht om intevoeren" />
+                        <MudTextField Label="Achternaam" Class="textCollor white-placeholder" Variant="Variant.Filled" @bind-Value="model.LastName" Required RequiredError="Uw achternaam is verplicht om intevoeren" />
                     </MudItem>
 
                     <!-- Row 3 -->
                     <MudItem xs="6">
-                        <MudDatePicker Label="Geboorte datum" Variant="Variant.Filled" @bind-Date="_UserBD" MaxDate="@DateTime.Today" ShowToolbar="false" />
+                        <MudDatePicker Label="Geboorte datum" Class="textCollor white-placeholder" Variant="Variant.Filled" @bind-Date="_UserBD" MaxDate="@DateTime.Today" ShowToolbar="false" />
                     </MudItem>
                     <MudItem xs="6">
-                        <MudTextField Label="Postcode" Variant="Variant.Filled" @bind-Value="model.PostCode" Required  RequiredError="postcode is verplicht om intevoeren"/>
+                        <MudTextField Label="Postcode" Class="textCollor white-placeholder" Variant="Variant.Filled" @bind-Value="model.PostCode" Required RequiredError="postcode is verplicht om intevoeren" />
                     </MudItem>
 
                     <MudItem xs="6"> 
-                        <MudTextField Label="Adres" Variant="Variant.Filled" @bind-Value="model.Address" Placeholder="Straatnaam & Huisnummer" Required RequiredError="Uw adres is verplicht om intevoeren" />
+                        <MudTextField Label="Adres" Class="textCollor white-placeholder" Variant="Variant.Filled" @bind-Value="model.Address" Placeholder="Straatnaam & Huisnummer" Required RequiredError="Uw adres is verplicht om intevoeren" />
                     </MudItem>
 
                     <!-- Row 4 -->
                     <MudItem xs="6">
                         <MudTextField Label="Nieuw wachtwoord"
                                       Variant="Variant.Filled"
+                                      Class="textCollor white-placeholder"
                                       @bind-Value="model.NewPassword"
                                       InputType="@NewPasswordInputType"
                                       Adornment="Adornment.End"
@@ -75,6 +78,7 @@
                     <MudItem xs="6">
                         <MudTextField Label="Herhaal wachtwoord"
                                       Variant="Variant.Filled"
+                                      Class="textCollor white-placeholder"
                                       @bind-Value="model.ConfirmPassword"
                                       InputType="@ConfirmPasswordInputType"
                                       Adornment="Adornment.End"
@@ -103,7 +107,7 @@
 
                 <MudCollapse Expanded="@(!string.IsNullOrEmpty(model.NewPassword))">
                     <div class="password-requirements mt-2">
-                        <MudText Typo="Typo.caption" Color="Color.Primary">Wachtwoord vereisten:</MudText>
+                        <MudText Typo="Typo.caption" >Wachtwoord vereisten:</MudText>
                         <div class="requirements-list">
                             <MudText Typo="Typo.caption" Color="@(HasMinLength() ? Color.Success : Color.Default)">
                                 <MudIcon Icon="@(HasMinLength() ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)" Size="Size.Small" />
@@ -162,6 +166,30 @@
     .start-color {
         background-color: #232323;
     }
+
+
+    .textCollor{
+        color: #F5F5F5 !important;
+    }
+
+        .textCollor input::placeholder {
+            color: #F5F5F5 !important;
+            opacity: 1;
+        }
+
+        .textCollor .mud-input-slot ::placeholder {
+            color: #F5F5F5 !important;
+            opacity: 1;
+        }
+
+        .textCollor .mud-input-label {
+            color: #F5F5F5 !important;
+        }
+
+        .textCollor .mud-input-slot{
+            color: #F5F5F5 !important;
+        }
+
 </style>
 
 

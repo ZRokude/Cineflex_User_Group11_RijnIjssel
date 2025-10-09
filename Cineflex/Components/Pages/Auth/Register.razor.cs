@@ -4,6 +4,7 @@ using Cinelexx.Services.Email;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using MudBlazor;
 using System.ComponentModel.DataAnnotations;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
@@ -44,12 +45,17 @@ namespace Cineflex.Components.Pages.Auth
             public string PostCode { get; set; } = string.Empty;
 
             public string Address { get; set; } = string.Empty;
-            public DateTime UserDb { get; set; } = DateTime.Now;
+
+            public DateTime _UserBD { get; set; }
 
         }
 
         //JON: Password visibility toggle state
         private bool _isPasswordVisible = false;
+
+
+        private DateTime DateTody  = DateTime.Now;
+        private int _countBetweeDates = 0;
 
         //JON: properties for password field visibility
         private InputType PasswordInputType => _isPasswordVisible ? InputType.Text : InputType.Password;
@@ -237,17 +243,28 @@ namespace Cineflex.Components.Pages.Auth
         }
 
 
+        
+
 
         private async Task MakeAccount()
         {
             _isLoading = true;
 
+
+
+            DateTime today = DateTime.Today;
+            TimeSpan totalDays = (today - _UserBD) ?? TimeSpan.Zero;
+            _countBetweeDates = (int)totalDays.TotalDays;
+
+            if (_countBetweeDates < 4380) //JON: 4380 is 12 jaar
+            {
+                Snackbar.Add("U moet ouder zijn als 12 jaar om een account aan te maken");
+                return;
+            }
+
             var hasher = new PasswordHasher<AccountCommand>(); //JON: the hasher of blazor
 
             await ValidateEmail();
-
-            if (!_isEmailUniqe)
-                return;
 
             AccountCommand newAccountCommands = new AccountCommand()
             {
@@ -269,7 +286,7 @@ namespace Cineflex.Components.Pages.Auth
                         LastName = model.LastName,
                         Address = model.Address,
                         PostCode = model.PostCode,
-                        DateBirth = model.UserDb,
+                        DateBirth = model._UserBD,
                         AccountId = result.Model.Id
                     };
 

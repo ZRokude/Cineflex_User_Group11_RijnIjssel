@@ -1,4 +1,41 @@
 ﻿@page "/"
+@using Cineflex.Services
+@using System.Text.Json
+@inject IJSRuntime JS
 
 <PageTitle>Home</PageTitle>
 
+@if (ipInfo.ValueKind != JsonValueKind.Undefined)
+{
+    <MudText>IP: @IP</MudText>
+    <MudText>Land: @ipInfo.GetProperty("country").GetString()</MudText>
+    <MudText>Stad: @ipInfo.GetProperty("city").GetString()</MudText>
+    <MudText>Provinci: @ipInfo.GetProperty("regionName").GetString()</MudText>
+   
+}
+
+@code {
+    [Inject] private IIpService IpService { get; set; } = null!;
+
+    private string IP = string.Empty;
+    private JsonElement ipInfo;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender)
+            {
+                IP = await JS.InvokeAsync<string>("getPublicIP");
+                ipInfo = await IpService.LookupIpIpApi(IP);
+                StateHasChanged();
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            throw;
+        }
+
+    }
+}
