@@ -1,0 +1,27 @@
+﻿@typeparam TData
+<section style="@_style">
+    <MudSwipeArea>
+        <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+            <CascadingValue Value="_service" IsFixed="true">
+                @if (Items != null)
+                {
+                    foreach (var item in Items)
+                    {
+                        @if (ItemTemplate != null)
+                        {
+                            
+                            @ItemTemplate(item);
+                        }
+                    }
+                    
+                }
+            </CascadingValue>
+        </MudStack>
+    </MudSwipeArea>
+</section>
+
+    
+
+
+
+

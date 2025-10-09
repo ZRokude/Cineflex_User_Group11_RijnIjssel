@@ -1,4 +1,5 @@
-﻿@using Cineflex.Models.Responses.Movie
+﻿@using Cineflex.Components.Shared.CustomSwipe.Component
+@using Cineflex.Models.Responses.Movie
 @page "/"
 
 <PageTitle>@Localizer["Home_Title"]</PageTitle>
@@ -18,13 +19,12 @@
             </div>
         </ItemTemplate>
     </MudCarousel>
-    <CustomSwipeContainer TData="MovieResponse" Height="40vh">
-        @foreach(var item in MovieList)
-        {
-            <CustomSwipeItem Image="@GetImage(item.Name)" Title="@item.Name">
+    <CustomSwipeContainer ShowItems="5" TData="MovieResponse" Height="40vh">
+        <ItemTemplate>
+            <CustomSwipeItem Image="@GetImage(context.Name)" Title="@context.Name">
 
             </CustomSwipeItem>
-        }
+        </ItemTemplate>
     </CustomSwipeContainer>
 </MudStack>
 
