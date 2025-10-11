@@ -28,71 +28,147 @@
     <div style="position: absolute; top: 70vh; left: 100px; text-align: left; z-index: 2; max-width: 600px;">
         @if (Movie is not null)
         {
-                    <MudText Class="movie-title">@Movie.Name</MudText>
+                                        <MudText Class="movie-title">@Movie.Name</MudText>
 
-                    <div class="movie-subtext">
-                        @if (Movie.AgeRestriction <= 3)
-                        {
-                                    <MudAvatar Color="Color.Success" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
-                        }
-                        else if (Movie.AgeRestriction >= 4 && Movie.AgeRestriction <= 12)
-                        {
-                                    <MudAvatar Color="Color.Warning" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
-                        }
-                        else if (Movie.AgeRestriction >= 13 && Movie.AgeRestriction <= 16)
-                        {
-                                    <MudAvatar Color="Color.Dark" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
-                        }
-                        else
-                        {
-                                    <MudAvatar Color="Color.Error" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
-                        }
 
+                <div class="movie-subtext">
+                    <div class="kijkWijzerContainer">
+                        @if (Movie.Themes.Any(t => t.Name == "Seks"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat seks">
+                                        <CustomSvgIcon Name="seks" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
+                        @if (Movie.Themes.Any(t => t.Name == "Angst"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat angst">
+                                        <CustomSvgIcon Name="angst" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
+                        @if (Movie.Themes.Any(t => t.Name == "Alcohol en roken"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat alcohol en roken">
+                                        <CustomSvgIcon Name="alcohol-roken" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
+                        @if (Movie.Themes.Any(t => t.Name == "Discriminatie"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat discriminatie">
+                                        <CustomSvgIcon Name="discriminatie" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
+                        @if (Movie.Themes.Any(t => t.Name == "Grof taalgebruik"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat grot taalgebruik">
+                                        <CustomSvgIcon Name="grof-taalgebruik" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
+                        @if (Movie.Themes.Any(t => t.Name == "Drugs"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat drug en alcoholmisbruik">
+                                        <CustomSvgIcon Name="drugs-en-alcoholmisbruik" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
+                        @if (Movie.Themes.Any(t => t.Name == "Gevaarlijke challenges of stunts"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat gevaarlijke challenges">
+                                        <CustomSvgIcon Name="gevaarlijke-challenges" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
+                        @if (Movie.Themes.Any(t => t.Name == "Geweld"))
+                        {
+                                <div class="kijkWijzerIco">
+                                    <MudTooltip Text="Deze film bevat geweld">
+                                        <CustomSvgIcon Name="geweld" Class="w-6 h-6 text-primary" />
+                                    </MudTooltip>
+                                </div>
+                        }
                     </div>
+                </div>
 
-                    <div class="movie-subtext">
-                        <MudIcon Icon="@Icons.Material.Filled.Star" /> Rating: @Movie.Rating / 10
-                    </div>
 
-                    <div class="movie-subtext">
-                        <MudIcon Icon="@Icons.Material.Filled.MovieCreation" /> Released date: @formattedDate
-                    </div>
 
-                    <div class="movie-subtext">
-                        <MudIcon Icon="@Icons.Material.Filled.Category" />
-                        Genres:
-                        @if (Movie.Genres != null && Movie.Genres.Any())
-                        {
-                                    <span>@string.Join(", ", Movie.Genres.Select(g => g.Name))</span>
-                        }
-                        else
-                        {
-                                    <span>Geen genres beschikbaar</span>
-                        }
-                    </div>
 
-                    <div class="movie-subtext">
 
-                        <MudText Class="description-box">
-                            <MudIcon Icon="@Icons.Material.Filled.ShortText" /> @ShortDescription
-                        </MudText>
+                        <div class="movie-subtext">
+                            @if (Movie.AgeRestriction <= 3)
+                            {
+                                            <MudAvatar Color="Color.Success" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
+                            else if (Movie.AgeRestriction >= 4 && Movie.AgeRestriction <= 12)
+                            {
+                                            <MudAvatar Color="Color.Warning" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
+                            else if (Movie.AgeRestriction >= 13 && Movie.AgeRestriction <= 16)
+                            {
+                                            <MudAvatar Color="Color.Dark" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
+                            else
+                            {
+                                            <MudAvatar Color="Color.Error" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
 
-                        <MudCollapse Expanded="@showMore">
+                        </div>
+
+
+
+                        <div class="movie-subtext">
+                            <MudIcon Icon="@Icons.Material.Filled.Star" /> Rating: @Movie.Rating / 10
+                        </div>
+
+                        <div class="movie-subtext">
+                            <MudIcon Icon="@Icons.Material.Filled.MovieCreation" /> Released date: @formattedDate
+                        </div>
+
+                        <div class="movie-subtext">
+                            <MudIcon Icon="@Icons.Material.Filled.Category" />
+                            Genres:
+                            @if (Movie.Genres != null && Movie.Genres.Any())
+                            {
+                                            <span>@string.Join(", ", Movie.Genres.Select(g => g.Name))</span>
+                            }
+                            else
+                            {
+                                            <span>Geen genres beschikbaar</span>
+                            }
+                        </div>
+
+                        <div class="movie-subtext">
+
                             <MudText Class="description-box">
-                                @RemainingDescription
+                                <MudIcon Icon="@Icons.Material.Filled.ShortText" /> @ShortDescription
                             </MudText>
-                        </MudCollapse>
 
-                        <MudButton OnClick="ToggleShowMore">
-                            @(showMore ? "Show less" : "Show more")
-                        </MudButton>
+                            <MudCollapse Expanded="@showMore">
+                                <MudText Class="description-box">
+                                    @RemainingDescription
+                                </MudText>
+                            </MudCollapse>
 
-                    </div>
+                            <MudButton OnClick="ToggleShowMore">
+                                @(showMore ? "Show less" : "Show more")
+                            </MudButton>
+
+                        </div>
 
         }
         else
         {
-                    <MudText>Loading...</MudText>
+                        <MudText>Loading...</MudText>
         }
     </div>
 
@@ -101,9 +177,9 @@
 
                @if (!_isLoggedIn)
                 {
-                        <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
-                            <MudText Style="color:white;" Typo="Typo.body1">*U moet ingelogd zijn om een filmticket te kopen*</MudText>
-                        </div>
+                            <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+                                <MudText Style="color:white;" Typo="Typo.body1">*U moet ingelogd zijn om een filmticket te kopen*</MudText>
+                            </div>
 
                 }
 
@@ -116,10 +192,10 @@
                                Style="width: 200px; color:white">
                         @if (GetCinema != null)
                         {
-                                @foreach (var cinema in GetCinema)
-                                {
-                                        <MudSelectItem Value="@cinema.Id">@cinema.Name</MudSelectItem>
-                                }
+                                    @foreach (var cinema in GetCinema)
+                                    {
+                                                <MudSelectItem Value="@cinema.Id">@cinema.Name</MudSelectItem>
+                                    }
                         }
                     </MudSelect>
                 </div>
@@ -127,7 +203,7 @@
 
 
           <div style="display: flex;justify-content: center; align-items: center; overflow-x: auto; gap: 15px; padding: 0 20px; scrollbar-width: thin; scrollbar-color: #666 #222;">
-                
+
                 <MudIconButton Icon="@Icons.Material.Filled.ChevronLeft"
                                Color="Color.Primary"
                                Size="Size.Large"
@@ -142,18 +218,18 @@
 
                     @for (int i = 0; i < 14; i++)
                     {
-                        var index = i;
-                        var date = DateTime.Now.AddDays(index);
-                        var isSelected = selectedDateIndex == index;
-                        var dayName = index == 0 ? "Today" : index == 1 ? "Tomorrow" : date.ToString("ddd");
-                        var isAvailable = availableDates.Any(d => d.Date == date.Date);
+                            var index = i;
+                            var date = DateTime.Now.AddDays(index);
+                            var isSelected = selectedDateIndex == index;
+                            var dayName = index == 0 ? "Today" : index == 1 ? "Tomorrow" : date.ToString("ddd");
+                            var isAvailable = availableDates.Any(d => d.Date == date.Date);
 
 
-                        <div @onclick="() => OnDateClick(index, isAvailable)"
-                               style="@($"min-width: 120px; padding: 15px 20px; background: {(isAvailable ? (isSelected ? "#1976d2" : "#333") : "#1a1a1a")}; border-radius: 8px; cursor: {(isAvailable ? "pointer" : "not-allowed")}; text-align: center; transition: all 0.3s ease; border: 2px solid {(isSelected && isAvailable ? "#42a5f5" : "transparent")}; opacity: {(isAvailable ? "1" : "0.4")};")">
-                            <MudText Style="@($"color: {(isAvailable ? "white" : "#555")}; font-weight: 600; font-size: 1rem;")">@dayName</MudText>
-                            <MudText Style="@($"color: {(isAvailable ? "#ccc" : "#444")}; font-size: 0.9rem;")">@date.ToString("MMM dd")</MudText>
-                        </div>
+                            <div @onclick="() => OnDateClick(index, isAvailable)"
+                                   style="@($"min-width: 120px; padding: 15px 20px; background: {(isAvailable ? (isSelected ? "#1976d2" : "#333") : "#1a1a1a")}; border-radius: 8px; cursor: {(isAvailable ? "pointer" : "not-allowed")}; text-align: center; transition: all 0.3s ease; border: 2px solid {(isSelected && isAvailable ? "#42a5f5" : "transparent")}; opacity: {(isAvailable ? "1" : "0.4")};")">
+                                <MudText Style="@($"color: {(isAvailable ? "white" : "#555")}; font-weight: 600; font-size: 1rem;")">@dayName</MudText>
+                                <MudText Style="@($"color: {(isAvailable ? "#ccc" : "#444")}; font-size: 0.9rem;")">@date.ToString("MMM dd")</MudText>
+                            </div>
                    }
                 </div>
 
@@ -167,32 +243,32 @@
           </div>
                 @if (_selectedCinemaId.HasValue)
                 {
-                    <div class="center">
-                            <div id="bottom" class="@($"fade-{(_hasselected ? "show" : "hide")}")" style="margin-top: 20px; padding: 0 20px;">
-                                <div style="margin-top: 20px; padding: 0 20px; position: relative;">
-                                    @foreach (var room in GetRoomsForSelectedDate())
-                                    {
-                                                <MudButton OnClick="@(() => SelectTicket(room))"
-                                                           Style="height:100px; width:150px; border-radius:15px; margin:10px; border-color:white;"
-                                                           class="@($"color-transition {backgroundClass}")">
-                                                    <MudText Style="color: white;">@room.AirTime.ToString("HH:mm")</MudText>
-                                                </MudButton>
-                                    }
+                        <div class="center">
+                                <div id="bottom" class="@($"fade-{(_hasselected ? "show" : "hide")}")" style="margin-top: 20px; padding: 0 20px;">
+                                    <div style="margin-top: 20px; padding: 0 20px; position: relative;">
+                                        @foreach (var room in GetRoomsForSelectedDate())
+                                        {
+                                                        <MudButton OnClick="@(() => SelectTicket(room))"
+                                                                   Style="height:100px; width:150px; border-radius:15px; margin:10px; border-color:white;"
+                                                                   class="@($"color-transition {backgroundClass}")">
+                                                            <MudText Style="color: white;">@room.AirTime.ToString("HH:mm")</MudText>
+                                                        </MudButton>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                    </div>
-                        
+                        </div>
+
                 }
                 else
                 {
-                    
-                        <MudText Typo="Typo.body1" Color="Color.Warning" Class="">
-                            Selecteer eerst een bioscoop om beschikbare tijden te zien
-                        </MudText>
+
+                            <MudText Typo="Typo.body1" Color="Color.Warning" Class="">
+                                Selecteer eerst een bioscoop om beschikbare tijden te zien
+                            </MudText>
 
                 }
 
-          
+
     </div>
 
     </div>
@@ -204,10 +280,10 @@
 
 <style>
 
-    .center{
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .start-color {
@@ -226,6 +302,7 @@
 
         .movie-title:hover {
             transform: scale(1.01);
+            transition: transform 0.2s ease;
         }
 
     .movie-subtext {
@@ -254,16 +331,16 @@
         pointer-events: none;
     }
 
-        .fade-container.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .fade-container.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-        .fade-container.hide {
-            opacity: 0;
-            transform: translateY(10px);
-            pointer-events: none;
-        }
+    .fade-container.hide {
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+    }
 
     .Disabled {
         pointer-events: none;
@@ -279,9 +356,31 @@
     .show {
         display: block;
     }
+
     .my-select {
         width: 50px;
         margin: 45px;
+    }
+
+    .kijkWijzerContainer {
+        display: flex;
+        flex-wrap: wrap; 
+        gap: 10px; 
+        align-items: center;
+    }
+
+
+
+
+    .kijkWijzerIcon{
+        gap: 5px;
+        margin: 5px;
+
+    }
+
+    .kijkWijzerIco:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s ease;
     }
 
 </style>
@@ -325,7 +424,7 @@
         }
     }
 
-    
+
 </script>
 
 
