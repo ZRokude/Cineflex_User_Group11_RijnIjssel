@@ -11,24 +11,35 @@
 <div class="@($"color-transition {backgroundClass}")"
     <div class="start-color" style="position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:0;"></div>
 
-     style="position: relative; width: 100vw; display: flex; flex-direction: column; align-items: center;">
 
+    @if (Movie == null)
+    {
+        <div style="display: flex; gap: 20px; padding: 20px;">
+            <MudSkeleton Animation="Animation.Wave" Height="350px" Width="250px" />
+            <MudSkeleton Animation="Animation.Wave" Height="350px" Width="600px" />
+        </div>
+    }
+    else
+    {
+        <!-- Banner card bovenaan -->
+        <MudCard Style="width:100vw; height:400px; border: 5px solid white; position: relative; z-index:1;">
 
-    <!-- Banner card bovenaan -->
-    <MudCard Style="width:100vw; height:400px; border: 5px solid white; position: relative; z-index:1;">
-
-        <!-- Poster card links -->
-        <MudCard Style="width:250px; height:350px; border: 5px solid gray; position: absolute; top: 6vh; left: 10vw; z-index: 2;">
+            <!-- Poster card links -->
+            <MudCard Style="width:250px; height:350px; border: 5px solid gray; position: absolute; top: 6vh; left: 10vw; z-index: 2;">
+            </MudCard>
         </MudCard>
-    </MudCard>
+    }
 
+
+    
+    
 
 
     <!-- Movie informatie links onderin -->
     <div style="position: absolute; top: 70vh; left: 100px; text-align: left; z-index: 2; max-width: 600px;">
         @if (Movie is not null)
         {
-                                        <MudText Class="movie-title">@Movie.Name</MudText>
+            <MudText Class="movie-title">@Movie.Name</MudText>
 
 
                 <div class="movie-subtext">
@@ -168,8 +179,12 @@
         }
         else
         {
-                        <MudText>Loading...</MudText>
+
+             <MudSkeleton Animation="Animation.Wave" Height="400px" Width="100vw" />
+             <MudSkeleton Animation="Animation.Wave" Height="350px" Width="250px" />
         }
+    
+
     </div>
 
     <div class="@(!_isLoggedIn ? "Disabled" : "show")">

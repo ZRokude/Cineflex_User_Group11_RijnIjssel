@@ -220,10 +220,8 @@ namespace Cineflex.Components.Pages
 
         private async Task SelectTicket(CinemaRoomMovieResponse selectedRoom)
         {
-            var selectedTime = selectedRoom.AirTime;
-            var formattedTime = selectedTime.ToString("yyyy-MM-ddTHH:mm:ss");
-
-            NavigationManager.NavigateTo($"/SelectSeats/{movieId}/{formattedTime}");
+            var selectedRoomId = selectedRoom.Id; 
+            NavigationManager.NavigateTo($"/SelectSeats/{selectedRoomId}/");
         }
 
     }
