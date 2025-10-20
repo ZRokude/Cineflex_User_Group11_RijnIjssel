@@ -1,9 +1,10 @@
 using Cineflex.Components.Shared.CustomSwipe.Service;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace Cineflex.Components.Shared.CustomSwipe.Component
 {
-    public partial class CustomSwipeItem: IAsyncDisposable
+    public partial class CustomSwipeItem : IAsyncDisposable
     {
         [CascadingParameter] public CustomSwipeParameter ParentParameter { get; set; }
         [Parameter] public string Title { get; set; }
@@ -15,6 +16,7 @@ namespace Cineflex.Components.Shared.CustomSwipe.Component
         /// </summary>
         [Parameter] public string TitleColor { get; set; }
         private string _style = string.Empty;
+        private string _imageStyle { get; set; } = "width:auto;height:100%;";
        
         private string _titleStyle { get; set; } = "border-radius:25px;";
 
@@ -35,7 +37,7 @@ namespace Cineflex.Components.Shared.CustomSwipe.Component
             {
                 _titleStyle += $"color:{TitleColor};";
             }
-            _style += $"max-width:{100-10 / ParentParameter.GetCurrentParameter().ShowItems}%;";
+            //_style += $"max-width:{(100-10) / ParentParameter.GetCurrentParameter().ShowItems}%;";
             return base.OnInitializedAsync();
         }
         

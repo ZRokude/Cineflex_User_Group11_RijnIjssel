@@ -18,7 +18,7 @@ namespace Cineflex.Components.Shared.CustomSwipe.Component
         [Parameter] public string Style { get; set; }
         [Parameter] public string Height { get; set; } = "200px";
 
-        private CustomSwipeParameter _service = new CustomSwipeParameter();
+        private CustomSwipeParameter _service;
         private string _itemStyle { get; set; } = string.Empty; 
 
         private string _style = string.Empty;
@@ -38,6 +38,7 @@ namespace Cineflex.Components.Shared.CustomSwipe.Component
         }
         private void SetParameter()
         {
+            _service = new CustomSwipeParameter();
             var parameter = new Parameter
             {
                 ShowItems = ShowItems

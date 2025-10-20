@@ -1,4 +1,5 @@
-﻿namespace Cineflex.Components.Shared.CustomSwipe.Service
+﻿
+namespace Cineflex.Components.Shared.CustomSwipe.Service
 {
     public class Parameter
     {

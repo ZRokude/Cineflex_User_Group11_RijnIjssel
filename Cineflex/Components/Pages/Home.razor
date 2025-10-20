@@ -19,7 +19,14 @@
             </div>
         </ItemTemplate>
     </MudCarousel>
-    <CustomSwipeContainer ShowItems="5" TData="MovieResponse" Height="40vh">
+    <CustomSwipeContainer ShowItems="5" Items="MovieList" Height="40vh">
+        <ItemTemplate>
+            <CustomSwipeItem Image="@GetImage(context.Name)" Title="@context.Name">
+
+            </CustomSwipeItem>
+        </ItemTemplate>
+    </CustomSwipeContainer>
+    <CustomSwipeContainer ShowItems="3" Items="MovieList" Height="40vh">
         <ItemTemplate>
             <CustomSwipeItem Image="@GetImage(context.Name)" Title="@context.Name">
 

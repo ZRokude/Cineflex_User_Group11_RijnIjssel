@@ -14,7 +14,6 @@ namespace Cineflex.Components.Pages
         private MudCarousel<object> _carouselMovieList = null!;
         private List<MovieResponse> MoviesHighlight { get; set; } = new();
         private List<MovieResponse> MovieList { get; set; } = new();
-        private string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
         protected override async Task OnInitializedAsync()
         {
             await DoApiService();
@@ -30,6 +29,8 @@ namespace Cineflex.Components.Pages
         }
         private string GetImage(string title)
         {
+            string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+
             string imgurl = "";
             string titleFilter = title.Replace(" ", "_");
             foreach (var ext in extensionsImage)
