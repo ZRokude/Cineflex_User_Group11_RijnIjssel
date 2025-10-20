@@ -11,7 +11,8 @@ namespace Cineflex_API.Model.Responses.Cinema
         public Guid Id { get; set; } = Guid.Empty;
         public Guid CinemaRoomId { get; set; } = Guid.Empty;
         public Guid MovieId { get; set; } = Guid.Empty;
-        public DateTime AirTime { get; set; } = DateTime.MinValue;
+        public DateTime StartAirTime { get; set; } = DateTime.Today;
+        public DateTime EndAirTime { get; set; }   = DateTime.Today;
         public bool IsActive { get; set; } = true;
     }
 }
