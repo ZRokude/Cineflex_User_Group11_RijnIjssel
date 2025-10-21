@@ -37,6 +37,10 @@ namespace Cineflex.Components.Shared.CustomSwipe.Component
             {
                 _titleStyle += $"color:{TitleColor};";
             }
+            if(!string.IsNullOrEmpty(Image))
+            {
+                _imageStyle += $"background-image:url('{Image}');background-size:cover;background-position:center;";
+            } 
             //_style += $"max-width:{(100-10) / ParentParameter.GetCurrentParameter().ShowItems}%;";
             return base.OnInitializedAsync();
         }
