@@ -1,0 +1,61 @@
+﻿@page "/seat/{CinemaRoomId:guid}"
+
+
+<PageTitle>@Localizer["SeatSelecter_Title"]</PageTitle>
+
+<div>
+    @if (CinemaRoomSeatResponses == null && CinemaRoomSeatResponses.Count > 0)
+    {
+
+    }
+    else
+    {
+        <MudStack Spacing="10">
+            <MudStack Style="margin-left:10%;margin-right:10%;" Justify="Justify.FlexEnd" AlignItems="AlignItems.End">
+                <MudSwitch @bind-Value="isShowNumber" Label="Show Number"/>
+            </MudStack>
+            <MudStack>
+                @foreach (var item in CinemaRoomSeatResponses.OrderBy(c => c.RowNumber))
+                {
+                    <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                        @for (int i = 1; i <= item.TotalRowSeatNumber; i++)
+                        {
+                            var seatIndex = i;
+                            var seatNumber = SeatNumber(item.RowNumber, seatIndex);
+                            if (!IsSeatTaken(seatNumber))
+                            {
+                                <MudButton Size="Size.Large" Disabled="@IsDisabledButtonList[seatNumber]" Color="@ColorButtonList[seatNumber]"
+                                           OnClick="@(() => OnClick(seatNumber))">
+                                    <MudIcon Icon="@Icons.Material.Filled.EventSeat" />
+                                    @if(isShowNumber)
+                                    {
+                                        @seatNumber
+                                    }
+                                </MudButton>
+                            }
+                            else
+                            {
+                                <MudButton Size="Size.Large" Disabled="@IsDisabledButtonList[seatNumber]" Color="@ColorButtonList[seatNumber]">
+                                    <MudIcon Icon="@Icons.Material.Filled.EventSeat" />
+                                    @if (isShowNumber)
+                                    {
+                                        @seatNumber
+                                    }
+                                </MudButton>
+                            }
+
+                        }
+                    </MudStack>
+                }
+            </MudStack>
+            <MudStack Style="margin-left:15%;margin-right:15%;" Justify="Justify.FlexEnd" AlignItems="AlignItems.End">
+                <MudButton EndIcon="@Icons.Material.Filled.NavigateNext" OnClick="@(() => Reservation())">
+                    Reserve
+                </MudButton>
+            </MudStack>
+        </MudStack>
+        
+    }
+
+</div>
+

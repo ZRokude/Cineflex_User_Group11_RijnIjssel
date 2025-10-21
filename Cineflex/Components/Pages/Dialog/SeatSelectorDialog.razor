@@ -1,0 +1,47 @@
+﻿<MudDialog>
+    <DialogContent>
+       
+            @if (CinemaRoomSeatResponses == null && CinemaRoomSeatResponses.Count > 0)
+            {
+
+            }
+            else
+            {
+                <MudStack>
+                    @foreach (var item in CinemaRoomSeatResponses.OrderBy(c => c.RowNumber))
+                    {
+                        <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                            @for (int i = 1; i <= item.TotalRowSeatNumber; i++)
+                            {
+                                //These two variables are needed to avoid unexpected error in razor loop iteration
+                                var seatIndex = i;
+                                var seatNumber = SeatNumber(item.RowNumber, seatIndex);
+                                if (!IsSeatTaken(seatNumber))
+                                {
+                                    <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[seatNumber]" Color="@ColorButtonList[seatNumber]"
+                                               OnClick="@(() => OnClick(seatNumber))">
+                                        <MudIcon Icon="@Icons.Material.Filled.EventSeat" />
+                                    </MudButton>
+                                }
+                                else
+                                {
+                                    <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[seatNumber]" Color="@ColorButtonList[seatNumber]">
+                                        <MudIcon Icon="@Icons.Material.Filled.EventSeat" />
+                                    </MudButton>
+                                }
+
+                            }
+                        </MudStack>
+                    }
+                </MudStack>
+            }
+      
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => Reservation())">
+            Reserve
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+
