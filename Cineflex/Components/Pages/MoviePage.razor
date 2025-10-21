@@ -49,7 +49,7 @@
                     <div class="kijkWijzerContainer">
                         @if (Theme != null)
                         {
-                                @if (Theme.Name == "Seks")
+                                @if (Theme.Any(t => t.Name == "Seks"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat seks">
@@ -57,7 +57,7 @@
                                                 </MudTooltip>
                                             </div>
                                 }
-                                @if (Theme.Name == "Angst")
+                                @if (Theme.Any(t => t.Name == "Angst"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat angst">
@@ -65,7 +65,7 @@
                                                 </MudTooltip>
                                             </div>
                                 }
-                                @if (Theme.Name == "Alcohol en roken")
+                                @if (Theme.Any(t => t.Name =="Alcohol en roken"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat alcohol en roken">
@@ -73,7 +73,7 @@
                                                 </MudTooltip>
                                             </div>
                                 }
-                                @if (Theme.Name == "Discriminatie")
+                                @if (Theme.Any(t => t.Name =="Discriminatie"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat discriminatie">
@@ -81,7 +81,7 @@
                                                 </MudTooltip>
                                             </div>
                                 }
-                                @if (Theme.Name == "Grof taalgebruik")
+                                @if (Theme.Any(t => t.Name == "Grof taalgebruik"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat grot taalgebruik">
@@ -89,7 +89,7 @@
                                                 </MudTooltip>
                                             </div>
                                 }
-                                @if (Theme.Name == "Drugs")
+                                @if (Theme.Any(t => t.Name == "Drugs"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat drug en alcoholmisbruik">
@@ -97,7 +97,7 @@
                                                 </MudTooltip>
                                             </div>
                                 }
-                                @if (Theme.Name == "Gevaarlijke challenges of stunts")
+                                @if (Theme.Any(t => t.Name =="Gevaarlijke challenges of stunts"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat gevaarlijke challenges">
@@ -105,7 +105,7 @@
                                                 </MudTooltip>
                                             </div>
                                 }
-                                @if (Theme.Name == "Geweld")
+                                @if (Theme.Any(t => t.Name == "Geweld"))
                                 {
                                             <div class="kijkWijzerIco">
                                                 <MudTooltip Text="Deze film bevat geweld">
@@ -273,7 +273,7 @@
                                                         <MudButton OnClick="@(() => SelectTicket(room))"
                                                                    Style="height:100px; width:150px; border-radius:15px; margin:10px; border-color:white;"
                                                                    class="@($"color-transition {backgroundClass}")">
-                                                            <MudText Style="color: white;">@room.AirTime.ToString("HH:mm")</MudText>
+                                                                    <MudText Style="color: white;">@room.StartAirTime.ToString("HH:mm")</MudText>
                                                         </MudButton>
                                         }
                                     </div>
@@ -388,6 +388,7 @@
         display: flex;
         flex-wrap: wrap; 
         gap: 10px; 
+        margin-bottom: 15px;
         align-items: center;
     }
 

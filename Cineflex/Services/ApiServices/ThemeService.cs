@@ -9,20 +9,30 @@ using Cineflex_API.Model.Responses.Movie;
 using Cineflex_API.Model.Responses.User;
 using Cineflex_API.Model.User;
 
-public interface IThemeService
+public interface IMovieThemeService
 {
-    public Task<ModelServiceResponse<ThemeResponse>> ReadThemeByMovieId(Guid movieId);
+    public Task<ModelServiceResponse<List<MovieThemeResponse>>> ReadByMovieId(Guid movieId);
+
+    public Task<ModelServiceResponse<ThemeResponse>> ReadbyId(Guid themeId);
 
 }
 
-public class ThemeService(HttpRequestHandler<Program> requestHandler, NotifyService notifyService) :
+public class MovieThemeService(HttpRequestHandler<Program> requestHandler, NotifyService notifyService) :
     BaseApiService(requestHandler, notifyService),
-    IThemeService
+    IMovieThemeService
 {
-    public async Task<ModelServiceResponse<MovieThemeResponse>> ReadThemeByMovieId(Guid movieId)
+    public async Task<ModelServiceResponse<List<MovieThemeResponse>>>ReadByMovieId(Guid movieId)
+    {
+        var result = await requestHandler.GetAsync<List<MovieThemeResponse>>(
+            $"api/MovieTheme/readbymovieid?movieId={movieId}", CancellationToken.None);
+        return result;
+    }
+
+
+    public async Task<ModelServiceResponse<ThemeResponse>> ReadbyId(Guid themeId)
     {
         var result = await requestHandler.GetAsync<ThemeResponse>(
-            $"api/MovieTheme/readbymovieid?movieId={movieId}", CancellationToken.None);
+            $"api/Theme/readbyid?id={themeId}", CancellationToken.None);
         return result;
     }
 

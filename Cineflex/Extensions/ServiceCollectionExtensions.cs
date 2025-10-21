@@ -66,7 +66,7 @@ namespace Cineflex.Extensions
                 .AddTransient<ITokenService, TokenService>()
                 .AddTransient<IMovieService, MovieService>()
                 .AddTransient<ILoginService, LoginService>()
-                .AddTransient<IThemeService, ThemeService>()
+                .AddTransient<IMovieThemeService, MovieThemeService>()
                 .AddTransient<ICinemaService, CinemaService>()
                 .AddTransient<IIpService, IpService>()
                 .AddTransient<ICinemaRoomService, CinemaRoomService>(); 

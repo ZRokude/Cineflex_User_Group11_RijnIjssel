@@ -18,7 +18,7 @@ namespace Cineflex.Components.Pages
 
         [Inject] private ICinemaService CinemaService {get; set;} = null!;
 
-        [Inject] private IThemeService ThemeService { get; set; } = null!;
+        [Inject] private IMovieThemeService ThemeService { get; set; } = null!;
 
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
@@ -30,7 +30,7 @@ namespace Cineflex.Components.Pages
 
 
         private MovieResponse? Movie { get; set; }
-        private ThemeResponse? Theme { get; set; } = null!; 
+        private List<ThemeResponse> Theme { get; set; } = new List<ThemeResponse>();
 
 
         private List<CinemaRoomMovieResponse> availableRooms = new();
@@ -57,8 +57,29 @@ namespace Cineflex.Components.Pages
                 var response = await MovieService.ReadMovieById(movieId);
                 Movie = response.Model;
 
-                var themerepsonse = await ThemeService.ReadThemeByMovieId(movieId);
-                Theme = themerepsonse.Model;
+                
+                var themeResponse = await ThemeService.ReadByMovieId(movieId);
+
+                
+                var themeDetails = new List<ThemeResponse>();
+
+                
+                if (themeResponse?.Model != null)
+                {
+                    foreach (var mt in themeResponse.Model)
+                    {
+                        var themeDetailResponse = await ThemeService.ReadbyId(mt.ThemeId);
+                        if (themeDetailResponse?.Model != null)
+                        {
+                            themeDetails.Add(themeDetailResponse.Model);
+                        }
+                    }
+
+                    Theme = themeDetails;
+                }
+
+                
+
 
                 formattedDate = Movie?.ReleaseDate.ToString("yyyy/MM");
 
@@ -77,7 +98,7 @@ namespace Cineflex.Components.Pages
 
                     
                     availableDates = availableRooms
-                        .Select(r => r.AirTime.Date)
+                        .Select(r => r.StartAirTime.Date)
                         .Distinct()
                         .OrderBy(d => d)
                         .ToList();
@@ -229,8 +250,8 @@ namespace Cineflex.Components.Pages
         {
             var selectedDate = DateTime.Now.AddDays(selectedDateIndex).Date;
             return availableRooms
-                .Where(r => r.AirTime.Date == selectedDate)
-                .OrderBy(r => r.AirTime)
+                .Where(r => r.StartAirTime.Date == selectedDate)
+                .OrderBy(r => r.StartAirTime)
                 .ToList();
         }
 
@@ -264,7 +285,7 @@ namespace Cineflex.Components.Pages
                     .ToList();
 
                 availableDates = availableRooms
-                    .Select(r => r.AirTime.Date)
+                    .Select(r => r.StartAirTime.Date)
                     .Distinct()
                     .OrderBy(d => d)
                     .ToList();
