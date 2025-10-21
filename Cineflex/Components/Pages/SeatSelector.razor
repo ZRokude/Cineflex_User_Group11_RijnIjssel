@@ -19,11 +19,15 @@
                     {
                         if(IsSeatTaken())
                         {
-                            <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@Color.Transparent"/>
+                            <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[currentSeat]">
+                                <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@Color.Transparent"/>
+                            </MudButton>
                         }
                         else
                         {
-                            <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@Color.Dark"/>
+                            <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[currentSeat]">
+                                <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@Color.Dark" />
+                            </MudButton>
                         }
                         
                     }

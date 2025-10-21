@@ -20,6 +20,8 @@ namespace Cineflex.Components.Pages
         private List<TicketResponse> TicketResponses { get; set; } = new();
         private CinemaRoomMovieResponse CinemaRoomMovieResponse { get; set; } = new();
         private int currentSeat = 0;
+        private List<int> ChoosedSeatList { get; set; } = new();
+        private Dictionary<int, bool> IsDisabledButtonList { get; set; } = new();
         protected override async Task OnInitializedAsync()
         {
             await DoApiService();
@@ -48,10 +50,18 @@ namespace Cineflex.Components.Pages
             currentSeat++;
             if(TicketResponses.Any(c=>c.SeatNumber == currentSeat))
             {
+                IsDisabledButtonList.Add(currentSeat, true);
                 return true;
             }
+            IsDisabledButtonList.Add(currentSeat, false);
             return false;
         }
-
+        private async Task OnClick(int seatNumber)
+        {
+            if (!ChoosedSeatList.Contains(seatNumber))
+            {
+                ChoosedSeatList.Add(seatNumber);
+            }
+        }
     }
 }
