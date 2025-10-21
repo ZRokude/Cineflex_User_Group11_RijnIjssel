@@ -1,0 +1,60 @@
+﻿@inject IWebHostEnvironment Env
+
+@if (!string.IsNullOrEmpty(SvgContent))
+{
+    @((MarkupString)SvgContent)
+}
+
+@code {
+    [Parameter] public string Name { get; set; } = "";
+    [Parameter] public string Class { get; set; } = "";
+
+    private string SvgContent = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var path = Path.Combine(Env.WebRootPath, "Picture", "icons", $"{Name}.svg");
+
+        if (File.Exists(path))
+        {
+            SvgContent = await File.ReadAllTextAsync(path);
+
+            // Verwijder alle width/height attributes
+            SvgContent = System.Text.RegularExpressions.Regex.Replace(
+                SvgContent,
+                @"\s*(width|height)=[""'][^""']*[""']",
+                "",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            );
+
+            // Vervang alle fill="#fff" door fill="currentColor" zodat de text-primary class werkt
+            SvgContent = SvgContent.Replace("fill=\"#fff\"", "fill=\"currentColor\"");
+            SvgContent = SvgContent.Replace("fill='#fff'", "fill='currentColor'");
+
+            // Voeg viewBox toe als die ontbreekt
+            if (!SvgContent.Contains("viewBox"))
+            {
+                SvgContent = System.Text.RegularExpressions.Regex.Replace(
+                    SvgContent,
+                    @"<svg",
+                    "<svg viewBox='0 0 36 36'",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase
+                );
+            }
+
+            // Voeg class en inline styles toe
+            SvgContent = System.Text.RegularExpressions.Regex.Replace(
+                SvgContent,
+                @"<svg",
+                $"<svg class='{Class}' style='width: 24px; height: 24px; display: inline-block; vertical-align: middle;'",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            );
+
+            Console.WriteLine($"✓ SVG loaded: {Name}");
+        }
+        else
+        {
+            Console.WriteLine($"✗ SVG not found: {path}");
+        }
+    }
+}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cineflex_API.Model.Responses.Movie;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace Cineflex_API.Model.Commands.Movie
         public string Description { get; set; } = string.Empty;
         public int Duration { get; set; }
         public DateTime ReleaseDate { get; set; }
+
+
 
     }
 }

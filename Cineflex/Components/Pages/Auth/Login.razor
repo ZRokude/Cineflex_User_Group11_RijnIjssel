@@ -12,7 +12,7 @@
      style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center;">
 
     <div class="row @(chairsVisible ? "row-visible" : "row-hidden")">
-        @for (int i = 0; i < 20; i++)
+        @for (int i = 0; i < 25; i++)
         {
             <div class="chair">
                 <div class="backrest"></div>
@@ -40,8 +40,9 @@
 
                     <!-- Email input field -->
                     <MudTextField Label="Email"
-                                  Class="mt-3"
+                                  
                                   @bind-Value="_loginFormModel.Email"
+                                  Class="textCollor white-placeholder "
                                   For="@(() => _loginFormModel.Email)"
                                   InputType="InputType.Email"
                                   Placeholder="naam@gmail.com"
@@ -52,11 +53,13 @@
                                   Label="Wachtwoord"
                                   @bind-Value="_loginFormModel.Password"
                                   For="@(() => _loginFormModel.Password)"
+                                  Class="textCollor white-placeholder"
                                   InputType="@PasswordInputType"
                                   Placeholder="***************"
                                   Variant="Variant.Filled"
                                   Adornment="Adornment.End"
                                   AdornmentIcon="@PasswordInputIcon"
+                                  AdornmentColor="Color.Inherit"
                                   OnAdornmentClick="TogglePasswordVisibility"
                                   IconSize="Size.Medium" />
 
@@ -151,11 +154,32 @@
 </div>
 
 <!-- CSS styles for background -->
-<style>
+ <style>
     .start-color {
         background-color: #232323;
     }
 
+    .textCollor{
+        color: #F5F5F5 !important;
+    }
+
+        .textCollor input::placeholder {
+            color: #F5F5F5 !important;
+            opacity: 1;
+        }
+
+        .textCollor .mud-input-slot ::placeholder {
+            color: #F5F5F5 !important;
+            opacity: 1;
+        }
+
+        .textCollor .mud-input-label {
+            color: #F5F5F5 !important;
+        }
+
+        .textCollor .mud-input-slot{
+            color: #F5F5F5 !important;
+        }
 
     .row {
         display: flex;
