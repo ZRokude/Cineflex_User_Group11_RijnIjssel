@@ -6,6 +6,7 @@
 @using Cineflex_API.Model.Responses.Movie
 @inject IJSRuntime JS
 
+
 <PageTitle>Movie pagina</PageTitle>
 
 <div class="@($"color-transition {backgroundClass}")"
@@ -22,10 +23,12 @@
     else
     {
         <!-- Banner card bovenaan -->
-        <MudCard Style="width:100vw; height:400px; border: 5px solid white; position: relative; z-index:1;">
+                <MudCard Style="width:100vw; height:400px; border: 5px solid; background-color:black; border-color:transparent; position: relative; z-index:1;">
+            <MudImage  Src="@GetBackgroundImage(Movie.Name)"  Alt="@Movie.Name"Style="width:100vw; height:400px; object-fit:cover; object-position:center;" />
 
             <!-- Poster card links -->
             <MudCard Style="width:250px; height:350px; border: 5px solid gray; position: absolute; top: 6vh; left: 10vw; z-index: 2;">
+                        <MudImage Src="@GetImage(Movie.Name)" Alt="@Movie.Name" Style="width:250; Height:345px;" />
             </MudCard>
         </MudCard>
     }
@@ -44,70 +47,74 @@
 
                 <div class="movie-subtext">
                     <div class="kijkWijzerContainer">
-                        @if (Movie.Themes.Any(t => t.Name == "Seks"))
+                        @if (Theme != null)
                         {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat seks">
-                                        <CustomSvgIcon Name="seks" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
+                                @if (Theme.Name == "Seks")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat seks">
+                                                    <CustomSvgIcon Name="seks" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Name == "Angst")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat angst">
+                                                    <CustomSvgIcon Name="angst" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Name == "Alcohol en roken")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat alcohol en roken">
+                                                    <CustomSvgIcon Name="alcohol-roken" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Name == "Discriminatie")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat discriminatie">
+                                                    <CustomSvgIcon Name="discriminatie" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Name == "Grof taalgebruik")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat grot taalgebruik">
+                                                    <CustomSvgIcon Name="grof-taalgebruik" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Name == "Drugs")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat drug en alcoholmisbruik">
+                                                    <CustomSvgIcon Name="drugs-en-alcoholmisbruik" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Name == "Gevaarlijke challenges of stunts")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat gevaarlijke challenges">
+                                                    <CustomSvgIcon Name="gevaarlijke-challenges" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Name == "Geweld")
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat geweld">
+                                                    <CustomSvgIcon Name="geweld" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
                         }
-                        @if (Movie.Themes.Any(t => t.Name == "Angst"))
-                        {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat angst">
-                                        <CustomSvgIcon Name="angst" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
-                        }
-                        @if (Movie.Themes.Any(t => t.Name == "Alcohol en roken"))
-                        {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat alcohol en roken">
-                                        <CustomSvgIcon Name="alcohol-roken" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
-                        }
-                        @if (Movie.Themes.Any(t => t.Name == "Discriminatie"))
-                        {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat discriminatie">
-                                        <CustomSvgIcon Name="discriminatie" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
-                        }
-                        @if (Movie.Themes.Any(t => t.Name == "Grof taalgebruik"))
-                        {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat grot taalgebruik">
-                                        <CustomSvgIcon Name="grof-taalgebruik" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
-                        }
-                        @if (Movie.Themes.Any(t => t.Name == "Drugs"))
-                        {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat drug en alcoholmisbruik">
-                                        <CustomSvgIcon Name="drugs-en-alcoholmisbruik" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
-                        }
-                        @if (Movie.Themes.Any(t => t.Name == "Gevaarlijke challenges of stunts"))
-                        {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat gevaarlijke challenges">
-                                        <CustomSvgIcon Name="gevaarlijke-challenges" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
-                        }
-                        @if (Movie.Themes.Any(t => t.Name == "Geweld"))
-                        {
-                                <div class="kijkWijzerIco">
-                                    <MudTooltip Text="Deze film bevat geweld">
-                                        <CustomSvgIcon Name="geweld" Class="w-6 h-6 text-primary" />
-                                    </MudTooltip>
-                                </div>
-                        }
+                        
                     </div>
                 </div>
 

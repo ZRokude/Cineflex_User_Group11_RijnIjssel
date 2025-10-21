@@ -25,7 +25,6 @@ namespace Cineflex.Components.Pages.Auth
 
 
         //<---------------------->Bools
-        private bool isValidToken = false;
         private bool isNewPasswordVisible = false;
         private bool isConfirmPasswordVisible = false;
         private bool _isLoading = false;

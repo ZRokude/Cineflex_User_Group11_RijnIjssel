@@ -1,10 +1,12 @@
-﻿using Cineflex.Services.ApiServices;
+﻿using Cineflex.Models.Responses.Movie;
+using Cineflex.Services.ApiServices;
 using Cineflex_API.Model.Responses.Cinema;
 using Cineflex_API.Model.Responses.Movie;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using MudBlazor;
+
 
 namespace Cineflex.Components.Pages
 {
@@ -16,6 +18,8 @@ namespace Cineflex.Components.Pages
 
         [Inject] private ICinemaService CinemaService {get; set;} = null!;
 
+        [Inject] private IThemeService ThemeService { get; set; } = null!;
+
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
         [Inject] NavigationManager NavigationManager { get; set; } = null!;
@@ -26,6 +30,7 @@ namespace Cineflex.Components.Pages
 
 
         private MovieResponse? Movie { get; set; }
+        private ThemeResponse? Theme { get; set; } = null!; 
 
 
         private List<CinemaRoomMovieResponse> availableRooms = new();
@@ -44,8 +49,6 @@ namespace Cineflex.Components.Pages
         private string _airTimeRoom = "";
 
         private int selectedDateIndex = 0;
-        private int _MovieAge = 0;
-
 
         protected override async Task OnInitializedAsync()
         {
@@ -53,6 +56,9 @@ namespace Cineflex.Components.Pages
             {
                 var response = await MovieService.ReadMovieById(movieId);
                 Movie = response.Model;
+
+                var themerepsonse = await ThemeService.ReadThemeByMovieId(movieId);
+                Theme = themerepsonse.Model;
 
                 formattedDate = Movie?.ReleaseDate.ToString("yyyy/MM");
 
@@ -131,6 +137,79 @@ namespace Cineflex.Components.Pages
                 return string.Join(" ", words.Skip(15));
             }
         }
+
+        private string GetImage(string title)
+        {
+            string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+
+            string imgurl = "";
+            string titleFilter = title.Replace(" ", "_");
+            foreach (var ext in extensionsImage)
+            {
+                var path = Path.Combine(Environment.CurrentDirectory, "wwwroot", "CoverMovie", $"{titleFilter}_cover{ext}");
+                if (File.Exists(path))
+                {
+                    imgurl = $"/CoverMovie/{titleFilter}_cover{ext}";
+                    break;
+                }
+            }
+            return imgurl;
+        }
+
+        private string GetBackgroundImage(string title)
+        {
+            string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            string titleFilter = title.Replace(" ", "_");
+
+            foreach (var ext in extensionsImage)
+            {
+                var originalPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "CoverMovie", $"{titleFilter}_Background_Cover{ext}");
+                if (File.Exists(originalPath))
+                {
+                    // Uitvoerpad voor bijgesneden afbeelding
+                    var croppedPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "CoverMovie", $"{titleFilter}_Background_Cropped{ext}");
+
+                    if (!File.Exists(croppedPath))
+                    {
+                        CropImageCenter(originalPath, croppedPath, 400); // Crop naar 400px hoog
+                    }
+
+                    return $"/CoverMovie/{titleFilter}_Background_Cropped{ext}";
+                }
+            }
+
+            return "";
+        }
+
+
+        private void CropImageCenter(string inputPath, string outputPath, int targetHeight)
+        {
+            using var image = System.Drawing.Image.FromFile(inputPath);
+            int originalWidth = image.Width;
+            int originalHeight = image.Height;
+
+            // Bepaal de hoogte die behouden blijft
+            if (originalHeight <= targetHeight)
+            {
+                // Te klein, gewoon kopiëren
+                File.Copy(inputPath, outputPath, true);
+                return;
+            }
+
+            int y = (originalHeight - targetHeight) / 2; // Midden
+            var cropRect = new System.Drawing.Rectangle(0, y, originalWidth, targetHeight);
+
+            using var bmp = new System.Drawing.Bitmap(cropRect.Width, cropRect.Height);
+            using (var g = System.Drawing.Graphics.FromImage(bmp))
+            {
+                g.DrawImage(image, new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), cropRect, System.Drawing.GraphicsUnit.Pixel);
+            }
+
+            bmp.Save(outputPath);
+        }
+
+
+
 
         private async Task ScrollDates(string direction)
         {
