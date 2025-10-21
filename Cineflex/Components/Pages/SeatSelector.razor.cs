@@ -1,3 +1,4 @@
+using Cineflex.Components.Pages.Dialog;
 using Cineflex.Services.ApiService;
 using Cineflex_API.Model.Responses.Cinema;
 using Microsoft.AspNetCore.Components;
@@ -15,6 +16,7 @@ namespace Cineflex.Components.Pages
         [Inject] private ICinemaRoomSeatService CinemaRoomSeatService { get; set; } = default!;
         [Inject] private ITicketService TicketService { get; set; } = default!;
         [Inject] private ICinemaRoomMovieService CinemaRoomMovieService { get; set; } = default!;
+        [Inject] private IDialogService DialogService { get; set; } = default!;
         [Parameter] public Guid CinemaRoomId { get; set; } = Guid.Empty;
         private List<CinemaRoomSeatResponse> CinemaRoomSeatResponses { get; set; } = new();
         private List<TicketResponse> TicketResponses { get; set; } = new();
@@ -23,6 +25,7 @@ namespace Cineflex.Components.Pages
         private List<int> ChoosedSeatList { get; set; } = new();
         private Dictionary<int, bool> IsDisabledButtonList { get; set; } = new();
         private Dictionary<int, MudBlazor.Color> ColorButtonList { get; set; } = new();
+        private bool isShowNumber { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
             await DoApiService();
@@ -80,6 +83,11 @@ namespace Cineflex.Components.Pages
         {
             var totalPreviousSeat = CinemaRoomSeatResponses.Where(c => c.RowNumber < seatRowNumber).Sum(c => c.TotalRowSeatNumber);
             return totalPreviousSeat + currentSeatIndex ;
+        }
+        private async Task Reservation()
+        {
+            var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, BackdropClick = true };
+            await DialogService.ShowAsync<ReservationDialog>(Localizer["Payment_Page"], options);
         }
     }
 }
