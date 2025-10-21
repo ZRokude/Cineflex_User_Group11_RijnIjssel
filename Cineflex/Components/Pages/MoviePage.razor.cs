@@ -20,6 +20,8 @@ namespace Cineflex.Components.Pages
 
         [Inject] private IMovieThemeService ThemeService { get; set; } = null!;
 
+        [Inject] private IMovieGenreService GenreService { get; set; } = null!;
+
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
         [Inject] NavigationManager NavigationManager { get; set; } = null!;
@@ -31,6 +33,7 @@ namespace Cineflex.Components.Pages
 
         private MovieResponse? Movie { get; set; }
         private List<ThemeResponse> Theme { get; set; } = new List<ThemeResponse>();
+        private List<GenreResponse> Genre { get; set; } = new List<GenreResponse>();
 
 
         private List<CinemaRoomMovieResponse> availableRooms = new();
@@ -57,13 +60,9 @@ namespace Cineflex.Components.Pages
                 var response = await MovieService.ReadMovieById(movieId);
                 Movie = response.Model;
 
-                
                 var themeResponse = await ThemeService.ReadByMovieId(movieId);
 
-                
-                var themeDetails = new List<ThemeResponse>();
-
-                
+                var themeDetails = new List<ThemeResponse>();               
                 if (themeResponse?.Model != null)
                 {
                     foreach (var mt in themeResponse.Model)
@@ -78,7 +77,23 @@ namespace Cineflex.Components.Pages
                     Theme = themeDetails;
                 }
 
-                
+
+                var genreResponse = await GenreService.ReadByMovieId(movieId);
+                var genreDetails = new List<GenreResponse>();
+
+                if (genreResponse?.Model != null && genreResponse.Model.Any())
+                {
+                    foreach (var movieGenre in genreResponse.Model)
+                    {
+                        var genreDetailResponse = await GenreService.ReadbyId(movieGenre.GenreId);
+                        if (genreDetailResponse?.Model != null)
+                        {
+                            genreDetails.Add(genreDetailResponse.Model);
+                        }
+                    }
+                    Genre = genreDetails;
+                }
+
 
 
                 formattedDate = Movie?.ReleaseDate.ToString("yyyy/MM");
@@ -321,7 +336,7 @@ namespace Cineflex.Components.Pages
         private async Task SelectTicket(CinemaRoomMovieResponse selectedRoom)
         {
             var selectedRoomId = selectedRoom.Id; 
-            NavigationManager.NavigateTo($"/SelectSeats/{selectedRoomId}/");
+            NavigationManager.NavigateTo($"/Seats/{selectedRoomId}/");
         }
 
     }

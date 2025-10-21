@@ -14,6 +14,8 @@ namespace Cineflex_API.Model.Responses.Movie
         public int Rating { get; set; }
         public int AgeRestriction { get; set; }
         public string Description { get; set; } = string.Empty;
+
+        public int Duration { get; set; }
         public DateTime ReleaseDate { get; set; }
 
         public List<GenreResponse> Genres { get; set; } = new();

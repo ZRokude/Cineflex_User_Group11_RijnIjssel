@@ -45,9 +45,9 @@
             <MudText Class="movie-title">@Movie.Name</MudText>
 
 
-                <div class="movie-subtext">
-                    <div class="kijkWijzerContainer">
-                        @if (Theme != null)
+            <div class="movie-subtext">
+                <div class="kijkWijzerContainer">
+                    @if (Theme != null)
                         {
                                 @if (Theme.Any(t => t.Name == "Seks"))
                                 {
@@ -115,15 +115,11 @@
                                 }
                         }
                         
-                    </div>
                 </div>
+            </div>
 
-
-
-
-
-                        <div class="movie-subtext">
-                            @if (Movie.AgeRestriction <= 3)
+            <div class="movie-subtext">
+                @if (Movie.AgeRestriction <= 3)
                             {
                                             <MudAvatar Color="Color.Success" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
                             }
@@ -140,32 +136,36 @@
                                             <MudAvatar Color="Color.Error" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
                             }
 
-                        </div>
+            </div>
 
 
 
-                        <div class="movie-subtext">
-                            <MudIcon Icon="@Icons.Material.Filled.Star" /> Rating: @Movie.Rating / 10
-                        </div>
+            <div class="movie-subtext">
+                <MudIcon Icon="@Icons.Material.Filled.Star" /> Rating: @Movie.Rating / 10
+            </div>
 
-                        <div class="movie-subtext">
-                            <MudIcon Icon="@Icons.Material.Filled.MovieCreation" /> Released date: @formattedDate
-                        </div>
+            <div class="movie-subtext">
+                <MudIcon Icon="@Icons.Material.Filled.AccessTimeFilled" /> Lengte: @Movie.Duration min
+            </div>
 
-                        <div class="movie-subtext">
+            <div class="movie-subtext">
+                <MudIcon Icon="@Icons.Material.Filled.MovieCreation" /> Released date: @formattedDate
+            </div>
+
+            <div class="movie-subtext">
                             <MudIcon Icon="@Icons.Material.Filled.Category" />
                             Genres:
-                            @if (Movie.Genres != null && Movie.Genres.Any())
+                            @if (Genre != null && Genre.Any())
                             {
-                                            <span>@string.Join(", ", Movie.Genres.Select(g => g.Name))</span>
+                                    <span>@string.Join(", ", Genre.Select(g => g.Name))</span>
                             }
                             else
                             {
-                                            <span>Geen genres beschikbaar</span>
+                                    <span>Geen genres beschikbaar</span>
                             }
                         </div>
 
-                        <div class="movie-subtext">
+            <div class="movie-subtext">
 
                             <MudText Class="description-box">
                                 <MudIcon Icon="@Icons.Material.Filled.ShortText" /> @ShortDescription
