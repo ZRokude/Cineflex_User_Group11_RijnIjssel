@@ -20,7 +20,6 @@ namespace Cineflex.Components.Pages.Auth
 
         private MudForm _form = new();
         private string _backgroundClass = "start-color";
-        private int _loginAttempts = 0;
         private bool _isLoading = false;
         private bool chairsVisible;
 
