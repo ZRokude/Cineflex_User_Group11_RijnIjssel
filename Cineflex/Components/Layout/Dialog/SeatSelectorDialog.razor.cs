@@ -1,14 +1,11 @@
 using Cineflex.Services.ApiService;
 using Cineflex_API.Model.Responses.Cinema;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MudBlazor;
-using System.Diagnostics.Eventing.Reader;
 
-namespace Cineflex.Components.Pages
+namespace Cineflex.Components.Layout.Dialog
 {
-    public partial class SeatSelector
+    public partial class SeatSelectorDialog
     {
         [Inject] internal MudLocalizer Localizer { get; set; } = default!;
         [Inject] private NavigationManager NavigationManager { get; set; } = default!;
@@ -22,7 +19,6 @@ namespace Cineflex.Components.Pages
         private int currentSeat = 0;
         private List<int> ChoosedSeatList { get; set; } = new();
         private Dictionary<int, bool> IsDisabledButtonList { get; set; } = new();
-        private Dictionary<int, MudBlazor.Color> ColorButtonList { get; set; } = new();
         protected override async Task OnInitializedAsync()
         {
             await DoApiService();
@@ -46,16 +42,15 @@ namespace Cineflex.Components.Pages
                 if (ticketResult != null && ticketResult.Model?.Count() > 0) TicketResponses = ticketResult.Model.ToList();
             }
         }
-        private bool IsSeatTaken(int seatNumber)
+        private bool IsSeatTaken()
         {
-            if (TicketResponses.Any(c => c.SeatNumber == seatNumber))
+            currentSeat++;
+            if (TicketResponses.Any(c => c.SeatNumber == currentSeat))
             {
-                IsDisabledButtonList.Add(seatNumber, true);
-                ColorButtonList.Add(seatNumber, MudBlazor.Color.Transparent);
+                IsDisabledButtonList.Add(currentSeat, true);
                 return true;
             }
             IsDisabledButtonList.Add(currentSeat, false);
-            ColorButtonList.Add(seatNumber, MudBlazor.Color.Dark);
             return false;
         }
         private Task OnClick(int seatNumber)
@@ -72,8 +67,8 @@ namespace Cineflex.Components.Pages
         }
         private int SeatNumber(int seatRowNumber, int currentSeatIndex)
         {
-            var totalPreviousSeat = CinemaRoomSeatResponses.Where(c => c.RowNumber < seatRowNumber).Sum(c => c.TotalRowSeatNumber);
+            var totalPreviousSeat = CinemaRoomSeatResponses.Where(c=>c.RowNumber < seatRowNumber).Sum(c=>c.TotalRowSeatNumber);
             return totalPreviousSeat + currentSeatIndex;
         }
     }
-}
+}   
