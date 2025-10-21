@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cineflex_DataAccess.Entities.Cinema;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cineflex_API.Model.Commands.User
 {
-    public class AccountResponse
+    public class AccountCommand
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Email { get; set; } = string.Empty;
