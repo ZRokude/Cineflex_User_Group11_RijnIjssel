@@ -106,6 +106,12 @@ namespace Cineflex.Components.Pages
                         .ToList();
                 }
 
+                //if (GetCinema?.Any() == true)
+                //{
+                //    _selectedCinemaId = GetCinema.First().Id;
+                //    await OnCinemaChanged(SelectedCinemaId);
+                //}
+
                 var cinemaRoomResponse = await CinemaRoomService.GetRoomsByMovieId(movieId);
                 if (cinemaRoomResponse.IsSuccesfull && cinemaRoomResponse.Model != null)
                 {
@@ -335,8 +341,8 @@ namespace Cineflex.Components.Pages
 
         private async Task SelectTicket(CinemaRoomMovieResponse selectedRoom)
         {
-            var selectedRoomId = selectedRoom.Id; 
-            NavigationManager.NavigateTo($"/Seats/{selectedRoomId}/");
+            var selectedRoomId = selectedRoom.CinemaRoomId; 
+            NavigationManager.NavigateTo($"/Seat/{selectedRoomId}/");
         }
 
     }
