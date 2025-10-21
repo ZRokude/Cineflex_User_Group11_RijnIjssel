@@ -50,12 +50,16 @@ namespace Cineflex.Components.Pages
         {
             if (TicketResponses.Any(c => c.SeatNumber == seatNumber))
             {
-                IsDisabledButtonList.Add(seatNumber, true);
-                ColorButtonList.Add(seatNumber, MudBlazor.Color.Transparent);
+                if(!IsDisabledButtonList.ContainsKey(seatNumber))
+                    IsDisabledButtonList.TryAdd(seatNumber, true);
+                if (!ColorButtonList.ContainsKey(seatNumber))
+                    ColorButtonList.Add(seatNumber, MudBlazor.Color.Transparent);
                 return true;
             }
-            IsDisabledButtonList.Add(currentSeat, false);
-            ColorButtonList.Add(seatNumber, MudBlazor.Color.Dark);
+            if (!IsDisabledButtonList.ContainsKey(seatNumber))
+                IsDisabledButtonList.TryAdd(seatNumber, false);
+            if (!ColorButtonList.ContainsKey(seatNumber))
+                ColorButtonList.Add(seatNumber, MudBlazor.Color.Dark);
             return false;
         }
         private Task OnClick(int seatNumber)
@@ -63,17 +67,19 @@ namespace Cineflex.Components.Pages
             if (!ChoosedSeatList.Contains(seatNumber))
             {
                 ChoosedSeatList.Add(seatNumber);
+                ColorButtonList[seatNumber] = MudBlazor.Color.Success;
             }
             else
             {
                 ChoosedSeatList.Remove(seatNumber);
+                ColorButtonList[seatNumber] = MudBlazor.Color.Transparent;
             }
             return Task.CompletedTask;
         }
         private int SeatNumber(int seatRowNumber, int currentSeatIndex)
         {
             var totalPreviousSeat = CinemaRoomSeatResponses.Where(c => c.RowNumber < seatRowNumber).Sum(c => c.TotalRowSeatNumber);
-            return totalPreviousSeat + currentSeatIndex;
+            return totalPreviousSeat + currentSeatIndex ;
         }
     }
 }

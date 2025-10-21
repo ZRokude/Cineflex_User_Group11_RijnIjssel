@@ -10,23 +10,25 @@
     }
     else
     {
-
         <MudStack>
             @foreach (var item in CinemaRoomSeatResponses.OrderBy(c => c.RowNumber))
             {
                 <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                    @for (int i = 0; i < item.TotalRowSeatNumber; i++)
+                    @for (int i = 1; i <= item.TotalRowSeatNumber; i++)
                     {
-                        if (IsSeatTaken(SeatNumber(item.RowNumber, i)))
+                        var seatIndex = i;
+                        var seatNumber = SeatNumber(item.RowNumber, seatIndex);
+                        if (!IsSeatTaken(seatNumber))
                         {
-                            <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[SeatNumber(item.RowNumber, i)]" OnClick="@(() => OnClick(SeatNumber(item.RowNumber, i)))">
-                                <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@ColorButtonList[SeatNumber(item.RowNumber, i)]" />
+                            <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[seatNumber]" Color="@ColorButtonList[seatNumber]"
+                                       OnClick="@(() => OnClick(seatNumber))">
+                                <MudIcon Icon="@Icons.Material.Filled.EventSeat" />
                             </MudButton>
                         }
                         else
                         {
-                            <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[currentSeat]">
-                                <MudIcon Icon="@Icons.Material.Filled.EventSeat" Color="@ColorButtonList[SeatNumber(item.RowNumber, i)]" />
+                            <MudButton Size="Size.Medium" Disabled="@IsDisabledButtonList[seatNumber]" Color="@ColorButtonList[seatNumber]">
+                                <MudIcon Icon="@Icons.Material.Filled.EventSeat" />
                             </MudButton>
                         }
 
