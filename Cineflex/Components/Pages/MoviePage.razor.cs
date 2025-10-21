@@ -335,7 +335,7 @@ namespace Cineflex.Components.Pages
 
         private async Task SelectTicket(CinemaRoomMovieResponse selectedRoom)
         {
-            var selectedRoomId = selectedRoom.Id; 
+            var selectedRoomId = selectedRoom.CinemaRoomId; 
             NavigationManager.NavigateTo($"/Seats/{selectedRoomId}/");
         }
 
