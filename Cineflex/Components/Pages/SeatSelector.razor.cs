@@ -84,10 +84,19 @@ namespace Cineflex.Components.Pages
             var totalPreviousSeat = CinemaRoomSeatResponses.Where(c => c.RowNumber < seatRowNumber).Sum(c => c.TotalRowSeatNumber);
             return totalPreviousSeat + currentSeatIndex ;
         }
+
+
         private async Task Reservation()
         {
-            var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, BackdropClick = true };
-            await DialogService.ShowAsync<ReservationDialog>(Localizer["Payment_Page"], options);
+            var options = new DialogOptions() { CloseButton = true, FullScreen = true, CloseOnEscapeKey = true, BackdropClick = true };
+
+            var ChosenSeatListparameters = new DialogParameters
+            {
+                { "ChoosedSeatList", ChoosedSeatList },
+                { "InformationFilm", CinemaRoomMovieResponse  }
+
+            };
+            await DialogService.ShowAsync<ReservationDialog>(Localizer["Payment_Page"], ChosenSeatListparameters, options);
         }
     }
 }

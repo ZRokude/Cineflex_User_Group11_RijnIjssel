@@ -1,13 +1,235 @@
-﻿<MudDialog>
+﻿@using Cineflex.Services.ApiService
+@using Cineflex.Services.ApiServices
+@using Cineflex_API.Model.Responses.Cinema
+@using Cineflex_API.Model.Responses.Movie
+
+<div class="@($"color-transition {_backgroundClass}")">
+    <MudDialog>
     <DialogContent>
-        <MudText Typo="Typo.h6">Payment</MudText>
-        <MudText>Select your preferred seats for the movie.</MudText>
-        <!-- Seat selection UI goes here -->
+
+            <div style="display: flex; justify-content: start; align-items: center; padding: 20px;">
+                <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
+            </div>
+
+            <MudText Typo="Typo.h3">Payment </MudText>
+
+            <!-- Container voor beide kaarten -->
+            <div class="Card_Container">
+                <div class="Card_info">
+                    <MudCard Style="width:600px; height:350px; gap:15px; padding:20px;">
+                        <MudText Typo="Typo.h6">Summary</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.body1">Amount of seats selected: @AmountSeatChosen</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.body1">RoomNumber: @RoomNumber</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.body1">Date and time of the movie: @RoomInformation[0]</MudText>
+
+
+                        <MudDivider />
+                        <MudText Typo="Typo.body1">The film of the tickets: Dune Part 1</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.body1">Total amount: @PriceTotal euro</MudText>
+                    </MudCard>
+                </div>
+
+                <div class="Card_Pay">
+                    <MudCard Style="width:400px; height:600px; gap:15px; padding:20px;">
+                        <MudText Typo="Typo.h6">Payment</MudText>
+
+
+                        <MudRadioGroup @bind-Value="SelectedPaymentMethod">
+                            <MudStack AlignItems="AlignItems.Start" Justify="Justify.FlexStart">
+                            <MudRadio Value="@("IDEAL")" Color="Color.Primary">  
+                                <CustomSvgIcon Name="ideal" Class="w-6 h-6 text-primary" />
+                                IDEAL
+                            </MudRadio>
+
+                            <MudRadio Value="@("CARD")" Color="Color.Primary" @onclick="ScrollDates">
+                                <CustomSvgIcon Name="credit-card" Class="w-6 h-6 text-primary" />
+                                Card
+                            </MudRadio>
+
+                            <MudRadio Value="@("PayPal")" Color="Color.Primary">
+                                <CustomSvgIcon Name="paypal" Class="w-6 h-6 text-primary" />
+                                payPal
+                            </MudRadio>
+
+                            </MudStack>
+                        </MudRadioGroup>
+
+                         <MudCollapse Expanded="@(SelectedPaymentMethod == "CARD")">
+                            <MudTextField T="string" Placeholder="xxxxx-xxxxx-xxxx" Label="Card number" Variant="Variant.Outlined" />
+                            <MudTextField T="string" Placeholder="dd/mm/jj" Label="Expiry date" Variant="Variant.Outlined" />
+                            <MudTextField T="string" Placeholder="CVV2" Label="CVV2" Variant="Variant.Outlined" />
+                        </MudCollapse>
+
+                        <MudButton Style="width:300px; background-color:black; align-items: center; ">Pay</MudButton>
+                        <MudDivider />
+                        <MudText>Personal info: naam@gmail.com</MudText>
+                    </MudCard>
+                </div>
+            </div>
+
     </DialogContent>
+
     <DialogActions>
         <MudButton Color="Color.Primary" Variant="Variant.Filled">Confirm</MudButton>
         <MudButton Color="Color.Secondary" Variant="Variant.Outlined">Cancel</MudButton>
     </DialogActions>
-</MudDialog>
 
+
+</MudDialog>
+</div>
+
+
+@code{
+    [Inject] IJSRuntime JSRuntime { get; set; } = null!;
+    [Inject] private ICinemaRoomMovieService CinemaRoomMovieService { get; set; } = default!;
+    [Inject] private IMovieService MovieService { get; set; } = null!;
+    [Inject] private ICinemaRoomService CinemaRoomService { get; set; } = null!;
+
+
+    [Parameter] public List<int> ChoosedSeatList { get; set; } = new();
+    [Parameter] public CinemaRoomMovieResponse CinemaRoomMovieResponse { get; set; } = null!;
+
+
+
+    private List<string> RoomInformation { get; set; } = new();
+    private MovieResponse? MovieResponse { get; set; }
+
+    private string _backgroundClass = "start-color";
+    private string SelectedPaymentMethod { get; set; } = "IDEAL";
+    private string MovieName = "";
+
+    private double PricePerSeat = 7.5;
+    private double PriceTotal = 0;
+
+    private int AmountSeatChosen = 0;
+
+    private Guid RoomNumber;
+    private Guid MovieId ;
+    private Guid RoomId;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Console.WriteLine("===> OnInitializedAsync started");
+
+        // if (CinemaRoomMovieResponse == null)
+        // {
+        //     Console.WriteLine("CinemaRoomMovieResponse is NULL!");
+        //     return;
+        // }
+
+        // AmountSeatChosen = ChoosedSeatList.Count;
+        // PriceTotal = AmountSeatChosen * PricePerSeat;
+
+        // RoomId = CinemaRoomMovieResponse.CinemaRoomId;
+        // MovieId = CinemaRoomMovieResponse.MovieId;
+
+        // RoomInformation.Clear();
+        // RoomInformation.Add($"Starttijd: {CinemaRoomMovieResponse.StartAirTime:HH:mm}");
+
+        // await DoApiService();
+        await base.OnInitializedAsync();
+    }
+
+
+    // private async Task DoApiService()
+    // {
+    //     var cinemaRoomMovieResult = await CinemaRoomMovieService.GetByCinemaRoomId(RoomId);
+    //     if (cinemaRoomMovieResult.IsSuccesfull)
+    //     {
+    //         CinemaRoomMovieResponse = cinemaRoomMovieResult.Model!.First();
+    //         CinemaRoomMovieResponse.CinemaRoomId = RoomNumber;
+    //     }
+
+
+    //     var movieResult = await MovieService.ReadMovieById(MovieId);
+    //     if (movieResult.IsSuccesfull)
+    //     {
+    //         MovieResponse = movieResult.Model!;
+    //         MovieResponse.Name = MovieName;
+    //     }
+    // }
+
+ 
+
+
+    private async Task ScrollDates()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollDates", "CARD");
+    }
+
+}
+
+<style>
+
+    .start-color {
+        background: radial-gradient(circle at center, #111 0%, #232323 40%, #000 100%);
+        overflow-x: hidden;
+    }
+
+    .Card_Container {
+        display: flex;
+        justify-content: space-between; /* één links, één rechts */
+        align-items: flex-start;
+        width: 100%;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .Card_info, .Card_Pay {
+        display: flex;
+        justify-content: center;
+        border: 1px solid gray;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* X-offset, Y-offset, blur, color */
+        border-radius: 8px; /* optional, looks smoother */
+        padding: 16px; /* optional, gives spacing inside the card */
+        background-color: white; /* optional, to make the shadow more visible */
+    }
+
+</style>
+<script>
+    let currentPage = 0;
+
+    function scrollDates(direction) {
+        const container = document.getElementById('dateScrollBar');
+        if (!container) return;
+
+        const cardWidth = 120 + 15; // each card + gap
+        const visibleCards = 4;
+        const scrollAmount = cardWidth * visibleCards;
+
+        const maxScroll = container.scrollWidth - container.clientWidth;
+
+        if (direction === "right") {
+            currentPage = Math.min(currentPage + 1, Math.ceil(container.scrollWidth / scrollAmount) - 1);
+        } else {
+            currentPage = Math.max(currentPage - 1, 0);
+        }
+
+        const newScroll = currentPage * scrollAmount;
+
+        container.scrollTo({
+            left: newScroll,
+            behavior: 'smooth'
+        });
+    }
+
+    function bottom() {
+        var el = document.getElementById('bottom');
+        if (el) {
+            el.scrollIntoView({
+                behavior: 'smooth',   // smooth scrolling
+                block: 'start',       // scroll so element top aligns with viewport top
+                inline: 'nearest'     // horizontal alignment (usually leave as 'nearest')
+            });
+        }
+    }
+
+
+</script>
 
