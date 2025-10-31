@@ -84,7 +84,7 @@ namespace Cineflex.Components.Pages.Dialog
         private async Task Reservation()
         {
             var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, BackdropClick=true };
-            await DialogService.ShowAsync<ReservationDialog>(Localizer["Payment_Page"], options);
+            await DialogService.ShowAsync<PaymentDialog>(Localizer["Payment_Page"], options);
         }
     }
 }   

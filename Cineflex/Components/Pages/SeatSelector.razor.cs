@@ -90,13 +90,13 @@ namespace Cineflex.Components.Pages
         {
             var options = new DialogOptions() { CloseButton = true, FullScreen = true, CloseOnEscapeKey = true, BackdropClick = true };
 
-            var ChosenSeatListparameters = new DialogParameters
+            var ChosenSeatListparameters = new DialogParameters<PaymentDialog>
             {
-                { "ChoosedSeatList", ChoosedSeatList },
-                { "InformationFilm", CinemaRoomMovieResponse  }
+                { x=>x.ChoosedSeatList, ChoosedSeatList },
+                { x=>x.CinemaRoomMovieResponse, CinemaRoomMovieResponse  }
 
             };
-            await DialogService.ShowAsync<ReservationDialog>(Localizer["Payment_Page"], ChosenSeatListparameters, options);
+            await DialogService.ShowAsync<PaymentDialog>(Localizer["Payment_Page"], ChosenSeatListparameters, options);
         }
     }
 }

@@ -11,31 +11,47 @@
                 <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
             </div>
 
-            <MudText Typo="Typo.h3">Payment </MudText>
+
+            <MudText style="color:white;" Typo="Typo.h3">Payment </MudText>
 
             <!-- Container voor beide kaarten -->
             <div class="Card_Container">
                 <div class="Card_info">
-                    <MudCard Style="width:600px; height:350px; gap:15px; padding:20px;">
-                        <MudText Typo="Typo.h6">Summary</MudText>
-                        <MudDivider />
-                        <MudText Typo="Typo.body1">Amount of seats selected: @AmountSeatChosen</MudText>
-                        <MudDivider />
-                        <MudText Typo="Typo.body1">RoomNumber: @RoomNumber</MudText>
-                        <MudDivider />
-                        <MudText Typo="Typo.body1">Date and time of the movie: @RoomInformation[0]</MudText>
 
+                    <MudCard Style="width:600px; height:350px; padding:15px;">
+                        <MudText Typo="Typo.h4">Summary</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">The film of the tickets: @MovieName</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            Date and time of the movie:
+                            <MudText Inline=true>@RoomInformation[0]</MudText>
+                        </MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            Amount of seats selected:
+                            <MudText Inline=true>@AmountSeatChosen</MudText> 
+                        </MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            Room Number:
+                            <MudText Inline=true>@RoomNumber</MudText>
+                        </MudText>
 
                         <MudDivider />
-                        <MudText Typo="Typo.body1">The film of the tickets: Dune Part 1</MudText>
+                        <MudText Typo="Typo.h6" >
+                            Total amount:
+                            <MudText Inline=true Typo="Typo.h6" style="font-weight: bold;">@PriceTotal euro</MudText>
+                        </MudText>
                         <MudDivider />
-                        <MudText Typo="Typo.body1">Total amount: @PriceTotal euro</MudText>
+
+                        <MudText>Personal info: @AccountEmail</MudText>
                     </MudCard>
                 </div>
 
                 <div class="Card_Pay">
                     <MudCard Style="width:400px; height:600px; gap:15px; padding:20px;">
-                        <MudText Typo="Typo.h6">Payment</MudText>
+                        <MudText Typo="Typo.h4">Payment</MudText>
 
 
                         <MudRadioGroup @bind-Value="SelectedPaymentMethod">
@@ -58,112 +74,44 @@
                             </MudStack>
                         </MudRadioGroup>
 
-                         <MudCollapse Expanded="@(SelectedPaymentMethod == "CARD")">
-                            <MudTextField T="string" Placeholder="xxxxx-xxxxx-xxxx" Label="Card number" Variant="Variant.Outlined" />
-                            <MudTextField T="string" Placeholder="dd/mm/jj" Label="Expiry date" Variant="Variant.Outlined" />
-                            <MudTextField T="string" Placeholder="CVV2" Label="CVV2" Variant="Variant.Outlined" />
+                        <MudCollapse Expanded="@(SelectedPaymentMethod == "CARD")" Style="padding:15px ;gap:15px">
+                            <MudTextField T="string" Label="Card number" Variant="Variant.Outlined" Placeholder="xxxx xxxx xxxx xxxx"
+                                          @bind-Value="CardModel.Number" Immediate="true" Error="@(!string.IsNullOrEmpty(CardNumberError))"
+                                          ErrorText="@CardNumberError" />
+
+                            <MudTextField T="string" Label="Expiry date" Variant="Variant.Outlined" Placeholder="MM/YY"
+                                          @bind-Value="CardModel.Expiry" Immediate="true" Error="@(!string.IsNullOrEmpty(ExpiryError))"
+                                          ErrorText="@ExpiryError" />
+
+                            <MudTextField T="string" Label="CVV" Variant="Variant.Outlined" Placeholder="CVV"
+                                          @bind-Value="CardModel.CVV" Immediate="true" Error="@(!string.IsNullOrEmpty(CVVError))"
+                                          ErrorText="@CVVError" />
                         </MudCollapse>
 
-                        <MudButton Style="width:300px; background-color:black; align-items: center; ">Pay</MudButton>
+                        <MudButton Style="width:300px; background-color:black;color:white; align-items:center;"
+                                   OnClick="buyTicker"
+                                   Disabled="@_isLoading">
+                            @if (_isLoading)
+                            {
+                                <MudProgressCircular Class="ms-n1" Style="color:white;" Size="Size.Small" Indeterminate="true" />
+                                <MudText Style="color:white;" Class="ms-2">Loading...</MudText>
+                            }
+                            else
+                            {
+                                <MudText>Pay</MudText>
+                            }
+                        </MudButton>
+
                         <MudDivider />
-                        <MudText>Personal info: naam@gmail.com</MudText>
+
                     </MudCard>
                 </div>
             </div>
 
     </DialogContent>
 
-    <DialogActions>
-        <MudButton Color="Color.Primary" Variant="Variant.Filled">Confirm</MudButton>
-        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">Cancel</MudButton>
-    </DialogActions>
-
-
 </MudDialog>
 </div>
-
-
-@code{
-    [Inject] IJSRuntime JSRuntime { get; set; } = null!;
-    [Inject] private ICinemaRoomMovieService CinemaRoomMovieService { get; set; } = default!;
-    [Inject] private IMovieService MovieService { get; set; } = null!;
-    [Inject] private ICinemaRoomService CinemaRoomService { get; set; } = null!;
-
-
-    [Parameter] public List<int> ChoosedSeatList { get; set; } = new();
-    [Parameter] public CinemaRoomMovieResponse CinemaRoomMovieResponse { get; set; } = null!;
-
-
-
-    private List<string> RoomInformation { get; set; } = new();
-    private MovieResponse? MovieResponse { get; set; }
-
-    private string _backgroundClass = "start-color";
-    private string SelectedPaymentMethod { get; set; } = "IDEAL";
-    private string MovieName = "";
-
-    private double PricePerSeat = 7.5;
-    private double PriceTotal = 0;
-
-    private int AmountSeatChosen = 0;
-
-    private Guid RoomNumber;
-    private Guid MovieId ;
-    private Guid RoomId;
-
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        // Console.WriteLine("===> OnInitializedAsync started");
-
-        // if (CinemaRoomMovieResponse == null)
-        // {
-        //     Console.WriteLine("CinemaRoomMovieResponse is NULL!");
-        //     return;
-        // }
-
-        // AmountSeatChosen = ChoosedSeatList.Count;
-        // PriceTotal = AmountSeatChosen * PricePerSeat;
-
-        // RoomId = CinemaRoomMovieResponse.CinemaRoomId;
-        // MovieId = CinemaRoomMovieResponse.MovieId;
-
-        // RoomInformation.Clear();
-        // RoomInformation.Add($"Starttijd: {CinemaRoomMovieResponse.StartAirTime:HH:mm}");
-
-        // await DoApiService();
-        await base.OnInitializedAsync();
-    }
-
-
-    // private async Task DoApiService()
-    // {
-    //     var cinemaRoomMovieResult = await CinemaRoomMovieService.GetByCinemaRoomId(RoomId);
-    //     if (cinemaRoomMovieResult.IsSuccesfull)
-    //     {
-    //         CinemaRoomMovieResponse = cinemaRoomMovieResult.Model!.First();
-    //         CinemaRoomMovieResponse.CinemaRoomId = RoomNumber;
-    //     }
-
-
-    //     var movieResult = await MovieService.ReadMovieById(MovieId);
-    //     if (movieResult.IsSuccesfull)
-    //     {
-    //         MovieResponse = movieResult.Model!;
-    //         MovieResponse.Name = MovieName;
-    //     }
-    // }
-
- 
-
-
-    private async Task ScrollDates()
-    {
-        await JSRuntime.InvokeVoidAsync("scrollDates", "CARD");
-    }
-
-}
 
 <style>
 
