@@ -1,12 +1,11 @@
 ﻿<MudDialog>
     <DialogContent>
-        <MudText Typo="Typo.h6">Payment</MudText>
-        <MudText>Select your preferred seats for the movie.</MudText>
-        <!-- Seat selection UI goes here -->
+        <MudText Typo="Typo.h6"></MudText>
+        <MudText>@string.Format(Localizer["Reserve_Notice"], string.Join(", ", SeatNumbers))</MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Primary" Variant="Variant.Filled">Confirm</MudButton>
-        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">Cancel</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="CheckBeforeReserve">Confirm</MudButton>
+        <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="@(() => MudDialog.Close())">Cancel</MudButton>
     </DialogActions>
 </MudDialog>
 
