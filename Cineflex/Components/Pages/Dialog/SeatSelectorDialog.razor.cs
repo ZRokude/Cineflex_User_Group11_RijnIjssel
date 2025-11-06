@@ -1,5 +1,5 @@
-using Cineflex.Services.ApiService;
-using Cineflex_API.Model.Responses.Cinema;
+using Cineflex.Models.Responses.Cinema;
+using Cineflex.Services.ApiServices;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

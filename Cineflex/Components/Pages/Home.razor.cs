@@ -1,7 +1,5 @@
-using Cineflex.Services.ApiService;
-using Cineflex_API.Model.Commands.Movie;
+using Cineflex.Models.Responses.Movie;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Hosting.Server;
 using MudBlazor;
 
 namespace Cineflex.Components.Pages

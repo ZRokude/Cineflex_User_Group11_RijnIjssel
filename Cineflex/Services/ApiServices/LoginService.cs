@@ -1,7 +1,7 @@
 ﻿using Cineflex.Models;
+using Cineflex.Models.Commands.User;
+using Cineflex.Models.Responses.User;
 using Cineflex.Utilities;
-using Cineflex_API.Model.Commands.User;
-using Cineflex_API.Model.Responses.User;
 
 namespace Cineflex.Services.ApiServices
 {

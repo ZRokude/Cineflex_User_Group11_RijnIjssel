@@ -1,9 +1,6 @@
-﻿
+﻿using Cineflex.Models.User;
 using Cineflex.Services.ApiServices;
-using Cineflex_API.Model.Commands.User;
-using Cineflex_API.Model.User;
 using Cinelexx.Services.Email;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
