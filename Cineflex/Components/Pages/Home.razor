@@ -3,10 +3,6 @@
 @using System.Text.Json
 @inject IJSRuntime JS
 
-<MudButton OnClick="@(() => SeatSelectorTest(Guid.Parse("008A6F52-C4A6-4744-BAA2-EB6A013DCFE1")))">
-    Select Seat
-</MudButton>
-
 @if (ipInfo.ValueKind != JsonValueKind.Undefined)
 {
     <MudText>IP: @IP</MudText>
@@ -15,6 +11,9 @@
     <MudText>Provinci: @ipInfo.GetProperty("regionName").GetString()</MudText>
    
 }
+
+<AcceptCookies/>
+
 
 @code {
     [Inject] private IIpService IpService { get; set; } = null!;

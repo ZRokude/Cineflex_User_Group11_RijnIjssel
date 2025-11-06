@@ -258,6 +258,7 @@ namespace Cineflex.Components.Pages.Auth
             if (_countBetweeDates < 4380) //JON: 4380 is 12 jaar
             {
                 Snackbar.Add("U moet ouder zijn als 12 jaar om een account aan te maken");
+                _isLoading = false;
                 return;
             }
 

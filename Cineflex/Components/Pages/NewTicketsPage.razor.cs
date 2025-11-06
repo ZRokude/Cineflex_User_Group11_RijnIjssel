@@ -192,20 +192,6 @@ namespace Cineflex.Components.Pages
             return "";
         }
 
-
-
-        private async Task ShowQrCode(dynamic ticket)
-        {
-            //Implement QR code dialog showing ticket details
-            //This could open a MudDialog with a generated QR code
-        }
-
-        private async Task DownloadTicket(dynamic ticket)
-        {
-            //Implement ticket download as PDF or image
-            //This could generate a printable ticket
-        }
-
         void GoToTickets()
         {
             NavigationManager.NavigateTo($"/ticketpage/{AccountId}");

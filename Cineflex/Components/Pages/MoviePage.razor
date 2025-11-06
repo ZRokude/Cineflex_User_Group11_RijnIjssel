@@ -35,6 +35,11 @@
     }
 
 
+    @if (_showCookieBar)
+    {
+        <AcceptCookies OnCookieDecisionMade="@OnCookiesHandled" />
+    }
+
     <!-- Movie informatie links onderin -->
     <div style="position: absolute; top: 70vh; left: 100px; text-align: left; z-index: 2; max-width: 600px;">
         @if (Movie is not null)
@@ -142,7 +147,7 @@
             </div>
 
             <div class="movie-subtext">
-                <MudIcon Icon="@Icons.Material.Filled.AccessTimeFilled" /> Lengte: @Movie.Duration min
+                <MudIcon Icon="@Icons.Material.Filled.AccessTimeFilled" /> Length: @Movie.Duration min
             </div>
 
             <div class="movie-subtext">
@@ -193,45 +198,62 @@
 
     </div>
 
+
+
+
     <div class="@(!_isLoggedIn ? "Disabled" : "show")">
           <div style="position: absolute; top: 120vh; width: 100%;  padding: 15px 0; border-top: 2px solid #333;">
 
                @if (!_isLoggedIn)
                 {
                             <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
-                                <MudText Style="color:white;" Typo="Typo.body1">*U moet ingelogd zijn om een filmticket te kopen*</MudText>
+                                <MudText Style="color:white;" Typo="Typo.body1">*U Need to be loged to buy a ticket*</MudText>
                             </div>
                 }
 
-            @if (!_selectedCinemaId.HasValue)
+            @if (CookieConsent)
             {
-                    <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
-                                <MudText Style="color:white;" Typo="Typo.body1">
-                                    Selecteer eerst een bioscoop om beschikbare tijden te zien
-                                </MudText>
-                    </div>
+                <div style="display: block; justify-content: center; align-items: center; padding: 20px; ">
+                    <MudText  Typo="Typo.body1">Don't know what cinema to choose ? check the
+                        <MudButton OnClick="OpenMap">
+                            <MudIcon Icon="@Icons.Material.Filled.Map"/>
+                                map
+                        </MudButton>
+                    </MudText>
+                </div>
             }
 
+            
+
                  <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
-                    <MudSelect T="Guid" Label="Selecteer Bioscoop"
-                               ValueChanged="OnCinemaChanged"
-                               Placeholder="Kies een bioscoop"
-                               FitContent=true
-                               Variant="Variant.Outlined"
-                               Style="width: 200px; color:white">
-                        @if (GetCinema != null)
-                        {
-                                    @foreach (var cinema in GetCinema)
-                                    {
-                                                <MudSelectItem Value="@cinema.Id">@cinema.Name</MudSelectItem>
-                                    }
-                        }
-                    </MudSelect>
+                     <MudTooltip Text=" first select a cinema before you can see the time for the movie"  Delay="400" Arrow="true" Placement="Placement.Top">
+                        <MudSelect T="Guid" Label="Choose Cinema"
+                                   ValueChanged="OnCinemaChanged"
+                                   Placeholder="Kies een bioscoop"
+                                   FitContent=true
+                                   Variant="Variant.Outlined"
+                                   Style="width: 200px; color:white">
+                            @if (GetCinema != null)
+                            {
+                                        @foreach (var cinema in GetCinema)
+                                        {
+                                                    <MudSelectItem Value="@cinema.Id">@cinema.Name</MudSelectItem>
+                                        }
+                            }
+                        </MudSelect>
+                     </MudTooltip>
                 </div>
 
 
 
+
           <div style="display: flex;justify-content: center; align-items: center; overflow-x: auto; gap: 15px; padding: 0 20px; scrollbar-width: thin; scrollbar-color: #666 #222;">
+
+                <MudTooltip Text="First select a cinema before you can see the time for the movie"
+                    Delay="400" Arrow="true" Placement="Placement.Top"
+                    Disabled="@_selectedCinemaId.HasValue">
+
+            <div style="display: flex;justify-content: center; align-items: center; overflow-x: auto; gap: 15px; padding: 0 20px; scrollbar-width: thin; scrollbar-color: #666 #222;">
 
                 <MudIconButton Icon="@Icons.Material.Filled.ChevronLeft"
                                Color="Color.Primary"
@@ -239,11 +261,10 @@
                                OnClick="@(() => ScrollDates("left"))"
                                Disabled="@(!availableDates.Any())" />
 
-                                
                 <div id="dateScrollBar"
-                 style="display: flex; overflow-x: hidden; gap: 15px; padding: 0 20px;
-                        scrollbar-width: none; scroll-behavior: smooth;
-                        width: calc((120px + 15px) * 4); /* 4 cards + gaps */">
+                     style="display: flex; overflow-x: hidden; gap: 15px; padding: 0 20px;
+                            scrollbar-width: none; scroll-behavior: smooth;
+                            width: calc((120px + 15px) * 4); /* 4 cards + gaps */">
 
                     @for (int i = 0; i < 14; i++)
                     {
@@ -253,56 +274,61 @@
                             var dayName = index == 0 ? "Today" : index == 1 ? "Tomorrow" : date.ToString("ddd");
                             var isAvailable = availableDates.Any(d => d.Date == date.Date);
 
-
                             <div @onclick="() => OnDateClick(index, isAvailable)"
-                                   style="@($"min-width: 120px; padding: 15px 20px; background: {(isAvailable ? (isSelected ? "#1976d2" : "#333") : "#1a1a1a")}; border-radius: 8px; cursor: {(isAvailable ? "pointer" : "not-allowed")}; text-align: center; transition: all 0.3s ease; border: 2px solid {(isSelected && isAvailable ? "#42a5f5" : "transparent")}; opacity: {(isAvailable ? "1" : "0.4")};")">
+                                 style="@($"min-width: 120px; padding: 15px 20px; background: {(isAvailable ? (isSelected ? "#1976d2" : "#333") : "#1a1a1a")}; border-radius: 8px; cursor: {(isAvailable ? "pointer" : "not-allowed")}; text-align: center; transition: all 0.3s ease; border: 2px solid {(isSelected && isAvailable ? "#42a5f5" : "transparent")}; opacity: {(isAvailable ? "1" : "0.4")};")">
                                 <MudText Style="@($"color: {(isAvailable ? "white" : "#555")}; font-weight: 600; font-size: 1rem;")">@dayName</MudText>
                                 <MudText Style="@($"color: {(isAvailable ? "#ccc" : "#444")}; font-size: 0.9rem;")">@date.ToString("MMM dd")</MudText>
                             </div>
-                   }
+                    }
+           </div>
+
+        <!-- Right scroll button -->
+        <MudIconButton Icon="@Icons.Material.Filled.ChevronRight"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       OnClick="@(() => ScrollDates("right"))"
+                       Disabled="@(!availableDates.Any())" />
+    </div>
+
+                </MudTooltip>
                 </div>
 
+@if (_selectedCinemaId.HasValue)
+{
+        <div style="width: 100%; margin-top: 30px; clear: both;">
+            <div id="bottom" class="@($"fade-{(_hasselected ? "show" : "hide")}")" style="padding: 0 20px;">
+                <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 20px;">
+                    @foreach (var room in GetRoomsForSelectedDate())
+                    {
+                            <MudButton OnClick="@(() => SelectTicket(room))"
+                                       Style="height:100px; width:150px; border-radius:15px; border-color:white;"
+                                       class="@($"color-transition {backgroundClass}")">
+                                <MudText Style="color: white;">@room.StartAirTime.ToString("HH:mm")</MudText>
+                            </MudButton>
+                    }
+                </div>
+            </div>
+        </div>
+}
 
-                <!-- Right scroll button -->
-                <MudIconButton Icon="@Icons.Material.Filled.ChevronRight"
-                               Color="Color.Primary"
-                               Size="Size.Large"
-                               OnClick="@(() => ScrollDates("right"))"
-                               Disabled="@(!availableDates.Any())" />
-          </div>
-                @if (_selectedCinemaId.HasValue)
-                {
-                        <div class="center">
-                                <div id="bottom" class="@($"fade-{(_hasselected ? "show" : "hide")}")" style="margin-top: 20px; padding: 0 20px;">
-                                    <div style="margin-top: 20px; padding: 0 20px; position: relative;">
-                                        @foreach (var room in GetRoomsForSelectedDate())
-                                        {
-                                                        <MudButton OnClick="@(() => SelectTicket(room))"
-                                                                   Style="height:100px; width:150px; border-radius:15px; margin:10px; border-color:white;"
-                                                                   class="@($"color-transition {backgroundClass}")">
-                                                                    <MudText Style="color: white;">@room.StartAirTime.ToString("HH:mm")</MudText>
-                                                        </MudButton>
-                                        }
-                                    </div>
-                                </div>
-                        </div>
-
-                }
-                @* else
-                {
+           
 
 
 
-                } *@
 
+
+        </div>
+        </div>
 
     </div>
 
-    </div>
-</div>
-
-
-
+        <div style="position: absolute; top: 150vh; left: 0; right: 0; margin-top: 50px; padding: 20px;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <MudCollapse Expanded="@showMap">
+                        <div id="map" style="height: 500px; width: 100%; min-height: 500px; display: block;"></div>
+                    </MudCollapse>
+            </div>
+        </div>
 
 
  <style>

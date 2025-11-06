@@ -1,0 +1,145 @@
+﻿@using Cineflex.Services.ApiService
+@using Cineflex.Services.Authentication
+@using Newtonsoft.Json
+
+@using static Cineflex.Components.Pages.Dialog.PaymentDialog
+@inherits LayoutComponentBase
+
+<MudAppBar Elevation="4">
+    <MudText Typo="Typo.h6" Class="ml-2">Cineflex</MudText>
+
+    <MudSpacer />
+
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Class="nav-link-spacing" style="width:100px"> Home </MudNavLink>
+
+    @if (!_isLoggedIn)
+    {
+        <MudNavLink style="width:100px" Href="/Login" Class="nav-link-spacing">Login</MudNavLink>
+    }
+    else
+    {
+        @if (HasTickets)
+        {
+            <MudNavLink style="width:125px" OnClick="GoToTickets" Class="nav-link-spacing">Your Tickets</MudNavLink>
+        }
+        
+        <MudNavLink style="width:100px" OnClick="LogOutAsync" Class="nav-link-spacing">Logout</MudNavLink>
+    }
+
+
+</MudAppBar>
+
+@code{
+
+
+    [Parameter] 
+    public string PageTitle { get; set; } = "";
+
+    [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] private ITicketService TicketService { get; set; } = null!;
+
+    [Inject] ISnackbar Snackbar { get; set; } = null!;
+    public Guid AccountId { get; private set; }
+
+    private bool _isLoggedIn = false;
+    private bool HasTickets = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCurrentUserIdAsync();
+        await CheckIfUserHasTickets();
+
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        await CheckIfUserHasTickets();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+
+    private async Task<Guid?> GetCurrentUserIdAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            var accountClaim = user.FindFirst("Account");
+            if (accountClaim != null)
+            {
+                var account = JsonConvert.DeserializeObject<AccountClaim>(accountClaim.Value);
+                AccountId = account.Id;
+
+                _isLoggedIn = true; 
+                StateHasChanged();
+
+                return account?.Id;
+            }
+
+            _isLoggedIn = true;
+            StateHasChanged();
+        }
+
+        return null;
+    }
+
+
+    private async Task LogOutAsync()
+    {
+        await ((PersistingAuthenticationStateProvider)AuthStateProvider).SignOut();
+
+        Snackbar.Add("U bent uitgelogd");
+        _isLoggedIn = false;
+
+        var currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        if (currentUri.StartsWith("ticketpage", StringComparison.OrdinalIgnoreCase))
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+
+        StateHasChanged();
+        return;
+    }
+
+    private void GoToTickets()
+    {
+        NavigationManager.NavigateTo($"/ticketpage/{AccountId}");
+    }
+
+    private async Task CheckIfUserHasTickets()
+    {
+        var response = await TicketService.GetTicketByAccountId(AccountId);
+        if (response?.Model != null)
+        {
+            HasTickets = true;
+        }
+    }
+
+}
+
+ <style>
+    .nav-link-spacing {
+        margin: 0 4px; /* Reduce to 4px left and right, or adjust to your liking */
+    }
+
+    .nav-link-enter {
+        opacity: 0;
+        transform: translateX(100px); /* Start outside the screen on the right */
+        transition: all 0.5s ease-out;
+    }
+
+    .nav-link-enter-active {
+        opacity: 1;
+        transform: translateX(0); /* Slide into view */
+    }
+
+ </style>

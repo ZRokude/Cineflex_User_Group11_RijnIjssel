@@ -30,6 +30,8 @@ namespace Cineflex.Services.ApiServices
         {
             return await requestHandler
                 .GetAsync<List<CinemaResponse>>($"api/Cinema/readbymovieid?Id={MovieId}", CancellationToken.None);
+
+
         }
 
 

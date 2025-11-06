@@ -1,0 +1,42 @@
+﻿@page "/map"
+
+@using System.Text.Json
+@using Cineflex.Services
+@using System.Text.Json.Serialization
+@inject IJSRuntime JS
+
+
+<div id="map" style="height: 500px; width: 100%;"></div>
+
+@code {
+    [Inject] private IIpService IpService { get; set; } = null!;
+    private string IP = string.Empty;
+    private JsonElement ipInfo;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IP = await JS.InvokeAsync<string>("getPublicIP");
+            ipInfo = await IpService.LookupIpIpApi(IP);
+            
+            // Haal latitude en longitude uit ipInfo
+            double latitude = ipInfo.GetProperty("lat").GetDouble();
+            double longitude = ipInfo.GetProperty("lon").GetDouble();
+            
+            var location = JsonSerializer.Deserialize<IpLocation>(ipInfo.GetRawText());
+            await JS.InvokeVoidAsync("initMap", location.Lat, location.Lon);
+            StateHasChanged();
+        }
+    }
+
+    public class IpLocation
+    {
+        [JsonPropertyName("lat")]
+        public double Lat { get; set; }
+
+        [JsonPropertyName("lon")]
+        public double Lon { get; set; }
+    }
+
+}

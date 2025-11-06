@@ -16,8 +16,6 @@ namespace Cineflex.Components.Pages.Auth
 
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
 
-
-
         private MudForm _form = new();
         private string _backgroundClass = "start-color";
         private bool _isLoading = false;
