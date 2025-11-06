@@ -1,0 +1,453 @@
+﻿@page "/moviepage/{movieId:guid}"
+@using Cineflex.Services.ApiServices
+@using Cineflex_API.Model.Commands.Cinema
+@using Cineflex_API.Model.Commands.Movie;
+@using Cineflex_API.Model.Responses.Cinema
+@using Cineflex_API.Model.Responses.Movie
+@inject IJSRuntime JS
+
+
+<PageTitle>Movie pagina</PageTitle>
+
+<div class="@($"color-transition {backgroundClass}")"
+    <div class="start-color" style="position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:0;"></div>
+
+
+    @if (Movie == null)
+    {
+        <div style="display: flex; gap: 20px; padding: 20px;">
+            <MudSkeleton Animation="Animation.Wave" Height="350px" Width="250px" />
+            <MudSkeleton Animation="Animation.Wave" Height="350px" Width="600px" />
+        </div>
+    }
+    else
+    {
+        <!-- Banner card bovenaan -->
+                <MudCard Style="width:100vw; height:400px; border: 5px solid; background-color:black; border-color:transparent; position: relative; z-index:1;">
+            <MudImage  Src="@GetBackgroundImage(Movie.Name)"  Alt="@Movie.Name"Style="width:100vw; height:400px; object-fit:cover; object-position:center;" />
+
+            <!-- Poster card links -->
+            <MudCard Style="width:250px; height:350px; border: 5px solid gray; position: absolute; top: 6vh; left: 10vw; z-index: 2;">
+                        <MudImage Src="@GetImage(Movie.Name)" Alt="@Movie.Name" Style="width:250; Height:345px;" />
+            </MudCard>
+        </MudCard>
+    }
+
+
+    
+    
+
+
+    <!-- Movie informatie links onderin -->
+    <div style="position: absolute; top: 70vh; left: 100px; text-align: left; z-index: 2; max-width: 600px;">
+        @if (Movie is not null)
+        {
+            <MudText Class="movie-title">@Movie.Name</MudText>
+
+
+            <div class="movie-subtext">
+                <div class="kijkWijzerContainer">
+                    @if (Theme != null)
+                        {
+                                @if (Theme.Any(t => t.Name == "Seks"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat seks">
+                                                    <CustomSvgIcon Name="seks" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Any(t => t.Name == "Angst"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat angst">
+                                                    <CustomSvgIcon Name="angst" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Any(t => t.Name =="Alcohol en roken"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat alcohol en roken">
+                                                    <CustomSvgIcon Name="alcohol-roken" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Any(t => t.Name =="Discriminatie"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat discriminatie">
+                                                    <CustomSvgIcon Name="discriminatie" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Any(t => t.Name == "Grof taalgebruik"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat grot taalgebruik">
+                                                    <CustomSvgIcon Name="grof-taalgebruik" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Any(t => t.Name == "Drugs"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat drug en alcoholmisbruik">
+                                                    <CustomSvgIcon Name="drugs-en-alcoholmisbruik" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Any(t => t.Name =="Gevaarlijke challenges of stunts"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat gevaarlijke challenges">
+                                                    <CustomSvgIcon Name="gevaarlijke-challenges" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                                @if (Theme.Any(t => t.Name == "Geweld"))
+                                {
+                                            <div class="kijkWijzerIco">
+                                                <MudTooltip Text="Deze film bevat geweld">
+                                                    <CustomSvgIcon Name="geweld" Class="w-6 h-6 text-primary" />
+                                                </MudTooltip>
+                                            </div>
+                                }
+                        }
+                        
+                </div>
+            </div>
+
+            <div class="movie-subtext">
+                @if (Movie.AgeRestriction <= 3)
+                            {
+                                            <MudAvatar Color="Color.Success" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
+                            else if (Movie.AgeRestriction >= 4 && Movie.AgeRestriction <= 12)
+                            {
+                                            <MudAvatar Color="Color.Warning" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
+                            else if (Movie.AgeRestriction >= 13 && Movie.AgeRestriction <= 16)
+                            {
+                                            <MudAvatar Color="Color.Dark" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
+                            else
+                            {
+                                            <MudAvatar Color="Color.Error" Variant="Variant.Outlined">@Movie.AgeRestriction</MudAvatar>
+                            }
+
+            </div>
+
+
+
+            <div class="movie-subtext">
+                <MudIcon Icon="@Icons.Material.Filled.Star" /> Rating: @Movie.Rating / 10
+            </div>
+
+            <div class="movie-subtext">
+                <MudIcon Icon="@Icons.Material.Filled.AccessTimeFilled" /> Lengte: @Movie.Duration min
+            </div>
+
+            <div class="movie-subtext">
+                <MudIcon Icon="@Icons.Material.Filled.MovieCreation" /> Released date: @formattedDate
+            </div>
+
+            <div class="movie-subtext">
+                            <MudIcon Icon="@Icons.Material.Filled.Category" />
+                            Genres:
+                            @if (Genre != null && Genre.Any())
+                            {
+                                    <span>@string.Join(", ", Genre.Select(g => g.Name))</span>
+                            }
+                            else
+                            {
+                                    <span>Geen genres beschikbaar</span>
+                            }
+                        </div>
+
+            <div class="movie-subtext">
+
+                            <MudText Class="description-box">
+                                <MudIcon Icon="@Icons.Material.Filled.ShortText" /> @ShortDescription
+                            </MudText>
+
+                            <MudCollapse Expanded="@showMore">
+                                <MudText Class="description-box">
+                                    @RemainingDescription
+                                </MudText>
+                            </MudCollapse>
+
+                            <MudButton OnClick="ToggleShowMore">
+                                @(showMore ? "Show less" : "Show more")
+                            </MudButton>
+
+                        </div>
+
+        }
+        else
+        {
+
+             <MudSkeleton Animation="Animation.Wave" Height="400px" Width="100vw" />
+             <MudSkeleton Animation="Animation.Wave" Height="350px" Width="250px" />
+        }
+    
+
+    </div>
+
+    <div class="@(!_isLoggedIn ? "Disabled" : "show")">
+          <div style="position: absolute; top: 120vh; width: 100%;  padding: 15px 0; border-top: 2px solid #333;">
+
+               @if (!_isLoggedIn)
+                {
+                            <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+                                <MudText Style="color:white;" Typo="Typo.body1">*U moet ingelogd zijn om een filmticket te kopen*</MudText>
+                            </div>
+
+                }
+
+                 <div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+                    <MudSelect T="Guid" Label="Selecteer Bioscoop"
+                               ValueChanged="OnCinemaChanged"
+                               Placeholder="Kies een bioscoop"
+                               FitContent=true
+                               Variant="Variant.Outlined"
+                               Style="width: 200px; color:white">
+                        @if (GetCinema != null)
+                        {
+                                    @foreach (var cinema in GetCinema)
+                                    {
+                                                <MudSelectItem Value="@cinema.Id">@cinema.Name</MudSelectItem>
+                                    }
+                        }
+                    </MudSelect>
+                </div>
+
+
+
+          <div style="display: flex;justify-content: center; align-items: center; overflow-x: auto; gap: 15px; padding: 0 20px; scrollbar-width: thin; scrollbar-color: #666 #222;">
+
+                <MudIconButton Icon="@Icons.Material.Filled.ChevronLeft"
+                               Color="Color.Primary"
+                               Size="Size.Large"
+                               OnClick="@(() => ScrollDates("left"))"
+                               Disabled="@(!availableDates.Any())" />
+
+                                <!-- Scrollable date bar -->
+                <div id="dateScrollBar"
+                 style="display: flex; overflow-x: hidden; gap: 15px; padding: 0 20px;
+                        scrollbar-width: none; scroll-behavior: smooth;
+                        width: calc((120px + 15px) * 4); /* 4 cards + gaps */">
+
+                    @for (int i = 0; i < 14; i++)
+                    {
+                            var index = i;
+                            var date = DateTime.Now.AddDays(index);
+                            var isSelected = selectedDateIndex == index;
+                            var dayName = index == 0 ? "Today" : index == 1 ? "Tomorrow" : date.ToString("ddd");
+                            var isAvailable = availableDates.Any(d => d.Date == date.Date);
+
+
+                            <div @onclick="() => OnDateClick(index, isAvailable)"
+                                   style="@($"min-width: 120px; padding: 15px 20px; background: {(isAvailable ? (isSelected ? "#1976d2" : "#333") : "#1a1a1a")}; border-radius: 8px; cursor: {(isAvailable ? "pointer" : "not-allowed")}; text-align: center; transition: all 0.3s ease; border: 2px solid {(isSelected && isAvailable ? "#42a5f5" : "transparent")}; opacity: {(isAvailable ? "1" : "0.4")};")">
+                                <MudText Style="@($"color: {(isAvailable ? "white" : "#555")}; font-weight: 600; font-size: 1rem;")">@dayName</MudText>
+                                <MudText Style="@($"color: {(isAvailable ? "#ccc" : "#444")}; font-size: 0.9rem;")">@date.ToString("MMM dd")</MudText>
+                            </div>
+                   }
+                </div>
+
+
+                <!-- Right scroll button -->
+                <MudIconButton Icon="@Icons.Material.Filled.ChevronRight"
+                               Color="Color.Primary"
+                               Size="Size.Large"
+                               OnClick="@(() => ScrollDates("right"))"
+                               Disabled="@(!availableDates.Any())" />
+          </div>
+                @if (_selectedCinemaId.HasValue)
+                {
+                        <div class="center">
+                                <div id="bottom" class="@($"fade-{(_hasselected ? "show" : "hide")}")" style="margin-top: 20px; padding: 0 20px;">
+                                    <div style="margin-top: 20px; padding: 0 20px; position: relative;">
+                                        @foreach (var room in GetRoomsForSelectedDate())
+                                        {
+                                                        <MudButton OnClick="@(() => SelectTicket(room))"
+                                                                   Style="height:100px; width:150px; border-radius:15px; margin:10px; border-color:white;"
+                                                                   class="@($"color-transition {backgroundClass}")">
+                                                                    <MudText Style="color: white;">@room.StartAirTime.ToString("HH:mm")</MudText>
+                                                        </MudButton>
+                                        }
+                                    </div>
+                                </div>
+                        </div>
+
+                }
+                else
+                {
+
+                            <MudText Typo="Typo.body1" Color="Color.Warning" Class="">
+                                Selecteer eerst een bioscoop om beschikbare tijden te zien
+                            </MudText>
+
+                }
+
+
+    </div>
+
+    </div>
+</div>
+
+
+
+
+
+<style>
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .start-color {
+        background: radial-gradient(circle at center, #111 0%, #232323 40%, #000 100%);
+        overflow-x: hidden;
+    }
+
+    .movie-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 2px;
+        transition: color 0.3s ease, transform 0.3s ease;
+        cursor: pointer;
+    }
+
+        .movie-title:hover {
+            transform: scale(1.01);
+            transition: transform 0.2s ease;
+        }
+
+    .movie-subtext {
+        font-size: 1rem;
+        color: #cccccc;
+        transition: color 0.3s ease;
+    }
+
+        .movie-subtext:hover {
+            transform: scale(1.01);
+            color: #ffffff;
+        }
+
+    .description-box {
+        max-width: 500px;
+        padding: 10px;
+        border-radius: 8px;
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+
+
+    .fade-container.hide {
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+    }
+
+    .fade-container.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .fade-container.hide {
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+    }
+
+    .Disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        user-select: none;
+    }
+
+
+    .hide {
+        display: none;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .my-select {
+        width: 50px;
+        margin: 45px;
+    }
+
+    .kijkWijzerContainer {
+        display: flex;
+        flex-wrap: wrap; 
+        gap: 10px; 
+        margin-bottom: 15px;
+        align-items: center;
+    }
+
+
+
+
+    .kijkWijzerIcon{
+        gap: 5px;
+        margin: 5px;
+
+    }
+
+    .kijkWijzerIco:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s ease;
+    }
+
+</style>
+
+
+<script>
+    let currentPage = 0;
+
+    function scrollDates(direction) {
+        const container = document.getElementById('dateScrollBar');
+        if (!container) return;
+
+        const cardWidth = 120 + 15; // each card + gap
+        const visibleCards = 4;
+        const scrollAmount = cardWidth * visibleCards;
+
+        const maxScroll = container.scrollWidth - container.clientWidth;
+
+        if (direction === "right") {
+            currentPage = Math.min(currentPage + 1, Math.ceil(container.scrollWidth / scrollAmount) - 1);
+        } else {
+            currentPage = Math.max(currentPage - 1, 0);
+        }
+
+        const newScroll = currentPage * scrollAmount;
+
+        container.scrollTo({
+            left: newScroll,
+            behavior: 'smooth'
+        });
+    }
+
+    function bottom() {
+        var el = document.getElementById('bottom');
+        if (el) {
+            el.scrollIntoView({
+                behavior: 'smooth',   // smooth scrolling
+                block: 'start',       // scroll so element top aligns with viewport top
+                inline: 'nearest'     // horizontal alignment (usually leave as 'nearest')
+            });
+        }
+    }
+
+
+</script>
+
+

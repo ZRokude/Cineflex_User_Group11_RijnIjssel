@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cineflex_API.Model.Commands.Movie
 {
-    public class MovieGenreResponse
+    public class MovieGenreCommand
     {
         public Guid MovieId { get; set; } = Guid.Empty;
         public Guid GenreId { get; set; } = Guid.Empty; 

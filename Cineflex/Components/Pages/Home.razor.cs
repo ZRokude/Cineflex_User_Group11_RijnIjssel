@@ -1,6 +1,7 @@
 using Cineflex.Services.ApiService;
 using Cineflex_API.Model.Commands.Movie;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Hosting.Server;
 using MudBlazor;
 
 namespace Cineflex.Components.Pages
@@ -30,7 +31,7 @@ namespace Cineflex.Components.Pages
         private string GetImage(string title)
         {
             string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-
+            
             string imgurl = "";
             string titleFilter = title.Replace(" ", "_");
             foreach (var ext in extensionsImage)

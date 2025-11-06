@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cineflex_API.Model.Commands.User
 {
-    public class AccountResponse
+    public class AccountCommand
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Email { get; set; } = string.Empty;

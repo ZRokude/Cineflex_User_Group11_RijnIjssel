@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Cineflex_API.Model.Commands.Movie
 {
-    public class GenreResponse
+    public class GenreCommand
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
     }
 }

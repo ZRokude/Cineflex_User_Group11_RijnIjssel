@@ -1,4 +1,5 @@
-﻿using Cineflex.Models;
+﻿using Cineflex.Extensions;
+using Cineflex.Models;
 using Cineflex.Utilities;
 using Cineflex.Models.Responses.Cinema;
 

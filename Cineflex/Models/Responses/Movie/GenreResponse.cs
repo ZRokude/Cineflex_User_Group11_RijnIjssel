@@ -10,5 +10,6 @@ namespace Cineflex.Models.Responses.Movie
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
     }
 }

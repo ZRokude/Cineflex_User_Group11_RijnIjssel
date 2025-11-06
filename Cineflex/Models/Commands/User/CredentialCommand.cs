@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cineflex_API.Model.Commands.User
 {
-    public class CredentialResponse
+    public class CredentialCommand
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string FirstName { get; set; } = string.Empty;

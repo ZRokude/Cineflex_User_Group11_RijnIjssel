@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using Cineflex.Services.Authentication;
+using System.Security.Claims;
 
 namespace Cineflex.Services.Authentication
 {
