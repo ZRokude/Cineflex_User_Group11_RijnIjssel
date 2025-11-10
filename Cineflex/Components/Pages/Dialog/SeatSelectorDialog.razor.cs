@@ -1,7 +1,13 @@
 using Cineflex.Services.ApiService;
+using Cineflex.Services.Authentication;
+using Cineflex_API.Model.Commands.Cinema;
 using Cineflex_API.Model.Responses.Cinema;
+using Cineflex_API.Model.User;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace Cineflex.Components.Pages.Dialog
 {
@@ -14,6 +20,7 @@ namespace Cineflex.Components.Pages.Dialog
         [Inject] private ITicketService TicketService { get; set; } = default!;
         [Inject] private ICinemaRoomMovieService CinemaRoomMovieService { get; set; } = default!;
         [Inject] private IDialogService DialogService { get; set; } = default!;
+        [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
         [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
         [Parameter] public Guid CinemaRoomId { get; set; } = Guid.Empty;
         private List<CinemaRoomSeatResponse> CinemaRoomSeatResponses { get; set; } = new();
@@ -83,8 +90,26 @@ namespace Cineflex.Components.Pages.Dialog
         }
         private async Task Reservation()
         {
+            var currentUserClaim = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.FindFirst("Account")?.Value;
+            AccountResponse  currentUser = new();
+            if (!string.IsNullOrEmpty(currentUserClaim))
+            {
+                currentUser = JsonSerializer.Deserialize<AccountResponse>(currentUserClaim)!;
+            }
+            
+            var ticketList = ChoosedSeatList.Select(c => new TicketCommand
+            {
+                CinemaRoomMovieId = CinemaRoomMovieResponse.Id,
+                SeatNumber = c,
+                AccounId = currentUser.Id
+            }).ToList();
             var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, BackdropClick=true };
-            await DialogService.ShowAsync<PaymentDialog>(Localizer["Payment_Page"], options);
+            var parameters = new DialogParameters<ReservationDialog>
+            {
+                { x => x.SeatNumbers,ChoosedSeatList },
+                { x => x.TicketCommands, ticketList  }
+            };
+            await DialogService.ShowAsync<ReservationDialog>(Localizer["Payment_Page"], options);
         }
     }
 }   
