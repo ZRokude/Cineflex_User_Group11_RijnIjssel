@@ -50,8 +50,11 @@
                 }
             </MudStack>
             <MudStack Style="margin-left:15%;margin-right:15%;" Justify="Justify.FlexEnd" AlignItems="AlignItems.End">
+                <MudButton EndIcon="@Icons.Material.Filled.NavigateNext" OnClick="@(() => Payment())">
+                    @Localizer["SeatSelector_PaymentButton"]"]
+                </MudButton>
                 <MudButton EndIcon="@Icons.Material.Filled.NavigateNext" OnClick="@(() => Reservation())">
-                    Reserve
+                    @Localizer["SeatSelector_ReserveButton"]"]
                 </MudButton>
             </MudStack>
         </MudStack>

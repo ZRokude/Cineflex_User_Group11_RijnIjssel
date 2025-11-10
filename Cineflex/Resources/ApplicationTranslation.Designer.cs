@@ -185,5 +185,23 @@ namespace Cineflex.Resources {
                 return ResourceManager.GetString("Reserve_Seat", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pay.
+        /// </summary>
+        public static string SeatSelector_PaymentButton {
+            get {
+                return ResourceManager.GetString("SeatSelector_PaymentButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reserve.
+        /// </summary>
+        public static string SeatSelector_ReserveButton {
+            get {
+                return ResourceManager.GetString("SeatSelector_ReserveButton", resourceCulture);
+            }
+        }
     }
 }
