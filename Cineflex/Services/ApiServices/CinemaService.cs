@@ -11,6 +11,8 @@ namespace Cineflex.Services.ApiServices
     public interface ICinemaService
     {
         public Task<ModelServiceResponse<List<CinemaResponse>>> GetCinema();
+
+        public Task<ModelServiceResponse<List<CinemaResponse>>> GetCinemaByMovieId(Guid MovieId);
     }
 
     public class CinemaService(HttpRequestHandler<Program> requestHandler, NotifyService notifyService)
@@ -21,6 +23,13 @@ namespace Cineflex.Services.ApiServices
         {
             return await requestHandler
                 .GetAsync<List<CinemaResponse>>($"api/Cinema/readall", CancellationToken.None);
+        }
+
+
+        public async Task<ModelServiceResponse<List<CinemaResponse>>> GetCinemaByMovieId(Guid MovieId)
+        {
+            return await requestHandler
+                .GetAsync<List<CinemaResponse>>($"api/Cinema/readbymovieid?Id={MovieId}", CancellationToken.None);
         }
 
 

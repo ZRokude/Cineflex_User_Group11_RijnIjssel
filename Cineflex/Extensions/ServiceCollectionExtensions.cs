@@ -1,5 +1,4 @@
 ﻿using Cineflex.Services;
-using Cineflex.Services.ApiService;
 using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
 using Cineflex.Utilities;
@@ -66,7 +65,8 @@ namespace Cineflex.Extensions
                 .AddTransient<IUserService, UserService>()
                 .AddTransient<ITokenService, TokenService>()
                 .AddTransient<ILoginService, LoginService>()
-                .AddTransient<ICinemaRoomMovieService,CinemaRoomMovieService>()
+                .AddTransient<ICinemaRoomMovieService, CinemaRoomMovieService>()
+                .AddTransient<ITicketService, TicketService>()
                 .AddTransient<ICinemaRoomSeatService, CinemaRoomSeatService>()
                 .AddTransient<IMovieService, MovieService>()
                 .AddTransient<ILoginService, LoginService>()
@@ -74,7 +74,7 @@ namespace Cineflex.Extensions
                 .AddTransient<ICinemaService, CinemaService>()
                 .AddTransient<IMovieGenreService, MovieGernreService>()
                 .AddTransient<IIpService, IpService>()
-                .AddTransient<ICinemaRoomService, CinemaRoomService>(); 
+                .AddTransient<ICinemaRoomService, CinemaRoomService>();
 
             return services;
         }
