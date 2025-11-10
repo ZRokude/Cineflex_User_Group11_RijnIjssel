@@ -1,11 +1,8 @@
 using Cineflex.Components.Pages.Dialog;
-using Cineflex.Services.ApiService;
-using Cineflex_API.Model.Responses.Cinema;
+using Cineflex.Models.Responses.Cinema;
+using Cineflex.Services.ApiServices;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MudBlazor;
-using System.Diagnostics.Eventing.Reader;
 
 namespace Cineflex.Components.Pages
 {
@@ -88,7 +85,7 @@ namespace Cineflex.Components.Pages
 
         private async Task Reservation()
         {
-            var options = new DialogOptions() { CloseButton = true, FullScreen = true, CloseOnEscapeKey = true, BackdropClick = true };
+            var options = new DialogOptions() { CloseButton = true, BackgroundClass = "my-custom-class", FullScreen = true, CloseOnEscapeKey = true, NoHeader = true, BackdropClick = true };
 
             var ChosenSeatListparameters = new DialogParameters<PaymentDialog>
             {

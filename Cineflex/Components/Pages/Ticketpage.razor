@@ -1,7 +1,6 @@
 ﻿@page "/ticketpage/{accountId:guid}"
-@using Cineflex_API.Model.Commands.Cinema
 
-<div class="@($"color-transition {backgroundClass}")">
+
     @if (tickets == null)
     {
         <p>U heeft nog geen tickets</p>
@@ -56,7 +55,7 @@
         </div>
 
     }
-</div>
+
 
 <style>
     .start-color {

@@ -1,9 +1,9 @@
 ﻿using Cineflex.Extensions;
 using Cineflex.Models;
 using Cineflex.Utilities;
-using Cineflex_API.Model.Responses.Cinema;
+using Cineflex.Models.Responses.Cinema;
 
-namespace Cineflex.Services.ApiService
+namespace Cineflex.Services.ApiServices
 {
     public interface ICinemaRoomMovieService
     {

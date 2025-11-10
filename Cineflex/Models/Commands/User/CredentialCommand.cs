@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cineflex_API.Model.Commands.User
+﻿namespace Cineflex.Models.Commands.User
 {
     public class CredentialCommand
     {

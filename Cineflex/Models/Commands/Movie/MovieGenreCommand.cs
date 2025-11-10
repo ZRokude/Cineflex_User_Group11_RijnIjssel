@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex_API.Model.Commands.Movie
+namespace Cineflex.Models.Commands.Movie
 {
     public class MovieGenreCommand
     {

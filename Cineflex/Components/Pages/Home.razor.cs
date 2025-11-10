@@ -1,21 +1,47 @@
-using Cineflex.Components.Pages.Dialog;
-using Cineflex.Services;
+using Cineflex.Models.Responses.Movie;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Hosting.Server;
 using MudBlazor;
+
 namespace Cineflex.Components.Pages
 {
     public partial class Home
     {
         [Inject] internal MudLocalizer Localizer { get; set; } = default!;
-        [Inject] IDialogService DialogService { get; set; } = default!;
-        private async Task SeatSelectorTest(Guid cinemaRoomId)
+        [Inject] private IMovieService MovieService { get; set; } = default!;
+
+        private MudCarousel<MovieResponse> _carousel = null!;
+        private MudCarousel<object> _carouselMovieList = null!;
+        private List<MovieResponse> MoviesHighlight { get; set; } = new();
+        private List<MovieResponse> MovieList { get; set; } = new();
+        protected override async Task OnInitializedAsync()
         {
-            var parameters = new DialogParameters<SeatSelectorDialog>();
-            parameters.Add(c=>c.CinemaRoomId, cinemaRoomId);
-            var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, BackdropClick = true, MaxWidth=MaxWidth.Large };
-            await DialogService.ShowAsync<SeatSelectorDialog>(Localizer["SeatSelector_Page"], parameters, options);
+            await DoApiService();
+        }
+        private async Task DoApiService()
+        {
+            var movieHighlightResult = await MovieService.GetAll();
+            if (movieHighlightResult.IsSuccesfull)
+            {
+                MoviesHighlight = movieHighlightResult.Model!.ToList();
+                MovieList = movieHighlightResult.Model!.ToList();
+            }
+        }
+        private string GetImage(string title)
+        {
+            string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
             
+            string imgurl = "";
+            string titleFilter = title.Replace(" ", "_");
+            foreach (var ext in extensionsImage)
+            {
+                var path = Path.Combine(Environment.CurrentDirectory, "wwwroot","CoverMovie", $"{titleFilter}_cover{ext}");
+                if (File.Exists(path))
+                {
+                    imgurl = $"/CoverMovie/{titleFilter}_cover{ext}";
+                    break;
+                }
+            }
+            return imgurl;
         }
     }
 }

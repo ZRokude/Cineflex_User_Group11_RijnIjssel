@@ -1,10 +1,9 @@
 ﻿using Cineflex.Models;
+using Cineflex.Models.Commands.User;
+using Cineflex.Models.Responses.User;
+using Cineflex.Models.User;
 using Cineflex.Services;
 using Cineflex.Utilities;
-using Cineflex_API.Model.Commands.User;
-using Cineflex_API.Model.Responses.User;
-using Cineflex_API.Model.User;
-
 public interface IUserService
 {
     public Task<ModelServiceResponse<AccountResponse>> CreateAccount(AccountCommand account);

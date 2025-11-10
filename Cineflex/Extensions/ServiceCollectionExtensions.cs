@@ -1,5 +1,4 @@
 ﻿using Cineflex.Services;
-using Cineflex.Services.ApiService;
 using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
 using Cineflex.Utilities;
@@ -61,8 +60,8 @@ namespace Cineflex.Extensions
         public static IServiceCollection AddApplicationSevice(this IServiceCollection services)
         {
             services.AddMudServices()
-                .AddMudTranslations()
                 .AddScoped<NotifyService>()
+                .AddTransient<IMovieService, MovieService>()
                 .AddTransient<IUserService, UserService>()
                 .AddTransient<ITokenService, TokenService>()
                 .AddTransient<ILoginService, LoginService>()
@@ -75,6 +74,8 @@ namespace Cineflex.Extensions
                 .AddTransient<ICinemaService, CinemaService>()
                 .AddTransient<IMovieGenreService, MovieGernreService>()
                 .AddTransient<IIpService, IpService>()
+                .AddTransient<ICinemaRoomService, CinemaRoomService>()
+                .AddMvc();
                 .AddScoped<CookieService>()
                 .AddTransient<ICinemaRoomService, CinemaRoomService>();
             ;

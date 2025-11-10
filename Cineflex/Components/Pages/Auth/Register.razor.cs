@@ -1,10 +1,7 @@
-using Cineflex_API.Model.Commands.User;
-
+using Cineflex.Models.Commands.User;
 using Cinelexx.Services.Email;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using MudBlazor;
 using System.ComponentModel.DataAnnotations;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
