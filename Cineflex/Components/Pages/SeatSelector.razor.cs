@@ -88,7 +88,7 @@ namespace Cineflex.Components.Pages
 
         private async Task Reservation()
         {
-            var options = new DialogOptions() { CloseButton = true, FullScreen = true, CloseOnEscapeKey = true, BackdropClick = true };
+            var options = new DialogOptions() { CloseButton = true, BackgroundClass = "my-custom-class", FullScreen = true, CloseOnEscapeKey = true, NoHeader = true, BackdropClick = true };
 
             var ChosenSeatListparameters = new DialogParameters<PaymentDialog>
             {
