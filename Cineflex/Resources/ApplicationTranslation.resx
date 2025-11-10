@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home_Test" xml:space="preserve">
-    <value>Hello World7</value>
-  </data>
   <data name="Home_Title" xml:space="preserve">
     <value>Cineflex</value>
   </data>
@@ -134,5 +131,23 @@
   </data>
   <data name="Navbar_Title" xml:space="preserve">
     <value>Cineflex</value>
+  </data>
+  <data name="Home_Test" xml:space="preserve">
+    <value>Hello World7</value>
+  </data>
+  <data name="Reserve_Notice" xml:space="preserve">
+    <value>You have chosen for seat number {0}  </value>
+  </data>
+  <data name="ConfirmDialog_Text" xml:space="preserve">
+    <value>Are you sure you want to proceed?</value>
+  </data>
+  <data name="ConfirmDialog_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmDialog_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ConfirmDialog_Tile" xml:space="preserve">
+    <value>Proceed</value>
   </data>
 </root>
