@@ -15,6 +15,19 @@
         </MudMainContent>
 
         <div class="block-color" />
+        <div class="row @(chairsVisible ? "row-visible" : "row-hidden")">
+            @for (int i = 0; i < 25; i++)
+            {
+                <div class="chair">
+                    <div class="backrest"></div>
+                    <div class="seat"></div>
+                    <div class="arm left"></div>
+                    <div class="arm right"></div>
+                    <div class="leg left"></div>
+                    <div class="leg right"></div>
+                </div>
+            }
+        </div>
     </MudStack>
 </MudLayout>
 
