@@ -1,6 +1,8 @@
 using Cineflex.Components.Pages.Dialog.Share;
+using Cineflex.Models;
 using Cineflex.Services.ApiServices;
 using Cineflex_API.Model.Commands.Cinema;
+using Cineflex_API.Model.Responses.Cinema;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -13,9 +15,13 @@ namespace Cineflex.Components.Pages.Dialog
         [Inject] private IDialogService DialogService { get; set; } = default!;
         [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
         [Parameter] public List<TicketCommand> TicketCommands { get; set; }
-
         [Parameter] public List<int> SeatNumbers { get; set; }
-        
+        [Parameter] public AccountClaim AccountClaim { get; set; }
+        [Parameter] public string MovieName { get; set; }
+        [Parameter] public int RoomNumber { get; set; }
+        [Parameter] public DateTime StartTime { get; set; }
+        [Parameter] public DateTime EndTime { get; set; }
+
         public async Task DoReserve()
         {
             foreach(var command in TicketCommands)

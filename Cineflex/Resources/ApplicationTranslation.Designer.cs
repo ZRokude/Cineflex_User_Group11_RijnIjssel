@@ -133,11 +133,38 @@ namespace Cineflex.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date and time.
+        /// </summary>
+        public static string Reserve_Date {
+            get {
+                return ResourceManager.GetString("Reserve_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have chosen for seat number {0}  .
         /// </summary>
         public static string Reserve_Notice {
             get {
                 return ResourceManager.GetString("Reserve_Notice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Room Number.
+        /// </summary>
+        public static string Reserve_RoomNumber {
+            get {
+                return ResourceManager.GetString("Reserve_RoomNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The  Seat.
+        /// </summary>
+        public static string Reserve_Seat {
+            get {
+                return ResourceManager.GetString("Reserve_Seat", resourceCulture);
             }
         }
     }

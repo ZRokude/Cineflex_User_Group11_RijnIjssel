@@ -1,11 +1,15 @@
 using Cineflex.Components.Pages.Dialog;
+using Cineflex.Models;
 using Cineflex.Services.ApiServices;
 using Cineflex_API.Model.Responses.Cinema;
+using Cineflex_API.Model.Responses.Movie;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MudBlazor;
 using System.Diagnostics.Eventing.Reader;
+using System.Text.Json;
 
 namespace Cineflex.Components.Pages
 {
@@ -17,6 +21,8 @@ namespace Cineflex.Components.Pages
         [Inject] private ITicketService TicketService { get; set; } = default!;
         [Inject] private ICinemaRoomMovieService CinemaRoomMovieService { get; set; } = default!;
         [Inject] private IDialogService DialogService { get; set; } = default!;
+        [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+        [Inject] private MovieService MovieService { get; set; } = default!;
         [Parameter] public Guid CinemaRoomId { get; set; } = Guid.Empty;
         private List<CinemaRoomSeatResponse> CinemaRoomSeatResponses { get; set; } = new();
         private List<TicketResponse> TicketResponses { get; set; } = new();
@@ -86,7 +92,7 @@ namespace Cineflex.Components.Pages
         }
 
 
-        private async Task Reservation()
+        private async Task Payment()
         {
             var options = new DialogOptions() { CloseButton = true, BackgroundClass = "my-custom-class", FullScreen = true, CloseOnEscapeKey = true, NoHeader = true, BackdropClick = true };
 
@@ -97,6 +103,48 @@ namespace Cineflex.Components.Pages
 
             };
             await DialogService.ShowAsync<PaymentDialog>(Localizer["Payment_Page"], ChosenSeatListparameters, options);
+        }
+        private async Task Reservation()
+        {
+            AccountClaim claim = await GetCurrentUserAsync();
+            var options = new DialogOptions() { CloseButton = true, BackgroundClass = "my-custom-class", FullScreen = true, CloseOnEscapeKey = true, NoHeader = true, BackdropClick = true };
+            var parameters = new DialogParameters<ReservationDialog>
+            {
+                { x=>x.SeatNumbers, ChoosedSeatList },
+                { x=>x.MovieName,  GetMovie().Result.Name },
+                {x => x.StartTime, CinemaRoomMovieResponse.StartAirTime },
+                {x => x.EndTime, CinemaRoomMovieResponse.EndAirTime },
+
+                { x =>x.AccountClaim, claim}
+            };
+            await DialogService.ShowAsync<ReservationDialog>(Localizer["Reservation_Page"],parameters, options);
+        }
+        private async Task<AccountClaim> GetCurrentUserAsync()
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                var accountClaim = user.FindFirst("Account");
+                if (accountClaim != null)
+                {
+                    var account = JsonSerializer.Deserialize<AccountClaim>(accountClaim.Value);
+                    return account;
+                }
+            }
+
+            return null;
+        }
+        private async Task<MovieResponse> GetMovie()
+        {
+
+            var movieResult = await MovieService.ReadMovieById(CinemaRoomMovieResponse.MovieId);
+            if (movieResult.Model == null)
+            {
+                return null;
+            }
+            return movieResult.Model;
         }
     }
 }

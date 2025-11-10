@@ -1,7 +1,40 @@
 ﻿<MudDialog>
     <DialogContent>
-        <MudText Typo="Typo.h6"></MudText>
-        <MudText>@string.Format(Localizer["Reserve_Notice"], string.Join(", ", SeatNumbers))</MudText>
+        <div style="display: flex; justify-content: start; align-items: center; padding: 20px;">
+                <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
+            </div>
+
+
+            <MudText style="color:white;" Typo="Typo.h3">Payment </MudText>
+
+            <!-- Container voor beide kaarten -->
+            <div class="Card_Container">
+                <div class="Card_info">
+
+                    <MudCard Style="width:600px; height:350px; padding:15px;">
+                        <MudText Typo="Typo.h4">Summary</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">The film of the tickets: @MovieName</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            @Localizer["Reserve_Date"]:
+                            <MudText Inline=true>@StartTime - @EndTime</MudText>
+                        </MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            @Localizer["Reserve_Seat"]:
+                        <MudText Inline=true>@string.Join(", ", SeatNumbers)</MudText>
+                    </MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            @Localizer["Reserve_Room"]:
+                            <MudText Inline=true>@RoomNumber</MudText>
+                        </MudText>
+                        <MudDivider />
+                        <MudText>@Localizer["Reserve_PersonalInfo"]: @AccountClaim.Email</MudText>
+                    </MudCard>
+                </div>
+            </div>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="CheckBeforeReserve">Confirm</MudButton>
