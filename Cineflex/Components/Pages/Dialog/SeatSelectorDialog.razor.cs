@@ -1,8 +1,8 @@
-using Cineflex.Services.ApiService;
+using Cineflex.Models.Commands.Cinema;
+using Cineflex.Models.Responses.Cinema;
+using Cineflex.Models.User;
+using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
-using Cineflex_API.Model.Commands.Cinema;
-using Cineflex_API.Model.Responses.Cinema;
-using Cineflex_API.Model.User;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
