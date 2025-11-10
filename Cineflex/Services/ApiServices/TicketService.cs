@@ -60,3 +60,4 @@ namespace Cineflex.Services.ApiServices
             );
         }
     }
+}
