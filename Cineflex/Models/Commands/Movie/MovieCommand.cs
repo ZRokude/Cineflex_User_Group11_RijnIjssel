@@ -1,11 +1,4 @@
-﻿using Cineflex_API.Model.Responses.Movie;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cineflex_API.Model.Commands.Movie
+﻿namespace Cineflex.Models.Commands.Movie
 {
     public class MovieCommand
     {

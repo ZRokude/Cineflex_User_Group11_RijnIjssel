@@ -1,11 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex_API.Model.Responses.Cinema
+namespace Cineflex.Models.Responses.Cinema
 {
     public class TicketResponse
     {

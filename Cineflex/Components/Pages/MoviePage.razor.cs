@@ -1,8 +1,7 @@
 ﻿using Cineflex.Components.Pages.Dialog;
+using Cineflex.Models.Responses.Cinema;
 using Cineflex.Models.Responses.Movie;
 using Cineflex.Services.ApiServices;
-using Cineflex_API.Model.Responses.Cinema;
-using Cineflex_API.Model.Responses.Movie;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;

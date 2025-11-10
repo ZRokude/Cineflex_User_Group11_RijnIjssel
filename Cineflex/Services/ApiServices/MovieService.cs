@@ -1,16 +1,11 @@
 ﻿using Cineflex.Models;
-using Cineflex.Models.Responses.User;
+using Cineflex.Models.Responses.Movie;
 using Cineflex.Services;
 using Cineflex.Utilities;
-using Cineflex_API.Model.Commands.User;
-using Cineflex_API.Model.Responses.Movie;
-using Cineflex_API.Model.Responses.User;
-using Cineflex_API.Model.User;
-
 public interface IMovieService
 {
     public Task<ModelServiceResponse<MovieResponse>> ReadMovieById(Guid movieId);
-
+    public Task<ModelServiceResponse<IEnumerable<MovieResponse>>> GetAll();
 }
 
 public class MovieService(HttpRequestHandler<Program> requestHandler, NotifyService notifyService) :
@@ -22,6 +17,10 @@ public class MovieService(HttpRequestHandler<Program> requestHandler, NotifyServ
         var result = await requestHandler.GetAsync<MovieResponse>(
             $"api/Movie/readbyid?id={movieId}", CancellationToken.None);
         return result;
+    }
+    public async Task<ModelServiceResponse<IEnumerable<MovieResponse>>> GetAll()
+    {
+        return await requestHandler.GetAsync<IEnumerable<MovieResponse>>("api/movie/readall", CancellationToken.None);
     }
 
 }

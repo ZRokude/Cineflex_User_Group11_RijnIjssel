@@ -1,18 +1,14 @@
-
 using Cineflex.Services.ApiServices;
-using Cineflex_API.Model;
-using Cineflex_API.Model.Commands.Cinema;
-using Cineflex_API.Model.Responses.Cinema;
-using Cineflex_API.Model.Responses.Movie;
 using Cinelexx.Services.Email;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using System.Security.Principal;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Cineflex.Models;
 using MudBlazor;
+using Cineflex.Models.Responses.Cinema;
+using Cineflex.Models.Responses.Movie;
+using Cineflex.Models.Commands.Cinema;
 
 namespace Cineflex.Components.Pages.Dialog
 {

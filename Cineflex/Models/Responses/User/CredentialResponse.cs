@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex_API.Model.Responses.User
+namespace Cineflex.Models.Responses.User
 {
     public class CredentialResponse
     {
