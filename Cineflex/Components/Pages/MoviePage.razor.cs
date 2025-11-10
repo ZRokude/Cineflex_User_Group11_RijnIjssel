@@ -1,4 +1,5 @@
 ﻿using Cineflex.Components.Pages.Dialog;
+using Cineflex.Models.Responses.Cinema;
 using Cineflex.Models.Responses.Movie;
 using Cineflex.Services.ApiServices;
 using Microsoft.AspNetCore.Components;

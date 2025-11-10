@@ -6,6 +6,11 @@ namespace Cineflex.Components.Shared
     public partial class CustomCarousel
     {
         private MudCarousel<MovieResponse> _carousel = null!;
+        private List<MovieResponse> MovieList { get; set; } = new();
+        protected override Task OnInitializedAsync()
+        {
+            return base.OnInitializedAsync();
+        }
         private string GetImage(string title)
         {
             string[] extensionsImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };

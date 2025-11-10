@@ -1,6 +1,6 @@
 using Cineflex.Components.Pages.Dialog;
+using Cineflex.Models.Responses.Cinema;
 using Cineflex.Services.ApiServices;
-using Cineflex_API.Model.Responses.Cinema;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

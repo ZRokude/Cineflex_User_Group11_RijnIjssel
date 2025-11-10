@@ -1,5 +1,5 @@
 ﻿using Cineflex.Models;
-using Cineflex.Models.Responses.Movie;
+using Cineflex.Models.Responses.Cinema;
 using Cineflex.Utilities;
 
 namespace Cineflex.Services.ApiServices

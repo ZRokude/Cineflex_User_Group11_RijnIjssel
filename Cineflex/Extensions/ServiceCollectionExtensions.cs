@@ -60,7 +60,6 @@ namespace Cineflex.Extensions
         public static IServiceCollection AddApplicationSevice(this IServiceCollection services)
         {
             services.AddMudServices()
-                .AddMudTranslations()
                 .AddScoped<NotifyService>()
                 .AddTransient<IMovieService, MovieService>()
                 .AddTransient<IUserService, UserService>()
@@ -75,7 +74,8 @@ namespace Cineflex.Extensions
                 .AddTransient<ICinemaService, CinemaService>()
                 .AddTransient<IMovieGenreService, MovieGernreService>()
                 .AddTransient<IIpService, IpService>()
-                .AddTransient<ICinemaRoomService, CinemaRoomService>();
+                .AddTransient<ICinemaRoomService, CinemaRoomService>()
+                .AddMvc();
 
             return services;
         }

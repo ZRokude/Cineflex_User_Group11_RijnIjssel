@@ -1,4 +1,6 @@
-
+using Cineflex.Models.Commands.Cinema;
+using Cineflex.Models.Responses.Cinema;
+using Cineflex.Models.User;
 using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
 using Microsoft.AspNetCore.Components;
