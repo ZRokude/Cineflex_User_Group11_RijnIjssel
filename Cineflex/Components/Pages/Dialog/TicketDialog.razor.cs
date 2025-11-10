@@ -1,4 +1,4 @@
-﻿using Cineflex.Services.ApiService;
+﻿
 using Cineflex.Services.ApiServices;
 using Cineflex_API.Model.Responses.Cinema;
 using Cineflex_API.Model.Responses.Movie;
@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using QRCoder;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Drawing.Imaging;
 using System.Net.NetworkInformation;
 using System.Text.Json;

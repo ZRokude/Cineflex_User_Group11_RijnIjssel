@@ -1,5 +1,4 @@
 ﻿using Cineflex.Services;
-using Cineflex.Services.ApiService;
 using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
 using Cineflex.Utilities;

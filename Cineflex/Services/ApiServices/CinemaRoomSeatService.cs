@@ -3,7 +3,7 @@ using Cineflex.Utilities;
 using Cineflex_API.Model.Commands.Cinema;
 using Cineflex_API.Model.Responses.Cinema;
 
-namespace Cineflex.Services.ApiService
+namespace Cineflex.Services.ApiServices
 {
     public interface ICinemaRoomSeatService
     {

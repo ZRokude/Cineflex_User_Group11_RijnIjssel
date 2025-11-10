@@ -1,5 +1,4 @@
 using Cineflex.Components.Pages.Dialog;
-using Cineflex.Services.ApiService;
 using Cineflex.Services.ApiServices;
 using Cineflex_API.Model.Responses.Cinema;
 using Cineflex_API.Model.Responses.Movie;

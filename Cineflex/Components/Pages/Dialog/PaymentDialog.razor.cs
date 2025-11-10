@@ -1,4 +1,4 @@
-using Cineflex.Services.ApiService;
+
 using Cineflex.Services.ApiServices;
 using Cineflex_API.Model;
 using Cineflex_API.Model.Commands.Cinema;
@@ -24,6 +24,7 @@ namespace Cineflex.Components.Pages.Dialog
         [Inject] private ICinemaRoomMovieService CinemaRoomMovieService { get; set; } = default!;
         [Inject] private IMovieService MovieService { get; set; } = null!;
         [Inject] private ICinemaRoomService CinemaRoomService { get; set; } = null!;
+
         [Inject] private ITicketService TicketService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
