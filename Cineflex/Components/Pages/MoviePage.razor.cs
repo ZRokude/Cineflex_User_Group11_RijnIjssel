@@ -1,11 +1,14 @@
 ﻿using Cineflex.Components.Pages.Dialog;
 using Cineflex.Models.Responses.Cinema;
 using Cineflex.Models.Responses.Movie;
+using Cineflex.Services;
 using Cineflex.Services.ApiServices;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using MudBlazor;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace Cineflex.Components.Pages
@@ -21,6 +24,9 @@ namespace Cineflex.Components.Pages
         [Inject] NavigationManager NavigationManager { get; set; } = null!;
         [Inject] IJSRuntime JSRuntime { get; set; } = null!;
         [Inject] IDialogService Dialog { get; set; } = null!;
+        [Inject] private IIpService IpService { get; set; } = null!;
+
+        [Inject] private CookieService CookieService { get; set; } = null!;
 
         [Parameter] public required Guid movieId { get; set; }
 
@@ -35,13 +41,23 @@ namespace Cineflex.Components.Pages
         private List<DateTime> availableDates = new();
         private readonly DialogOptions _maxWidth = new() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+
+
+        private JsonElement ipInfo;
         private Guid? _selectedCinemaId = null;
 
+        private bool showMap = false;
+        private bool mapInitialized = false;
         private bool showMore = false;
         private bool _hasselected = false;
+        private bool _showCookieBar = false;
         private bool _isLoggedIn = false;
+        private bool CookieConsent = false;
+
 
         private string? formattedDate;
+
+        private string IP = string.Empty;
         private string backgroundClass = "start-color";
         private string _airTimeRoom = "";
 
@@ -131,9 +147,45 @@ namespace Cineflex.Components.Pages
                     StateHasChanged();
                 }
 
-
+                await CheckCookieConsent();
             }
         }
+
+
+        private async Task CheckCookieConsent()
+        {
+            try
+            {
+                var hasConsent = await CookieService.CheckCookieConsent();
+                if (hasConsent == null)
+                {
+                    _showCookieBar = true;
+                }
+                else if(hasConsent == false)
+                {
+                    _showCookieBar = true;
+                }
+                else
+                {
+                    CookieConsent = true;
+                }
+                    StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking cookie consent: {ex.Message}");
+                _showCookieBar = true;
+                StateHasChanged();
+            }
+        }
+
+        private void OnCookiesHandled(bool consentGiven)
+        {
+            Console.WriteLine($"Cookies accepted: {consentGiven}");
+            CookieConsent = true;
+        }
+
+
 
 
         private string ShortDescription
@@ -349,5 +401,52 @@ namespace Cineflex.Components.Pages
 
             return Dialog.ShowAsync<MoviePageDialog>("Custom Options Dialog",Movieparameters, options);
         }
+
+
+
+
+        private async Task OpenMap()
+        {
+            showMap = !showMap;
+
+            // Initialiseer de map alleen als deze wordt geopend en nog niet is geïnitialiseerd
+            if (showMap && !mapInitialized)
+            {
+                StateHasChanged(); // Zorg dat de collapse eerst uitvouwt
+                await Task.Delay(500); // Verhoog de delay iets (was 400ms)
+
+                try
+                {
+                    // Haal IP en locatie op
+                    IP = await JSRuntime.InvokeAsync<string>("getPublicIP");
+                    ipInfo = await IpService.LookupIpIpApi(IP);
+
+                    // Haal latitude en longitude op
+                    double latitude = ipInfo.GetProperty("lat").GetDouble();
+                    double longitude = ipInfo.GetProperty("lon").GetDouble();
+
+                    // Wacht nog een keer om zeker te zijn dat de DOM klaar is
+                    await Task.Delay(100);
+
+                    // Initialiseer de map
+                    await JSRuntime.InvokeVoidAsync("initMap", latitude, longitude);
+
+                    mapInitialized = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error initializing map: {ex.Message}");
+                }
+            }
+        }
+    }
+
+    public class IpLocation
+    {
+        [JsonPropertyName("lat")]
+        public double Lat { get; set; }
+
+        [JsonPropertyName("lon")]
+        public double Lon { get; set; }
     }
 }

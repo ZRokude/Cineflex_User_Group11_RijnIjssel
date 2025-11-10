@@ -3,8 +3,11 @@ using Cineflex.Models.Responses.Cinema;
 using Cineflex.Models.Responses.Movie;
 using Cineflex.Services.ApiServices;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
+using Newtonsoft.Json;
+using static Cineflex.Components.Pages.Dialog.PaymentDialog;
 
 
 namespace Cineflex.Components.Pages
@@ -22,16 +25,23 @@ namespace Cineflex.Components.Pages
         [Inject] private IStringLocalizer<Ticketpage> Localizer { get; set; } = null!;
         [Inject] private ICinemaService CinemaService { get; set; } = null!;
         [Inject] private IDialogService DialogService { get; set; } = null!;
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
+        [Inject] private ISnackbar Snackbar { get; set; } = null!;
+
 
         private Dictionary<Guid, MovieResponse> movieCache = new();
         private Dictionary<Guid, CinemaRoomResponse> cinemaRoomCache = new();
         private Dictionary<Guid, CinemaRoomMovieResponse> cinemaRoomMovieCache = new();
+
 
         private List<TicketResponse>? tickets;
         private CinemaResponse? cinema;
 
 
         private string backgroundClass = "start-color";
+
+        private bool _isLoggedIn = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -70,6 +80,8 @@ namespace Cineflex.Components.Pages
                     await LoadCinemaRoomData(roomId);
                 }
             }
+
+            await GetCurrentUserIdAsync();
         }
 
         private async Task LoadCinemaRoomMovieData(Guid cinemaRoomMovieId)
@@ -96,6 +108,36 @@ namespace Cineflex.Components.Pages
         }
 
 
+
+        private async Task<Guid?> GetCurrentUserIdAsync()
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                var accountClaim = user.FindFirst("Account");
+                if (accountClaim != null)
+                {
+                    var account = JsonConvert.DeserializeObject<AccountClaim>(accountClaim.Value);
+
+                    _isLoggedIn = true;
+                    StateHasChanged();
+
+                    return account?.Id;
+                }
+
+                    _isLoggedIn = true;
+                StateHasChanged();
+            }
+            else
+            {
+                Snackbar.Add("U need to be logged in");
+                NavigationManager.NavigateTo("/");
+            }
+
+            return null;
+        }
 
 
         private async Task LoadMovieData(Guid movieId)

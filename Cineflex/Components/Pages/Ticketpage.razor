@@ -1,9 +1,9 @@
 ﻿@page "/ticketpage/{accountId:guid}"
 
-<div class="@($"color-transition {backgroundClass}")">
+
     @if (tickets == null)
     {
-        <p>Tickets worden geladen...</p>
+        <p>U heeft nog geen tickets</p>
     }
     else if (tickets.Count == 0)
     {
@@ -55,7 +55,7 @@
         </div>
 
     }
-</div>
+
 
 <style>
     .start-color {

@@ -75,7 +75,12 @@ namespace Cineflex.Extensions
                 .AddTransient<IMovieGenreService, MovieGernreService>()
                 .AddTransient<IIpService, IpService>()
                 .AddTransient<ICinemaRoomService, CinemaRoomService>()
+                .AddScoped<CookieService>()
+                .AddTransient<ICinemaRoomService, CinemaRoomService>()
                 .AddMvc();
+                
+                
+            ;
 
             return services;
         }
