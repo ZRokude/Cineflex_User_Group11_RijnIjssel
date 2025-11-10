@@ -1,3 +1,9 @@
+.block-color {
+    width:10vw;
+    height: auto;
+    min-height:100vh;
+    background-color: transparent;
+}
 #blazor-error-ui {
     color-scheme: light only;
     background: lightyellow;
@@ -11,10 +17,10 @@
     width: 100%;
     z-index: 1000;
 }
-
     #blazor-error-ui .dismiss {
         cursor: pointer;
         position: absolute;
         right: 0.75rem;
         top: 0.5rem;
     }
+    

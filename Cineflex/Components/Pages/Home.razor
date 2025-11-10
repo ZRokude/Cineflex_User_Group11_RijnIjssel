@@ -1,43 +1,72 @@
-﻿@page "/"
-@using Cineflex.Services
-@using System.Text.Json
-@inject IJSRuntime JS
+﻿@using Cineflex.Components.Shared.CustomSwipe.Component
+@using Cineflex.Models.Responses.Movie
+@page "/"
 
-<MudButton OnClick="@(() => SeatSelectorTest(Guid.Parse("008A6F52-C4A6-4744-BAA2-EB6A013DCFE1")))">
-    Select Seat
-</MudButton>
+<PageTitle>@Localizer["Home_Title"]</PageTitle>
+<MudStack Justify="Justify.Center" >
+    <MudCarousel @ref="_carousel" ItemsSource="MoviesHighlight" Style="height:60vh;" EnableSwipeGesture="true"
+                 ShowArrows="true" ShowBullets="true" AutoCycle="true" AutoCycleTime="TimeSpan.FromSeconds(10)">
+        <ItemTemplate>
+            <div style="display:flex; justify-content:center; align-items:center; height:100%; position:relative;">
+                <MudImage Elevation="5" Src="@GetImage(context.Name)"
+                          Style="max-height:100%; max-width:100%; object-fit:contain;" />
+                <MudText Align="@Align.Start" Class="carousel-text-carousel-highlight overflow-scroll"
+                         Style="position:absolute; bottom:10%; left:5%;">
+                    @context.Name
+                    <br />
+                    @context.Description
+                </MudText>
+            </div>
+        </ItemTemplate>
+    </MudCarousel>
+    @* <MudCarousel>
+        <ItemTemplate>
+            <div style="display:flex; justify-content:center; align-items:center; height:100%; position:relative;">
 
-@if (ipInfo.ValueKind != JsonValueKind.Undefined)
-{
-    <MudText>IP: @IP</MudText>
-    <MudText>Land: @ipInfo.GetProperty("country").GetString()</MudText>
-    <MudText>Stad: @ipInfo.GetProperty("city").GetString()</MudText>
-    <MudText>Provinci: @ipInfo.GetProperty("regionName").GetString()</MudText>
-   
-}
+            </div>
+        </ItemTemplate>
+    </MudCarousel> *@
+    @* <CustomSwipeContainer ShowItems="5" Items="MovieList" Height="40vh">
+        <ItemTemplate>
+            <CustomSwipeItem Image="@GetImage(context.Name)" Title="@context.Name">
 
-@code {
-    [Inject] private IIpService IpService { get; set; } = null!;
+            </CustomSwipeItem>
+        </ItemTemplate>
+    </CustomSwipeContainer>
+    <CustomSwipeContainer ShowItems="3" Items="MovieList" Height="40vh">
+        <ItemTemplate>
+            <CustomSwipeItem Image="@GetImage(context.Name)" Title="@context.Name">
 
-    private string IP = string.Empty;
-    private JsonElement ipInfo;
+            </CustomSwipeItem>
+        </ItemTemplate>
+    </CustomSwipeContainer> *@
+</MudStack>
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        try
-        {
-            if (firstRender)
-            {
-                IP = await JS.InvokeAsync<string>("getPublicIP");
-                ipInfo = await IpService.LookupIpIpApi(IP);
-                StateHasChanged();
-            }
-        }
-        catch(Exception ex)
-        {
-            Console.WriteLine("Error: " + ex.Message);
-            throw;
-        }
 
+
+@*Isolation CSS doesnt work*@
+<style>
+    .carousel-text-carousel-highlight {
+        display:inline-block;
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        color: white;
+        background-color: rgba(0,0,0,0.5);
+        padding: 5px 10px;
+        border-radius: 5px;
+        max-width:20%;
     }
-}
+
+    .carousel-text-carousel{
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%); 
+        color: white;
+        background-color: rgba(0,0,0,0.5);
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>

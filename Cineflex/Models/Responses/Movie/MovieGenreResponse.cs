@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cineflex_API.Model.Responses.Movie
+namespace Cineflex.Models.Responses.Movie
 {
     public class MovieGenreResponse
     {

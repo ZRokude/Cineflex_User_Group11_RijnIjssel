@@ -1,11 +1,9 @@
+using Cineflex.Models.Commands.User;
 using Cineflex.Services.ApiServices;
 using Cineflex.Services.Authentication;
-using Cineflex_API.Model.Commands.User;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
 using MudBlazor;
-using System.Threading.Tasks;
 
 namespace Cineflex.Components.Pages.Auth
 {

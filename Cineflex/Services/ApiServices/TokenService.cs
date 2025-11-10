@@ -1,10 +1,5 @@
 ﻿using Cineflex.Models;
-using Cineflex.Services;
 using Cineflex.Utilities;
-using Cineflex_API.Model.Commands.User;
-using Cineflex_API.Model.Responses.User;
-using Cineflex_API.Model.User;
-using Cineflex_API.Model.Responses.User;
 using Cineflex.Models.Responses.User;
 
 

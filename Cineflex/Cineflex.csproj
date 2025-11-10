@@ -37,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\ApiService\" />
     <Folder Include="wwwroot\Picture\icons\" />
   </ItemGroup>
 

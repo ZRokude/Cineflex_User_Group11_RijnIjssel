@@ -1,7 +1,5 @@
 using Cineflex.Models.Responses.User;
 using Cineflex.Services.ApiServices;
-using Cineflex.Services.Email;
-using Cineflex_API.Model.Commands.User;
 using Cinelexx.Services.Email;
 
 using Microsoft.AspNetCore.Components;

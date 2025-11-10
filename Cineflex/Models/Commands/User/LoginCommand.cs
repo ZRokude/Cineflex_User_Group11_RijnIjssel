@@ -1,4 +1,4 @@
-﻿namespace Cineflex_API.Model.Commands.User
+﻿namespace Cineflex.Models.Commands.User
 {
     public class LoginCommand
     {
