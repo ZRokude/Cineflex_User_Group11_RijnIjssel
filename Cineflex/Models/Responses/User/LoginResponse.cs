@@ -1,4 +1,4 @@
-﻿namespace Cineflex_API.Model.Responses.User
+﻿namespace Cineflex.Models.Responses.User
 {
     public class LoginResponse
     {

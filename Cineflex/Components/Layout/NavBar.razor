@@ -1,0 +1,44 @@
+﻿@using Newtonsoft.Json
+<MudAppBar Elevation="4">
+    <MudText Typo="Typo.h6" Class="ml-2">Cineflex</MudText>
+
+    <MudSpacer />
+
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Class="nav-link-spacing" style="width:100px"> Home </MudNavLink>
+
+    @if (!_isLoggedIn)
+    {
+        <MudNavLink style="width:100px" Href="/Login" Class="nav-link-spacing">Login</MudNavLink>
+    }
+    else
+    {
+        @if (HasTickets)
+        {
+            <MudNavLink style="width:125px" OnClick="GoToTickets" Class="nav-link-spacing">Your Tickets</MudNavLink>
+        }
+
+        <MudNavLink style="width:100px" OnClick="LogOutAsync" Class="nav-link-spacing">Logout</MudNavLink>
+    }
+
+
+</MudAppBar>
+
+
+
+<style>
+    .nav-link-spacing {
+        margin: 0 4px; /* Reduce to 4px left and right, or adjust to your liking */
+    }
+
+    .nav-link-enter {
+        opacity: 0;
+        transform: translateX(100px); /* Start outside the screen on the right */
+        transition: all 0.5s ease-out;
+    }
+
+    .nav-link-enter-active {
+        opacity: 1;
+        transform: translateX(0); /* Slide into view */
+    }
+
+</style>

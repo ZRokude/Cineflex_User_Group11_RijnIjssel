@@ -1,13 +1,7 @@
-﻿using Cineflex.Components;
-using Cineflex.Models;
+﻿using Cineflex.Models;
 using Cineflex.Models.Responses.Movie;
-using Cineflex.Models.Responses.User;
 using Cineflex.Services;
 using Cineflex.Utilities;
-using Cineflex_API.Model.Commands.User;
-using Cineflex_API.Model.Responses.Movie;
-using Cineflex_API.Model.Responses.User;
-using Cineflex_API.Model.User;
 
 public interface IMovieThemeService
 {

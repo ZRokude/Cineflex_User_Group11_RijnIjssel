@@ -1,10 +1,6 @@
 ﻿using Cineflex.Models;
-using Cineflex.Models.Responses.Movie;
+using Cineflex.Models.Responses.Cinema;
 using Cineflex.Utilities;
-using Cineflex_API.Model.Commands.Cinema;
-using Cineflex_API.Model.Commands.User;
-using Cineflex_API.Model.Responses.Cinema;
-using Cineflex_API.Model.Responses.User;
 
 namespace Cineflex.Services.ApiServices
 {

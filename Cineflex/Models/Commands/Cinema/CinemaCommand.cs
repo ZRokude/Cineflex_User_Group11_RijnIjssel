@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cineflex_API.Model.Commands.Cinema
+﻿
+namespace Cineflex.Models.Commands.Cinema
 {
     public class CinemaCommand
     {

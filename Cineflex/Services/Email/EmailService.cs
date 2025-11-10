@@ -1,6 +1,5 @@
 ﻿using Cineflex.Models;
 using Cineflex.Services.Email;
-using Cineflex_API.Model.Responses.Cinema;
 using MailKit.Net.Smtp;
 using MimeKit;
 using System.Text;
