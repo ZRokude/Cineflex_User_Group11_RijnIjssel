@@ -3,13 +3,15 @@ using Cineflex.Models;
 using Cineflex.Utilities;
 using Cineflex_API.Model.Responses.Cinema;
 
-namespace Cineflex.Services.ApiService
+namespace Cineflex.Services.ApiServices
 {
     public interface ICinemaRoomMovieService
     {
         public Task<ModelServiceResponse<IEnumerable<CinemaRoomMovieResponse>>> GetAll();
         public Task<ModelServiceResponse<IEnumerable<CinemaRoomMovieResponse>>> GetByCinemaRoomId(Guid Id);
         public Task<ModelServiceResponse<IEnumerable<CinemaRoomMovieResponse>>> GetByMovieId(Guid Id);
+
+        public Task<ModelServiceResponse<CinemaRoomMovieResponse>> GetById(Guid Id);
     }
     public class CinemaRoomMovieService(HttpRequestHandler<Program> requestHandler, NotifyService notifyService)
         : BaseApiService(requestHandler, notifyService)
@@ -27,5 +29,14 @@ namespace Cineflex.Services.ApiService
         {
             return await requestHandler.GetAsync<IEnumerable<CinemaRoomMovieResponse>>($"api/CinemaRoomMovie/readbymovie?movieId={Id}", CancellationToken.None);
         }
+
+        public async Task<ModelServiceResponse<CinemaRoomMovieResponse>> GetById(Guid Id)
+        {
+            return await requestHandler.GetAsync<CinemaRoomMovieResponse>($"api/CinemaRoomMovie/readbyid?id={Id}", CancellationToken.None);
+        }
+
+
+
+
     }
 }
