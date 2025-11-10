@@ -1,0 +1,25 @@
+﻿@using Cineflex_API.Model.Responses.Movie
+@using Cineflex.Models.Responses.Movie
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h5">@MovieTitle (@ReleaseYear.Year)</MudText>
+        <MudText Typo="Typo.body1">@Description</MudText>
+        <MudText>Genres: @string.Join(", ", genres?.Select(g => g.Name) ?? Array.Empty<string>())</MudText>
+        <MudText Typo="Typo.body2">Duur: @Duration minuten</MudText>
+        <MudText Typo="Typo.body2">Thema: @string.Join(", ", Theme?.Select(t => t.Name) ?? Array.Empty<string>())</MudText>
+        <MudText Typo="Typo.body2">Rating: @Rating / 10</MudText>
+    </DialogContent>
+    <DialogActions>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter] public string MovieTitle { get; set; }
+    [Parameter] public DateTime ReleaseYear { get; set; }
+    [Parameter] public string Description { get; set; }
+    [Parameter] public double Rating { get; set; }
+    [Parameter] public List<GenreResponse> genres { get; set; }
+    [Parameter] public List<ThemeResponse> Theme { get; set; }
+    [Parameter] public int Duration { get; set; }
+}

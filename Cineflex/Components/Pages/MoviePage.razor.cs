@@ -1,4 +1,4 @@
-﻿using Cineflex.Models.Responses.Cinema;
+﻿using Cineflex.Components.Pages.Dialog;
 using Cineflex.Models.Responses.Movie;
 using Cineflex.Services.ApiServices;
 using Microsoft.AspNetCore.Components;
@@ -12,20 +12,14 @@ namespace Cineflex.Components.Pages
     public partial class MoviePage
     {
         [Inject] private IMovieService MovieService { get; set; } = null!;
-
         [Inject] private ICinemaRoomService CinemaRoomService { get; set; } = null!;
-
         [Inject] private ICinemaService CinemaService {get; set;} = null!;
-
         [Inject] private IMovieThemeService ThemeService { get; set; } = null!;
-
         [Inject] private IMovieGenreService GenreService { get; set; } = null!;
-
         [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
-
         [Inject] NavigationManager NavigationManager { get; set; } = null!;
-
         [Inject] IJSRuntime JSRuntime { get; set; } = null!;
+        [Inject] IDialogService Dialog { get; set; } = null!;
 
         [Parameter] public required Guid movieId { get; set; }
 
@@ -38,7 +32,7 @@ namespace Cineflex.Components.Pages
         private List<CinemaRoomMovieResponse> availableRooms = new();
         private List<CinemaResponse> GetCinema = new();
         private List<DateTime> availableDates = new();
-
+        private readonly DialogOptions _maxWidth = new() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
         private Guid? _selectedCinemaId = null;
 
@@ -335,8 +329,24 @@ namespace Cineflex.Components.Pages
         private async Task SelectTicket(CinemaRoomMovieResponse selectedRoom)
         {
             var selectedRoomId = selectedRoom.CinemaRoomId; 
-            NavigationManager.NavigateTo($"/Seats/{selectedRoomId}/");
+            NavigationManager.NavigateTo($"/Seat/{selectedRoomId}/");
         }
 
+
+        private Task OpenDialogAsync(DialogOptions options)
+        {
+            var Movieparameters = new DialogParameters
+                {
+                    { "MovieTitle", Movie.Name },
+                    { "ReleaseYear", Movie.ReleaseDate },
+                    { "Description", Movie.Description },
+                    { "Rating", Movie.Rating },
+                    { "genres", Genre },
+                    { "Theme" , Theme},
+                    { "Duration" ,Movie.Duration }
+                };
+
+            return Dialog.ShowAsync<MoviePageDialog>("Custom Options Dialog",Movieparameters, options);
+        }
     }
 }

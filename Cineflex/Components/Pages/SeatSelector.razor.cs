@@ -1,6 +1,6 @@
 using Cineflex.Components.Pages.Dialog;
-using Cineflex.Models.Responses.Cinema;
 using Cineflex.Services.ApiServices;
+using Cineflex_API.Model.Responses.Cinema;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -81,10 +81,19 @@ namespace Cineflex.Components.Pages
             var totalPreviousSeat = CinemaRoomSeatResponses.Where(c => c.RowNumber < seatRowNumber).Sum(c => c.TotalRowSeatNumber);
             return totalPreviousSeat + currentSeatIndex ;
         }
+
+
         private async Task Reservation()
         {
-            var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, BackdropClick = true };
-            await DialogService.ShowAsync<ReservationDialog>(Localizer["Payment_Page"], options);
+            var options = new DialogOptions() { CloseButton = true, BackgroundClass = "my-custom-class", FullScreen = true, CloseOnEscapeKey = true, NoHeader = true, BackdropClick = true };
+
+            var ChosenSeatListparameters = new DialogParameters<PaymentDialog>
+            {
+                { x=>x.ChoosedSeatList, ChoosedSeatList },
+                { x=>x.CinemaRoomMovieResponse, CinemaRoomMovieResponse  }
+
+            };
+            await DialogService.ShowAsync<PaymentDialog>(Localizer["Payment_Page"], ChosenSeatListparameters, options);
         }
     }
 }

@@ -75,9 +75,8 @@ namespace Cineflex.Extensions
                 .AddTransient<ICinemaService, CinemaService>()
                 .AddTransient<IMovieGenreService, MovieGernreService>()
                 .AddTransient<IIpService, IpService>()
-                .AddTransient<ICinemaRoomService, CinemaRoomService>()
-                .AddMvc();
-                ;
+                .AddTransient<ICinemaRoomService, CinemaRoomService>();
+
             return services;
         }
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)

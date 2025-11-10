@@ -26,12 +26,13 @@
                             {
                                 <MudButton Size="Size.Large" Disabled="@IsDisabledButtonList[seatNumber]" Color="@ColorButtonList[seatNumber]"
                                            OnClick="@(() => OnClick(seatNumber))">
-                                    <MudIcon Icon="@Icons.Material.Filled.EventSeat" />
-                                    @if(isShowNumber)
+                                    <MudIcon Icon="@Icons.Material.Filled.EventSeat" />  
+                                    @if (isShowNumber)
                                     {
                                         @seatNumber
                                     }
                                 </MudButton>
+
                             }
                             else
                             {

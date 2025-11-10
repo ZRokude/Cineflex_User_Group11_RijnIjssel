@@ -1,0 +1,225 @@
+﻿@page "/newtickets"
+@using Cineflex_API.Model.Commands.Cinema
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
+    <div class="header-section">
+        @if (tickets.Count > 0)
+        {
+            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Large" Style="font-size: 64px; margin-bottom: 16px;" />
+            <MudText Typo="Typo.h3" Style="font-weight: 600; margin-bottom: 8px;">Booking Confirmed!</MudText>
+            <MudText Typo="Typo.h6" Style="opacity: 0.9;">Your tickets are ready. Enjoy the show!</MudText>
+        }
+        else
+        {
+            if (IslogedIn)
+            {
+            <MudText Typo="Typo.h6" Style="opacity: 0.9;">no ticket to be seen?</MudText>
+            <MudText Typo="Typo.h6" Style="opacity: 0.9;">
+                Check the
+                <MudLink style="color:white;" @onclick="GoToTickets" Underline="Underline.Always" Typo="Typo.h6">ticket page</MudLink>
+                    on the top right to see you're ticket</MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6" Style="opacity: 0.9;">no ticket to be seen?</MudText>
+                <MudText Typo="Typo.h6" Style="opacity: 0.9;">
+                    <MudLink style="color:white;" Href="/login" Underline="Underline.Always" Typo="Typo.h6">login</MudLink>
+                    to see your ticket on the Ticketpage
+                   
+                    </MudText>
+               
+            }
+
+        }
+
+
+
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px;">
+        @foreach (var ticket in tickets)
+        {
+            <MudPaper Class="ticket-card" Elevation="3" Style="height: 200px; width: 550px; padding: 0; flex-shrink: 0; opacity: 0;">
+                <div class="ticket-perforation"></div>
+
+                <div class="ticket-content">
+                    <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between;">
+                        <div>
+                            <MudText Typo="Typo.h5" Style="font-weight: 600; margin-bottom: 16px; color: #333;">
+                                @GetMovieName(ticket.CinemaRoomMovieId)
+                            </MudText>
+                        </div>
+
+                        <div>
+                            <div class="ticket-info-item">
+                                <MudIcon Icon="@Icons.Material.Filled.EventSeat" Size="Size.Small" Color="Color.Primary" />
+                                <MudText Typo="Typo.body2" Style="color: #666; font-weight: 500;">Seat: <strong style="color: #333;">@ticket.SeatNumber</strong></MudText>
+                            </div>
+
+                            <div class="ticket-info-item">
+                                <MudIcon Icon="@Icons.Material.Filled.Schedule" Size="Size.Small" Color="Color.Primary" />
+                                <MudText Typo="Typo.body2" Style="color: #666; font-weight: 500;">@GetStartTime(ticket.CinemaRoomMovieId)</MudText>
+                            </div>
+
+                            <div class="ticket-info-item">
+                                <MudIcon Icon="@Icons.Material.Filled.MeetingRoom" Size="Size.Small" Color="Color.Primary" />
+                                <MudText Typo="Typo.body2" Style="color: #666; font-weight: 500;">@GetRoomNumber(ticket.CinemaRoomMovieId)</MudText>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ticket-stub">
+                    <MudCardMedia Image="@GetMovieImage(ticket.CinemaRoomMovieId)"
+                                  Style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+            </MudPaper>
+        }
+    </div>
+
+    @if (tickets.Count > 0)
+    {
+        <MudPaper Class="mt-6 pa-4" Style="background: #f8f9fa; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Info" />
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600; margin-bottom: 4px;">Important Information</MudText>
+                <MudText Typo="Typo.body2" Style="color: #666;">
+                    Please arrive 15 minutes before showtime.
+                </MudText>
+            </div>
+        </div>
+    </MudPaper>
+
+    }
+</MudContainer>
+
+
+<style>
+    .ticket-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+        .ticket-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+    .ticket-perforation {
+        position: absolute;
+        right: 155px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: repeating-linear-gradient( to bottom, transparent, transparent 8px, rgba(255,255,255,0.3) 8px, rgba(255,255,255,0.3) 16px );
+    }
+
+    .ticket-content {
+        background: white;
+        height: 100%;
+        padding: 24px;
+        padding-right: 170px;
+    }
+
+    .ticket-stub {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .download-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .download-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+    .header-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 48px 32px;
+        border-radius: 16px;
+        margin-bottom: 32px;
+        color: white;
+        text-align: center;
+    }
+
+    .ticket-info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        gap: 8px;
+    }
+
+    .qr-code-overlay {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: white;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+        .qr-code-overlay:hover {
+            transform: scale(1.1);
+        }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .ticket-card {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+        .ticket-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .ticket-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .ticket-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .ticket-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+    
+    .mud-link {
+        color: #ffff !important;
+    }
+    /* restore the CSS default color for a visited link */
+</style>
+

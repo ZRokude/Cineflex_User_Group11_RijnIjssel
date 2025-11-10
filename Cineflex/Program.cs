@@ -16,6 +16,9 @@ public class Program
         //builder.Services.AddTransient<MudLocalizer, ApplicationTranslation>();
         builder.Services.AddApplicationSevice();
         builder.Services.AddLocalizationServices();
+       
+
+
         builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
         builder.Services.AddClients(builder.Configuration);
         var app = builder.Build();
@@ -30,7 +33,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
-
+        app.UseStaticFiles();
         app.UseAntiforgery();
 
         app.MapStaticAssets();

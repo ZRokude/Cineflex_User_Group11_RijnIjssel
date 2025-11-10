@@ -1,0 +1,182 @@
+﻿@using Cineflex.Services.ApiServices
+@using Cineflex_API.Model.Responses.Cinema
+@using Cineflex_API.Model.Responses.Movie
+
+<div class="@($"color-transition {_backgroundClass}")">
+    <MudDialog>
+    <DialogContent>
+
+            <div style="display: flex; justify-content: start; align-items: center; padding: 20px;">
+                <img src="Picture/Logo_Cineflex.png" style="height: 100px; width: 125px;" alt="Cineflex Logo" />
+            </div>
+
+
+            <MudText style="color:white;" Typo="Typo.h3">Payment </MudText>
+
+            <!-- Container voor beide kaarten -->
+            <div class="Card_Container">
+                <div class="Card_info">
+
+                    <MudCard Style="width:600px; height:350px; padding:15px;">
+                        <MudText Typo="Typo.h4">Summary</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">The film of the tickets: @MovieName</MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            Date and time of the movie:
+                            <MudText Inline=true>@RoomInformation[0]</MudText>
+                        </MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            Amount of seats selected:
+                            <MudText Inline=true>@AmountSeatChosen</MudText> 
+                        </MudText>
+                        <MudDivider />
+                        <MudText Typo="Typo.h6">
+                            Room Number:
+                            <MudText Inline=true>@RoomNumber</MudText>
+                        </MudText>
+
+                        <MudDivider />
+                        <MudText Typo="Typo.h6" >
+                            Total amount:
+                            <MudText Inline=true Typo="Typo.h6" style="font-weight: bold;">@PriceTotal euro</MudText>
+                        </MudText>
+                        <MudDivider />
+
+                        <MudText>Personal info: @AccountEmail</MudText>
+                    </MudCard>
+                </div>
+
+                <div class="Card_Pay">
+                    <MudCard Style="width:400px; height:600px; gap:15px; padding:20px;">
+                        <MudText Typo="Typo.h4">Payment</MudText>
+
+
+                        <MudRadioGroup @bind-Value="SelectedPaymentMethod">
+                            <MudStack AlignItems="AlignItems.Start" Justify="Justify.FlexStart">
+                            <MudRadio Value="@("IDEAL")" Color="Color.Primary">  
+                                <CustomSvgIcon Name="ideal" Class="w-6 h-6 text-primary" />
+                                IDEAL
+                            </MudRadio>
+
+                            <MudRadio Value="@("CARD")" Color="Color.Primary" @onclick="ScrollDates">
+                                <CustomSvgIcon Name="credit-card" Class="w-6 h-6 text-primary" />
+                                Card
+                            </MudRadio>
+
+                            <MudRadio Value="@("PayPal")" Color="Color.Primary">
+                                <CustomSvgIcon Name="paypal" Class="w-6 h-6 text-primary" />
+                                payPal
+                            </MudRadio>
+
+                            </MudStack>
+                        </MudRadioGroup>
+
+                        <MudCollapse Expanded="@(SelectedPaymentMethod == "CARD")" Style="padding:15px ;gap:15px">
+                            <MudTextField T="string" Label="Card number" Variant="Variant.Outlined" Placeholder="xxxx xxxx xxxx xxxx"
+                                          @bind-Value="CardModel.Number" Immediate="true" Error="@(!string.IsNullOrEmpty(CardNumberError))"
+                                          ErrorText="@CardNumberError" />
+
+                            <MudTextField T="string" Label="Expiry date" Variant="Variant.Outlined" Placeholder="MM/YY"
+                                          @bind-Value="CardModel.Expiry" Immediate="true" Error="@(!string.IsNullOrEmpty(ExpiryError))"
+                                          ErrorText="@ExpiryError" />
+
+                            <MudTextField T="string" Label="CVV" Variant="Variant.Outlined" Placeholder="CVV"
+                                          @bind-Value="CardModel.CVV" Immediate="true" Error="@(!string.IsNullOrEmpty(CVVError))"
+                                          ErrorText="@CVVError" />
+                        </MudCollapse>
+
+                        <MudButton Style="width:300px; background-color:black;color:white; align-items:center;"
+                                   OnClick="buyTicker"
+                                   Disabled="@_isLoading">
+                            @if (_isLoading)
+                            {
+                                <MudProgressCircular Class="ms-n1" Style="color:white;" Size="Size.Small" Indeterminate="true" />
+                                <MudText Style="color:white;" Class="ms-2">Loading...</MudText>
+                            }
+                            else
+                            {
+                                <MudText>Pay</MudText>
+                            }
+                        </MudButton>
+
+                        <MudDivider />
+
+                    </MudCard>
+                </div>
+            </div>
+
+    </DialogContent>
+
+</MudDialog>
+</div>
+
+<style>
+
+    .start-color {
+        background: radial-gradient(circle at center, #111 0%, #232323 40%, #000 100%);
+        overflow-x: hidden;
+    }
+
+    .Card_Container {
+        display: flex;
+        justify-content: space-between; /* één links, één rechts */
+        align-items: flex-start;
+        width: 100%;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .Card_info, .Card_Pay {
+        display: flex;
+        justify-content: center;
+        border: 1px solid gray;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* X-offset, Y-offset, blur, color */
+        border-radius: 8px; /* optional, looks smoother */
+        padding: 16px; /* optional, gives spacing inside the card */
+        background-color: white; /* optional, to make the shadow more visible */
+    }
+
+</style>
+<script>
+    let currentPage = 0;
+
+    function scrollDates(direction) {
+        const container = document.getElementById('dateScrollBar');
+        if (!container) return;
+
+        const cardWidth = 120 + 15; // each card + gap
+        const visibleCards = 4;
+        const scrollAmount = cardWidth * visibleCards;
+
+        const maxScroll = container.scrollWidth - container.clientWidth;
+
+        if (direction === "right") {
+            currentPage = Math.min(currentPage + 1, Math.ceil(container.scrollWidth / scrollAmount) - 1);
+        } else {
+            currentPage = Math.max(currentPage - 1, 0);
+        }
+
+        const newScroll = currentPage * scrollAmount;
+
+        container.scrollTo({
+            left: newScroll,
+            behavior: 'smooth'
+        });
+    }
+
+    function bottom() {
+        var el = document.getElementById('bottom');
+        if (el) {
+            el.scrollIntoView({
+                behavior: 'smooth',   // smooth scrolling
+                block: 'start',       // scroll so element top aligns with viewport top
+                inline: 'nearest'     // horizontal alignment (usually leave as 'nearest')
+            });
+        }
+    }
+
+
+</script>
+
