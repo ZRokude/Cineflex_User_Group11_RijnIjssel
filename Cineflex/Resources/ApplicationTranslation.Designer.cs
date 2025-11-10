@@ -61,6 +61,42 @@ namespace Cineflex.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string ConfirmDialog_Cancel {
+            get {
+                return ResourceManager.GetString("ConfirmDialog_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string ConfirmDialog_Confirm {
+            get {
+                return ResourceManager.GetString("ConfirmDialog_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to proceed?.
+        /// </summary>
+        public static string ConfirmDialog_Text {
+            get {
+                return ResourceManager.GetString("ConfirmDialog_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proceed.
+        /// </summary>
+        public static string ConfirmDialog_Tile {
+            get {
+                return ResourceManager.GetString("ConfirmDialog_Tile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello World7.
         /// </summary>
         public static string Home_Test {
@@ -93,6 +129,15 @@ namespace Cineflex.Resources {
         public static string Navbar_Title {
             get {
                 return ResourceManager.GetString("Navbar_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have chosen for seat number {0}  .
+        /// </summary>
+        public static string Reserve_Notice {
+            get {
+                return ResourceManager.GetString("Reserve_Notice", resourceCulture);
             }
         }
     }
