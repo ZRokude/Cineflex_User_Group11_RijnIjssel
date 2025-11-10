@@ -1,0 +1,16 @@
+﻿<MudCarousel @ref="_carousel">
+    <ItemTemplate>
+        <div style="display:flex; justify-content:center; align-items:center; height:100%; position:relative;">\
+            <MudTooltip Text="@context.Name">
+                <MudImage Elevation="5" Src="@GetImage(context.Name)"
+                          Style="max-height:100%; max-width:100%; object-fit:contain;" />
+                <MudText Align="@Align.Start" Class="carousel-text-carousel-highlight overflow-scroll"
+                         Style="position:absolute; bottom:10%; left:5%;">
+                </MudText>
+            </MudTooltip>
+           
+        </div>
+    </ItemTemplate>
+</MudCarousel>
+
+
