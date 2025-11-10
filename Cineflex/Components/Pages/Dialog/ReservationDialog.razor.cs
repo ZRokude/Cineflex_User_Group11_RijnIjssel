@@ -1,8 +1,7 @@
 using Cineflex.Components.Pages.Dialog.Share;
 using Cineflex.Models;
+using Cineflex.Models.Commands.Cinema;
 using Cineflex.Services.ApiServices;
-using Cineflex_API.Model.Commands.Cinema;
-using Cineflex_API.Model.Responses.Cinema;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
